@@ -3,18 +3,22 @@
 <head>
   <meta charset="utf-8">
   
-  <title>凤凰苑</title>
+  <title>iOS内存管理方式 | 凤凰苑</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="张春生的技术博客 不定时更新 请原谅">
-<meta property="og:type" content="website">
-<meta property="og:title" content="凤凰苑">
-<meta property="og:url" content="https://zcs0843021123.github.io/index.html">
+  <meta name="description" content="零. 写在前边的话 参考书: 《Objective-C高级编程:iOS与OS X多线程和内存管理》书中分别讲了GNUstep与Cocoa框架,有利于我们做比较和参考。 参考资料(特别鸣谢这两个作者写了这么好的文章,让我受益匪浅):  http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementa">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS内存管理方式">
+<meta property="og:url" content="https://zcs0843021123.github.io/2016/09/15/iOS内存管理方式/iOS内存管理方式/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="张春生的技术博客 不定时更新 请原谅">
+<meta property="og:description" content="零. 写在前边的话 参考书: 《Objective-C高级编程:iOS与OS X多线程和内存管理》书中分别讲了GNUstep与Cocoa框架,有利于我们做比较和参考。 参考资料(特别鸣谢这两个作者写了这么好的文章,让我受益匪浅):  http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementa">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://zcs0843021123.github.io/2016/09/15/iOS内存管理方式/iOS内存管理方式/iOS内存管理方式/image.png">
+<meta property="og:updated_time" content="2018-05-08T15:33:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="凤凰苑">
-<meta name="twitter:description" content="张春生的技术博客 不定时更新 请原谅">
+<meta name="twitter:title" content="iOS内存管理方式">
+<meta name="twitter:description" content="零. 写在前边的话 参考书: 《Objective-C高级编程:iOS与OS X多线程和内存管理》书中分别讲了GNUstep与Cocoa框架,有利于我们做比较和参考。 参考资料(特别鸣谢这两个作者写了这么好的文章,让我受益匪浅):  http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementa">
+<meta name="twitter:image" content="https://zcs0843021123.github.io/2016/09/15/iOS内存管理方式/iOS内存管理方式/iOS内存管理方式/image.png">
   
     <link rel="alternate" href="/atom.xml" title="凤凰苑" type="application/atom+xml">
   
@@ -67,245 +71,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" class="article-date">
-  <time datetime="2017-09-19T08:42:31.000Z" itemprop="datePublished">2017-09-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/">OC runtime 源码阅读-1.环境搭建篇</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li><p>参考资料</p>
-<ul>
-<li><a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a><br>这个是可以编译通过的runtime源码,特别鸣谢这位作者整理了我们可以编译通过runtime版本, 而且这位作者始终在更新, 十分感谢</li>
-<li><a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/objc4/</a><br>苹果官方网站源码,苹果的是不能编译通过的</li>
-</ul>
-</li>
-<li><p>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></p>
-</li>
-</ol>
-<h1 id="一-runtime-源码概述"><a href="#一-runtime-源码概述" class="headerlink" title="一. runtime 源码概述"></a>一. runtime 源码概述</h1><ol start="0">
-<li>首先明确一点 runtime 是C++代码 不是C代码; C语言和C++不是一种语言!!!</li>
-<li>本文采用的 runtime 源码为 objc4-709.1 </li>
-<li>下载源码 地址 <a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a> </li>
-<li><p>下载后打开Xcode工程 文档结构图如下<br><img src="OC-runtime-源码阅读-1-环境搭建篇/Snip20170920_1.png" alt=""></p>
-<p>若打不开图片,则可以看这个文字版的文档结构图:</p>
-<ul>
-<li>objc<ul>
-<li>include (各种头文件, 不要以为是头文件就不重要, 这是C++代码, 很多函数都是直接写在了声明类的头文件里)</li>
-<li>Public Headers  (公共头文件)</li>
-<li>Private Headers (私有头文件)</li>
-<li>Project Headers (项目头文件)</li>
-<li>Obsolete Headers(旧的,即将要废弃的头文件)</li>
-<li>Obsolete Source (旧的,即将要废弃的源代码)</li>
-<li>Source          (源代码)</li>
-<li>Other           (其他)</li>
-<li>debug-objc      (调试用的代码)</li>
-<li>Products        (生成的二进制文件)</li>
-<li>Frameworks      (用到的系统的动态库)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" data-id="cjh0o4dic0001d5nxd3fkz93j" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" class="article-date">
-  <time datetime="2016-09-30T07:47:08.000Z" itemprop="datePublished">2016-09-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/">判断电脑是大端系统还是小端系统</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">union enidanUnion &#123;</span><br><span class="line">    short shortValue;</span><br><span class="line">    char charValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 返回 -1 失效; 0 小端; 1 大端</span><br><span class="line"> */</span><br><span class="line">int testEnidan(void) &#123;</span><br><span class="line">    </span><br><span class="line">    union enidanUnion num;</span><br><span class="line">    if (sizeof(short) == 2) &#123;</span><br><span class="line">        </span><br><span class="line">        num.shortValue = 0x000F;</span><br><span class="line">        if (num.charValue[0] == 0 &amp;&amp; num.charValue[1] == 15) &#123;</span><br><span class="line">            printf(&quot;大端系统&quot;);</span><br><span class="line">            return 1;</span><br><span class="line">        &#125; else if (num.charValue[0] == 15 &amp;&amp; num.charValue[1] == 0) &#123;</span><br><span class="line">            printf(&quot;小端系统&quot;);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            printf(&quot;本测试失效&quot;);</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        printf(&quot;本测试失效&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://zcs0843021123.github.io/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" data-id="cjh0o4diq0004d5nxod7imbyg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C语言/">C语言</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-double类型数据的存储结构/double类型数据的存储结构" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/" class="article-date">
-  <time datetime="2016-09-30T03:08:42.000Z" itemprop="datePublished">2016-09-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/">double类型数据的存储结构</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一. 基础知识</p>
-<p>double 类型的大小为:8字节<br>float  类型的大小为:4字节<br>注意:在一些单片机里,double的大小为 4字节<br>本文以 8字节的double为讨论对象（4字节的同理）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br></pre></td></tr></table></figure>
-<p>double型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">位(从0开始)</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">64</td>
-<td style="text-align:center">符号位 0正 1负</td>
-</tr>
-<tr>
-<td style="text-align:center">52-62 (共 11 位)</td>
-<td style="text-align:center">指数部分</td>
-</tr>
-<tr>
-<td style="text-align:center">0-51  (共 52 位)</td>
-<td style="text-align:center">尾数部分</td>
-</tr>
-</tbody>
-</table>
-<p>float型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">位(从0开始)</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">31</td>
-<td style="text-align:center">符号位 0正 1负</td>
-</tr>
-<tr>
-<td style="text-align:center">23-30 (共 8 位)</td>
-<td style="text-align:center">指数部分</td>
-</tr>
-<tr>
-<td style="text-align:center">0-22  (共 23 位)</td>
-<td style="text-align:center">尾数部分</td>
-</tr>
-</tbody>
-</table>
-<p>值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">double </span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-1023)</span><br><span class="line">float</span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-127)</span><br></pre></td></tr></table></figure></p>
-<p>二. 例子</p>
-<p>以0.9为例 看看我们的结论是否正确 代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">union Double &#123;</span><br><span class="line">    double doubleValue;</span><br><span class="line">    int intValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    </span><br><span class="line">    union Double d;</span><br><span class="line">    d.doubleValue = 0.9;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>其中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">intValue[0] 是 -858993459 转成二进制是 11001100110011001100110011001101</span><br><span class="line">intValue[1] 是 1072483532 转成二进制是 00111111111011001100110011001100</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>连接连个整数的二进制<br>  我是根据两个整数的值来判断的<br>  intValue[0] 小于 0， intValue[1] 大于 0，而我们的0.9 大于零，<br>  因此，连个整数在内存中的排列是形如下图的: </li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">前</th>
-<th style="text-align:center">后</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">intValue[1]</td>
-<td style="text-align:center">intValue[0]</td>
-</tr>
-<tr>
-<td style="text-align:center">00111111111011001100110011001100</td>
-<td style="text-align:center">11001100110011001100110011001101</td>
-</tr>
-</tbody>
-</table>
-<pre><code>最科学的方法当然是 要知道自己的电脑是 大端系统 还是 小端系统；
-本文只是作者的实际操作，可能不是很科学。
-两个整数连接在一起，前半段是 intValue[1] 的二进制；后半段是 intValue[0] 的二进制
-0011111111101100110011001100110011001100110011001100110011001101
-</code></pre><ul>
-<li><p>验证结论<br>  把二进制按位分开 分别 1，11，52 位<br>  63位:    0<br>  52-62位:   01111111110<br>  0-51位:    1100110011001100110011001100110011001100110011001101</p>
-<p>  63位 是0， 表示是正数<br>  52-62位 是01111111110 大小为 0x3FE 十进制是 1022<br>  0-51位 是二进制的小数部分 转成十六进制是 0xCCCCCCCCCCCCD</p>
-<p>  其实这个小数部分可以很方便的计算<br>  但是我发现这其实是一个无限循环小数，我们完全可以用无穷级数求和来计算:</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">值 = 12 * 16^-1 + 12 * 16^-2 + 12 * 16^-3 + ......</span><br><span class="line">值 = (12/16) / (1 - 1/16)</span><br><span class="line">值 = 4/5</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>计算结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.9 = -1^0 * (1 + 4/5) * 2^(1022-1023)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/" data-id="cjh0o4dio0003d5nxe5lmuz7q" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C语言/">C语言</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-iOS内存管理方式/iOS内存管理方式" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-iOS内存管理方式/iOS内存管理方式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/09/15/iOS内存管理方式/iOS内存管理方式/" class="article-date">
   <time datetime="2016-09-15T07:03:03.000Z" itemprop="datePublished">2016-09-15</time>
@@ -318,8 +84,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/15/iOS内存管理方式/iOS内存管理方式/">iOS内存管理方式</a>
+    <h1 class="article-title" itemprop="name">
+      iOS内存管理方式
     </h1>
   
 
@@ -453,178 +219,28 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-如何区分开源许可证/如何区分开源许可证" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/12/如何区分开源许可证/如何区分开源许可证/" class="article-date">
-  <time datetime="2015-09-12T06:42:35.000Z" itemprop="datePublished">2015-09-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+    <a href="/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/12/如何区分开源许可证/如何区分开源许可证/">如何区分开源许可证</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="区分方法"><a href="#区分方法" class="headerlink" title="区分方法"></a>区分方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">let result = undefined;</span><br><span class="line"></span><br><span class="line">// WTFPL: DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE</span><br><span class="line">// CC0是来自CC的公开领域许可证</span><br><span class="line">// https://creativecommons.org/publicdomain/zero/1.0/legalcode</span><br><span class="line">// 发布在Public Domain 即公开领域的知名软件有SQLite;</span><br><span class="line">if (我无所谓) &#123;</span><br><span class="line">    result = &quot;WTFPL or CC0 or 公开领域&quot;;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if (修改源码后,需要采用同样的许可证) &#123;</span><br><span class="line">    if (新增代码需要采用相同或兼容的许可证) &#123;</span><br><span class="line">        //DMR: Digital Rights Management 的缩写,数字版权管理</span><br><span class="line">        if (禁止DRM,公布相关硬件) &#123; </span><br><span class="line">            result = &quot;GPLv3许可证&quot;;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;GPLv2许可证&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (禁止DRM,公布相关硬件) &#123;</span><br><span class="line">            result = &quot;LGPLv3许可证&quot;;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;LGPLv2许可证 or MPL许可证(Mozilla Public License)&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    if (每一个修改过的文件,都必须包含版权说明和更改处) &#123;</span><br><span class="line">        result = &quot;Apache License 2&quot;;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (可以采用版权拥有者的名字进行推广) &#123;</span><br><span class="line">            result = &quot;BSD(2-clause) or MIT许可证&quot;;</span><br><span class="line">            // BSD(2-clause) 也叫 Simplified BSD License 和 FreeBSD License</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;BSD(3-clause) &quot;;</span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://opensource.org/licenses" target="_blank" rel="noopener">https://opensource.org/licenses</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://zcs0843021123.github.io/2015/09/12/如何区分开源许可证/如何区分开源许可证/" data-id="cjh0o4diz0008d5nxl5jys551" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/环境搭建/">环境搭建</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/" class="article-date">
-  <time datetime="2015-08-05T05:54:33.000Z" itemprop="datePublished">2015-08-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+          double类型数据的存储结构
         
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/">Mac环境搭建HEXO+Github博客</a>
-    </h1>
   
+    <a href="/2015/09/12/如何区分开源许可证/如何区分开源许可证/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何区分开源许可证</div>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><p>  本系列文章是自己的工作总结,因此写的有些简略,如有不明白的地方,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></p>
-<h1 id="一-安装工具"><a href="#一-安装工具" class="headerlink" title="一. 安装工具"></a>一. 安装工具</h1><p>Hexo 官网指南 <a href="https://hexo.io/docs/index.html" target="_blank" rel="noopener">https://hexo.io/docs/index.html</a></p>
-<ol>
-<li>Git </li>
-<li>Node.js </li>
-<li>安装hexo  <code>npm install -g hexo-cli</code><br>注意：全局安装的npm第三方库在 /usr/local/lib/node_modules 里边,所以,安装hexo的结果可以在 /usr/local/lib/node_modules 中查看</li>
-</ol>
-<h1 id="二-配置hexo"><a href="#二-配置hexo" class="headerlink" title="二. 配置hexo"></a>二. 配置hexo</h1><h2 id="1-cd到自己要放博客源码的目录中去"><a href="#1-cd到自己要放博客源码的目录中去" class="headerlink" title="1. cd到自己要放博客源码的目录中去"></a>1. cd到自己要放博客源码的目录中去</h2><p>比如我的是在 /Users/zhangchunsheng/Documents</p>
-<ol>
-<li><p>创建myGithubBlog目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init myGithubBlog</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>进入到 myGithubBlog 中 </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> myGithubBlog</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装node_modules第三方库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动本地服务,预览页面</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server 	<span class="comment">#或是 hexo s （简写）</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>这时候 就可以在<a href="http://localhost:4000/就可以看到一个欢迎页面了" target="_blank" rel="noopener">http://localhost:4000/就可以看到一个欢迎页面了</a></p>
-</li>
-</ol>
-<h2 id="2-配置-config-yml-对属性进行修改-修改为自己定义的属性"><a href="#2-配置-config-yml-对属性进行修改-修改为自己定义的属性" class="headerlink" title="2. 配置 _config.yml 对属性进行修改,修改为自己定义的属性"></a>2. 配置 _config.yml 对属性进行修改,修改为自己定义的属性</h2><p>如：</p>
-<ol>
-<li>title.  subtitle. description. author. language 这些基本属性</li>
-<li>url属性（你的博客的网站, github默认就是 <a href="https://your_github_user_name.github.io/）" target="_blank" rel="noopener">https://your_github_user_name.github.io/）</a></li>
-<li><p>deploy是部署相关的配置属性: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/zcs0843021123/zcs0843021123.github.io.git,master</span><br></pre></td></tr></table></figure>
-<p>其中: type是类型, git,<br>repo就是你在github上的远程仓库, 例如 我的是 <a href="https://github.com/zcs0843021123/zcs0843021123.github.io.git" target="_blank" rel="noopener">https://github.com/zcs0843021123/zcs0843021123.github.io.git</a>,<br>后边跟上逗号,<br>master 表示是master分支</p>
-</li>
-<li>一个可用的例子:(以下例子只是可以照着修改对应的属性 不可以把原有的属性都删除了)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 凤凰苑</span><br><span class="line">subtitle: 张春生的个人博客</span><br><span class="line">description: 张春生的技术博客 不定时更新 请原谅</span><br><span class="line">author: 张春生</span><br><span class="line">language: zh-Hans</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://zcs0843021123.github.io/</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/zcs0843021123/zcs0843021123.github.io.git,master</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="3-在自己的github上创建一个仓库"><a href="#3-在自己的github上创建一个仓库" class="headerlink" title="3. 在自己的github上创建一个仓库"></a>3. 在自己的github上创建一个仓库</h2><p>仓库的名字就叫做 your_github_user_name.github.io<br>your_github_user_name.github.io 这个名字的格式是固定的 不可以谁便乱改</p>
-<h2 id="4-测试写一个博客并发布"><a href="#4-测试写一个博客并发布" class="headerlink" title="4. 测试写一个博客并发布"></a>4. 测试写一个博客并发布</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean      </span><br><span class="line">hexo generate #（简写 hexo g）</span><br><span class="line">hexo deploy   #（简写 hexo d）</span><br></pre></td></tr></table></figure>
-<h2 id="5-查看结果"><a href="#5-查看结果" class="headerlink" title="5. 查看结果"></a>5. 查看结果</h2><p>   本地预览: <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a><br>   github网页：<a href="https://zcs0843021123Zcs.github.io" target="_blank" rel="noopener">https://zcs0843021123Zcs.github.io</a></p>
-<h1 id="三-写博客-amp-发布博客"><a href="#三-写博客-amp-发布博客" class="headerlink" title="三. 写博客 &amp; 发布博客"></a>三. 写博客 &amp; 发布博客</h1><h2 id="1-写博客"><a href="#1-写博客" class="headerlink" title="1. 写博客"></a>1. 写博客</h2><p><code>hexo new &quot;a test article&quot;</code><br>就会产生一个文件 your_github_blog_local_path/source/_posts/a-test-article.md<br>文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: a test article</span><br><span class="line">date: 2017-09-05 13:46:21</span><br><span class="line">tags:</span><br><span class="line">---</span><br></pre></td></tr></table></figure></p>
-<p>然后就可以在a-test-article.md里边愉快的写博客了</p>
-<h2 id="2-发布博客"><a href="#2-发布博客" class="headerlink" title="2. 发布博客"></a>2. 发布博客</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-<h2 id="3-hexo主题"><a href="#3-hexo主题" class="headerlink" title="3. hexo主题"></a>3. hexo主题</h2><p>个人使用的是：iissnan/hexo-theme-next<br>源码地址在 <a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next</a><br>next 官网 <a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">http://theme-next.iissnan.com/getting-started.html</a></p>
-<ol>
-<li><p>下载主题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ cd myGithubBlog #我的博客的本地的目录就在 myGithubBlog</span><br><span class="line">$ ls</span><br><span class="line">_config.yml  node_modules  package.json  public  scaffolds  source  themes</span><br><span class="line">$ mkdir themes/next</span><br><span class="line"></span><br><span class="line"># 在myGithubBlog之外的另外一个目录里下载next主题的源码,</span><br><span class="line"># 记住千万不要直接clone进myGithubBlog,否则里边有一个子git你会很蛋疼</span><br><span class="line"># 而且你还需要修改 next 的配置</span><br><span class="line">$ git clone --branch v5.1.2 https://github.com/iissnan/hexo-theme-next themes/next</span><br><span class="line">$ git checkout master</span><br><span class="line">$ git pull</span><br><span class="line"></span><br><span class="line"># 再把源码拷贝进 themes/next</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>把 next 主题设为自己blog的主题, 修改 _config.yml 中的内容 theme: next</p>
-</li>
-<li><p>修改 _config.yml 中的内容 language: zh-Hans</p>
-</li>
-<li><p>创建一个 tags 文件<br><code>hexo new page &quot;tags&quot;</code><br>文件内容为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">title: All tags</span><br><span class="line">date: 2014-12-22 12:39:04</span><br><span class="line">type: &quot;tags&quot;</span><br></pre></td></tr></table></figure>
-<p>修改 themes/next/_config.yml 文件, 修改如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /</span><br><span class="line">  archives: /archives</span><br><span class="line">  tags: /tags</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>常用设置 (修改 themes/next/_config.yml 文件)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /</span><br><span class="line">  archives: /archives</span><br><span class="line">  tags: /tags</span><br><span class="line">favicon: /favicon.ico</span><br><span class="line">avatar: /default_avatar.png</span><br><span class="line">highlight_theme: normal</span><br><span class="line">fancybox: true</span><br><span class="line">since: 2013</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>类似的, 添加 about (关于) 页面, 也是这么添加的。</p>
-</li>
-<li><p>在 source/_data 目录下创建一个 next.yml 文件 (如果没有 _data 就创建一个 _data 目录)</p>
-</li>
-<li><p>把 _config.yml 和 themes/next 下的 _config.yml 内容都粘贴到 next.yml 中</p>
-</li>
-<li><p>以后使用 hexo clean . hexo g . hexo s .  hexo d 都要加上 <code>--config source/_data/next.yml</code><br>如: <code>hexo clean --config source/_data/next.yml &amp;&amp; hexo g --config source/_data/next.yml</code>.</p>
-</li>
-<li><p>根据自己的喜好,再看着 next.yml 里的注释, 进行自己的喜欢的风格的配置。<br>例如 </p>
-<ul>
-<li>设置头像 可以设置 next.yml 中的 avatar 属性。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 远程图片的URL</span><br><span class="line">avatar: https://avatars1.githubusercontent.com/u/12196768?v=4&amp;u=f5638036e2ae07181f94613dc4b95eb207ac0476&amp;s=400</span><br><span class="line"></span><br><span class="line"># 或者是 本地图片</span><br><span class="line">avatar: /images/12196768.jepg</span><br><span class="line"># 注意 本地图片 你需要把图片在 theme 目录下的 /images/ 和 网站目录下 /uploads/ 都存一份</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>一定要注意,以后要是修改配置文件需要 themes/next下的_config.yml.  _config.yml 与 next.yml 同时修改。<br>当然要是某个文件里,压根就木有那个属性,我们就不用修改。</p>
-</li>
-</ol>
-<h2 id="4-插入图片"><a href="#4-插入图片" class="headerlink" title="4. 插入图片"></a>4. 插入图片</h2><ol>
-<li>把主页配置文件 _config.yml 里的 post_asset_folder :这个选项设置为true<br>把 next.yml 里的 post_asset_folder:这个选项设置为true</li>
-<li>安装图片保存的第三方库 <code>npm install hexo-asset-image --save</code> </li>
-<li>在 /source/_posts 里边造一个和 your_md_name.md 同名的目录 your_md_name,把图片放在里边。</li>
-<li>md文件中应用图片<br>格式    <code>![你想输入的替代文字](图片所在的目录名/图片名.jpg)</code><br>如      <code>![测试图片](Mac环境搭建HEXO-Github博客/Snip20170906_5.png)</code><br> <img src="Mac环境搭建HEXO-Github博客/Snip20170906_5.png" alt="测试图片"></li>
-</ol>
-<h1 id="四-注意事项"><a href="#四-注意事项" class="headerlink" title="四. 注意事项"></a>四. 注意事项</h1><ol>
-<li>注意事项 确保自己是 Hexo 3 (或者更高的版本)</li>
-<li><p>有时候报错 ERROR Deployer not found: git  这时候,需要加装第三方库： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>有时候在Safari上浏览 <a href="https://zcs0843021123.github.io">https://zcs0843021123.github.io</a> 看不到,报错404；可能是浏览器的问题,可以用Chrome 或者手机试试,也可以清空缓存试试（Safari的清空缓存 在Safari的开发菜单下边）</p>
-</li>
-<li>推荐安装从 finder 直接点击叫出shell 的工具 Go2Shell (当然你也可以不安装 直接一步一步cd进去）</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://zcs0843021123.github.io/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/" data-id="cjh0o4di10000d5nxntgpe3tb" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/环境搭建/">环境搭建</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
 
 </section>
         

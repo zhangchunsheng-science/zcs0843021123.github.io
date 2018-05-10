@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>OC runtime 源码阅读-1.环境搭建篇 | 凤凰苑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="零. 写在前边的话 参考资料  https://github.com/RetVal/objc-runtime这个是可以编译通过的runtime源码,特别鸣谢这位作者整理了我们可以编译通过runtime版本, 而且这位作者始终在更新, 十分感谢 https://opensource.apple.com/tarballs/objc4/苹果官方网站源码,苹果的是不能编译通过的   本系列文章是自己的学习">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OC runtime 源码阅读-1.环境搭建篇">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/index.html">
+<meta property="og:site_name" content="凤凰苑">
+<meta property="og:description" content="零. 写在前边的话 参考资料  https://github.com/RetVal/objc-runtime这个是可以编译通过的runtime源码,特别鸣谢这位作者整理了我们可以编译通过runtime版本, 而且这位作者始终在更新, 十分感谢 https://opensource.apple.com/tarballs/objc4/苹果官方网站源码,苹果的是不能编译通过的   本系列文章是自己的学习">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/Snip20170920_1.png">
+<meta property="og:updated_time" content="2018-05-08T15:33:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OC runtime 源码阅读-1.环境搭建篇">
+<meta name="twitter:description" content="零. 写在前边的话 参考资料  https://github.com/RetVal/objc-runtime这个是可以编译通过的runtime源码,特别鸣谢这位作者整理了我们可以编译通过runtime版本, 而且这位作者始终在更新, 十分感谢 https://opensource.apple.com/tarballs/objc4/苹果官方网站源码,苹果的是不能编译通过的   本系列文章是自己的学习">
+<meta name="twitter:image" content="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/Snip20170920_1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="凤凰苑" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">凤凰苑</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">张春生的个人博客</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://zcs0843021123.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" class="article-date">
+  <time datetime="2017-09-19T08:42:31.000Z" itemprop="datePublished">2017-09-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OC runtime 源码阅读-1.环境搭建篇
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li><p>参考资料</p>
+<ul>
+<li><a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a><br>这个是可以编译通过的runtime源码,特别鸣谢这位作者整理了我们可以编译通过runtime版本, 而且这位作者始终在更新, 十分感谢</li>
+<li><a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/objc4/</a><br>苹果官方网站源码,苹果的是不能编译通过的</li>
+</ul>
+</li>
+<li><p>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></p>
+</li>
+</ol>
+<h1 id="一-runtime-源码概述"><a href="#一-runtime-源码概述" class="headerlink" title="一. runtime 源码概述"></a>一. runtime 源码概述</h1><ol start="0">
+<li>首先明确一点 runtime 是C++代码 不是C代码; C语言和C++不是一种语言!!!</li>
+<li>本文采用的 runtime 源码为 objc4-709.1 </li>
+<li>下载源码 地址 <a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a> </li>
+<li><p>下载后打开Xcode工程 文档结构图如下<br><img src="OC-runtime-源码阅读-1-环境搭建篇/Snip20170920_1.png" alt=""></p>
+<p>若打不开图片,则可以看这个文字版的文档结构图:</p>
+<ul>
+<li>objc<ul>
+<li>include (各种头文件, 不要以为是头文件就不重要, 这是C++代码, 很多函数都是直接写在了声明类的头文件里)</li>
+<li>Public Headers  (公共头文件)</li>
+<li>Private Headers (私有头文件)</li>
+<li>Project Headers (项目头文件)</li>
+<li>Obsolete Headers(旧的,即将要废弃的头文件)</li>
+<li>Obsolete Source (旧的,即将要废弃的源代码)</li>
+<li>Source          (源代码)</li>
+<li>Other           (其他)</li>
+<li>debug-objc      (调试用的代码)</li>
+<li>Products        (生成的二进制文件)</li>
+<li>Frameworks      (用到的系统的动态库)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" data-id="cjh0o4dic0001d5nxd3fkz93j" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">判断电脑是大端系统还是小端系统</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C语言/">C语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/环境搭建/">环境搭建</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C语言/" style="font-size: 10px;">C语言</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/环境搭建/" style="font-size: 10px;">环境搭建</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/">OC runtime 源码阅读-1.环境搭建篇</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/">判断电脑是大端系统还是小端系统</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/">double类型数据的存储结构</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/15/iOS内存管理方式/iOS内存管理方式/">iOS内存管理方式</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/12/如何区分开源许可证/如何区分开源许可证/">如何区分开源许可证</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 张春生<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

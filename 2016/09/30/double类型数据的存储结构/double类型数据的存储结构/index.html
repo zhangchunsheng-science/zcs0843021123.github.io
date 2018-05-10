@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>double类型数据的存储结构 | 凤凰苑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
+<meta name="keywords" content="C语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="double类型数据的存储结构">
+<meta property="og:url" content="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/index.html">
+<meta property="og:site_name" content="凤凰苑">
+<meta property="og:description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-08T09:14:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="double类型数据的存储结构">
+<meta name="twitter:description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
+  
+    <link rel="alternate" href="/atom.xml" title="凤凰苑" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">凤凰苑</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">张春生的个人博客</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://zcs0843021123.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-double类型数据的存储结构/double类型数据的存储结构" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/" class="article-date">
+  <time datetime="2016-09-30T03:08:42.000Z" itemprop="datePublished">2016-09-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      double类型数据的存储结构
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一. 基础知识</p>
+<p>double 类型的大小为:8字节<br>float  类型的大小为:4字节<br>注意:在一些单片机里,double的大小为 4字节<br>本文以 8字节的double为讨论对象（4字节的同理）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br></pre></td></tr></table></figure>
+<p>double型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">位(从0开始)</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">64</td>
+<td style="text-align:center">符号位 0正 1负</td>
+</tr>
+<tr>
+<td style="text-align:center">52-62 (共 11 位)</td>
+<td style="text-align:center">指数部分</td>
+</tr>
+<tr>
+<td style="text-align:center">0-51  (共 52 位)</td>
+<td style="text-align:center">尾数部分</td>
+</tr>
+</tbody>
+</table>
+<p>float型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">位(从0开始)</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">31</td>
+<td style="text-align:center">符号位 0正 1负</td>
+</tr>
+<tr>
+<td style="text-align:center">23-30 (共 8 位)</td>
+<td style="text-align:center">指数部分</td>
+</tr>
+<tr>
+<td style="text-align:center">0-22  (共 23 位)</td>
+<td style="text-align:center">尾数部分</td>
+</tr>
+</tbody>
+</table>
+<p>值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">double </span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-1023)</span><br><span class="line">float</span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-127)</span><br></pre></td></tr></table></figure></p>
+<p>二. 例子</p>
+<p>以0.9为例 看看我们的结论是否正确 代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">union Double &#123;</span><br><span class="line">    double doubleValue;</span><br><span class="line">    int intValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    </span><br><span class="line">    union Double d;</span><br><span class="line">    d.doubleValue = 0.9;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">intValue[0] 是 -858993459 转成二进制是 11001100110011001100110011001101</span><br><span class="line">intValue[1] 是 1072483532 转成二进制是 00111111111011001100110011001100</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>连接连个整数的二进制<br>  我是根据两个整数的值来判断的<br>  intValue[0] 小于 0， intValue[1] 大于 0，而我们的0.9 大于零，<br>  因此，连个整数在内存中的排列是形如下图的: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">前</th>
+<th style="text-align:center">后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">intValue[1]</td>
+<td style="text-align:center">intValue[0]</td>
+</tr>
+<tr>
+<td style="text-align:center">00111111111011001100110011001100</td>
+<td style="text-align:center">11001100110011001100110011001101</td>
+</tr>
+</tbody>
+</table>
+<pre><code>最科学的方法当然是 要知道自己的电脑是 大端系统 还是 小端系统；
+本文只是作者的实际操作，可能不是很科学。
+两个整数连接在一起，前半段是 intValue[1] 的二进制；后半段是 intValue[0] 的二进制
+0011111111101100110011001100110011001100110011001100110011001101
+</code></pre><ul>
+<li><p>验证结论<br>  把二进制按位分开 分别 1，11，52 位<br>  63位:    0<br>  52-62位:   01111111110<br>  0-51位:    1100110011001100110011001100110011001100110011001101</p>
+<p>  63位 是0， 表示是正数<br>  52-62位 是01111111110 大小为 0x3FE 十进制是 1022<br>  0-51位 是二进制的小数部分 转成十六进制是 0xCCCCCCCCCCCCD</p>
+<p>  其实这个小数部分可以很方便的计算<br>  但是我发现这其实是一个无限循环小数，我们完全可以用无穷级数求和来计算:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">值 = 12 * 16^-1 + 12 * 16^-2 + 12 * 16^-3 + ......</span><br><span class="line">值 = (12/16) / (1 - 1/16)</span><br><span class="line">值 = 4/5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.9 = -1^0 * (1 + 4/5) * 2^(1022-1023)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/" data-id="cjh0o4dio0003d5nxe5lmuz7q" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C语言/">C语言</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          判断电脑是大端系统还是小端系统
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/15/iOS内存管理方式/iOS内存管理方式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">iOS内存管理方式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C语言/">C语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/环境搭建/">环境搭建</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C语言/" style="font-size: 10px;">C语言</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/环境搭建/" style="font-size: 10px;">环境搭建</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/">OC runtime 源码阅读-1.环境搭建篇</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/">判断电脑是大端系统还是小端系统</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/">double类型数据的存储结构</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/15/iOS内存管理方式/iOS内存管理方式/">iOS内存管理方式</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/12/如何区分开源许可证/如何区分开源许可证/">如何区分开源许可证</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 张春生<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
