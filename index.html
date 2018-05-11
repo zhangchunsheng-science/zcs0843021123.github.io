@@ -492,7 +492,7 @@ B、选择All Glyphs
 <p>4、<br>在swift写一个类<br>注意这个类一定要继承NSObject，不然在OC中没法用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class hello: NSObject &#123;</span><br><span class="line"></span><br><span class="line">    var address : String</span><br><span class="line">    var gender: String</span><br><span class="line">   </span><br><span class="line">    init(address:String,gender:String)&#123;</span><br><span class="line">        self.address = address</span><br><span class="line">        self.gender = gender</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    func method() &#123;</span><br><span class="line">        print(&quot;message \(self.address + self.gender)&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>5、<br>在OC需要用到的swift文件中导入文件 “Product Module Name -Swift.h”<br>因为 Product Module Name 默认是工程的名字<br>所以直接导入 #import “工程名-Swift.h”</p>
-<p>6、<br>记着写完先command + b 编译一下，如果没有报错就可以在OC文件调用swift中的类了</p>
+<p>6、<br>记着写完先 command + b 编译一下，如果没有报错就可以在OC文件调用swift中的类了</p>
 <p>二、Swift调用OC</p>
 <p>1、桥接文件名字：工程名-Bridging-Header.h</p>
 <p>2、在桥接文件中把需要用到OC的头文件导入进去</p>
