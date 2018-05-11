@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="C语言," />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
-<meta name="keywords" content="C语言">
+<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 创建私有Pod 首先，你的代码要编译通过。  创建spec文件   12pod spec create https://github.com/zcs0843021123/ZRPlayground# url 是github上的地址。不是下载地址，只是">
+<meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="double类型数据的存储结构">
-<meta property="og:url" content="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/index.html">
+<meta property="og:title" content="私有Pod">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/06/10/私有Pod/私有Pod/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
+<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 创建私有Pod 首先，你的代码要编译通过。  创建spec文件   12pod spec create https://github.com/zcs0843021123/ZRPlayground# url 是github上的地址。不是下载地址，只是">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-11T08:14:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="double类型数据的存储结构">
-<meta name="twitter:description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
+<meta name="twitter:title" content="私有Pod">
+<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 创建私有Pod 首先，你的代码要编译通过。  创建spec文件   12pod spec create https://github.com/zcs0843021123/ZRPlayground# url 是github上的地址。不是下载地址，只是">
 
 
 
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/"/>
+  <link rel="canonical" href="https://zcs0843021123.github.io/2017/06/10/私有Pod/私有Pod/"/>
 
 
 
 
 
-  <title>double类型数据的存储结构 | 凤凰苑</title>
+  <title>私有Pod | 凤凰苑</title>
   
 
 
@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/10/私有Pod/私有Pod/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="张春生">
@@ -277,7 +277,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">double类型数据的存储结构</h2>
+          <h2 class="post-title" itemprop="name headline">私有Pod</h2>
         
 
         <div class="post-meta">
@@ -289,8 +289,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-30T11:08:42+08:00">
-                2016-09-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-10T23:25:31+08:00">
+                2017-06-10
               </time>
             
 
@@ -327,94 +327,41 @@
       
 
       
-        <p>一. 基础知识</p>
-<p>double 类型的大小为:8字节<br>float  类型的大小为:4字节<br>注意:在一些单片机里,double的大小为 4字节<br>本文以 8字节的double为讨论对象（4字节的同理）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br></pre></td></tr></table></figure>
-<p>double型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">位(从0开始)</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">64</td>
-<td style="text-align:center">符号位 0正 1负</td>
-</tr>
-<tr>
-<td style="text-align:center">52-62 (共 11 位)</td>
-<td style="text-align:center">指数部分</td>
-</tr>
-<tr>
-<td style="text-align:center">0-51  (共 52 位)</td>
-<td style="text-align:center">尾数部分</td>
-</tr>
-</tbody>
-</table>
-<p>float型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">位(从0开始)</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">31</td>
-<td style="text-align:center">符号位 0正 1负</td>
-</tr>
-<tr>
-<td style="text-align:center">23-30 (共 8 位)</td>
-<td style="text-align:center">指数部分</td>
-</tr>
-<tr>
-<td style="text-align:center">0-22  (共 23 位)</td>
-<td style="text-align:center">尾数部分</td>
-</tr>
-</tbody>
-</table>
-<p>值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">double </span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-1023)</span><br><span class="line">float</span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-127)</span><br></pre></td></tr></table></figure></p>
-<p>二. 例子</p>
-<p>以0.9为例 看看我们的结论是否正确 代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">union Double &#123;</span><br><span class="line">    double doubleValue;</span><br><span class="line">    int intValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    </span><br><span class="line">    union Double d;</span><br><span class="line">    d.doubleValue = 0.9;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>其中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">intValue[0] 是 -858993459 转成二进制是 11001100110011001100110011001101</span><br><span class="line">intValue[1] 是 1072483532 转成二进制是 00111111111011001100110011001100</span><br></pre></td></tr></table></figure></p>
+        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-创建私有Pod"><a href="#一-创建私有Pod" class="headerlink" title="一. 创建私有Pod"></a>一. 创建私有Pod</h1><ol>
+<li><p>首先，你的代码要编译通过。</p>
+</li>
+<li><p>创建spec文件</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod spec create https://github.com/zcs0843021123/ZRPlayground</span><br><span class="line"># url 是github上的地址。不是下载地址，只是Github上那一页的地址</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>修改spec文件并提交 </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |s|</span><br><span class="line">  s.name = &quot;ZRPlayground&quot;</span><br><span class="line">  s.version = &quot;0.0.4&quot;</span><br><span class="line">  s.summary = &quot;ZRPlayground&quot;</span><br><span class="line">  s.description = &lt;&lt;-DESC</span><br><span class="line">                      	ZRPlaygroundDescription</span><br><span class="line">                        DESC</span><br><span class="line">  s.homepage = &quot;https://github.com/zcs0843021123/ZRPlayground&quot;</span><br><span class="line">  s.author = &#123; &quot;zcs&quot; =&gt; &quot;1017295148@qq.com&quot; &#125;</span><br><span class="line">  s.source = &#123; :git =&gt; &quot;https://github.com/zcs0843021123/ZRPlayground.git&quot;, :tag =&gt; &quot;0.0.4&quot; &#125;</span><br><span class="line">  s.source_files = &quot;ZRPlayground/&quot;, &quot;ZRPlayground/**/*.&#123;h,m&#125;&quot;</span><br><span class="line">  s.public_header_files = &quot;ZRPlayground/**/*.h&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <ul>
-<li>连接连个整数的二进制<br>  我是根据两个整数的值来判断的<br>  intValue[0] 小于 0， intValue[1] 大于 0，而我们的0.9 大于零，<br>  因此，连个整数在内存中的排列是形如下图的: </li>
+<li>记住 version 和 tag 一定要对应你即将要打的tag（此时，你还没打tag，你要把这个spec文件也打进去）<br>就是说 ： 你的 tag 一定要与你的 spec 文件 一一对应。</li>
+<li>homepage、git、source_files、public_header_files 这几个是必须填写的</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">前</th>
-<th style="text-align:center">后</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">intValue[1]</td>
-<td style="text-align:center">intValue[0]</td>
-</tr>
-<tr>
-<td style="text-align:center">00111111111011001100110011001100</td>
-<td style="text-align:center">11001100110011001100110011001101</td>
-</tr>
-</tbody>
-</table>
-<pre><code>最科学的方法当然是 要知道自己的电脑是 大端系统 还是 小端系统；
-本文只是作者的实际操作，可能不是很科学。
-两个整数连接在一起，前半段是 intValue[1] 的二进制；后半段是 intValue[0] 的二进制
-0011111111101100110011001100110011001100110011001100110011001101
-</code></pre><ul>
-<li><p>验证结论<br>  把二进制按位分开 分别 1，11，52 位<br>  63位:    0<br>  52-62位:   01111111110<br>  0-51位:    1100110011001100110011001100110011001100110011001101</p>
-<p>  63位 是0， 表示是正数<br>  52-62位 是01111111110 大小为 0x3FE 十进制是 1022<br>  0-51位 是二进制的小数部分 转成十六进制是 0xCCCCCCCCCCCCD</p>
-<p>  其实这个小数部分可以很方便的计算<br>  但是我发现这其实是一个无限循环小数，我们完全可以用无穷级数求和来计算:</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">值 = 12 * 16^-1 + 12 * 16^-2 + 12 * 16^-3 + ......</span><br><span class="line">值 = (12/16) / (1 - 1/16)</span><br><span class="line">值 = 4/5</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>计算结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.9 = -1^0 * (1 + 4/5) * 2^(1022-1023)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &quot;XXXX&quot;</span><br><span class="line">git pull</span><br><span class="line">git push</span><br><span class="line">git tag -a 0.0.1 -m &quot;Tag release 0.0.1&quot;  #本地打tag标签</span><br><span class="line">git push --tags   						    #推送tag到远程</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>在引用这个Pod的Podfile中加入这一句。这里的URL是git仓库的地址。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;ZRPlayground&apos;, :git =&gt; &apos;https://github.com/zcs0843021123/ZRPlayground.git&apos;</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;ZRPlayground&apos;, :path =&gt; &apos;spec文件的路径&apos;</span><br></pre></td></tr></table></figure>
+<p>注意：以上两句都可以podfile中的指定，这只是指定spec文件在哪里，并不是指定源文件在哪里。在spec文件中指定源文件在哪里的。<br>所以 spec 文件是可以和 源文件 分开的。</p>
+<ol start="5">
+<li>安装Pod</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod install</span><br><span class="line">pod update</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>相关说明</li>
+</ol>
+<p>Podfile.lock<br>这是CocoaPods创建的最重要的文件之一。它记录了需要被安装的pod的每个已安装的版本。如果你想知道已安装的pod是哪个版本，可以查看这个文件。推荐将Podfile.lock文件加入到版本控制中，这有助于整个团队的一致性。</p>
+<p>Manifest.lock<br>这是每次运行pod install时创建的Podfile.lock文件的副本。如果你见过“沙盒文件和Podfile.lock文件不同步”的错误，这个错误就是因Manifest.lock文件和Podfile.lock文件不一样引起。由于Pods所在的目录并不总在版本控制之下，这样可以保证开发者运行app之前都能更新他们的pods，否则app可能会crash，或者在一些不太明显的地方编译失败。</p>
 
       
     </div>
@@ -432,7 +379,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C语言/" rel="tag"># C语言</a>
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
           
         </div>
       
@@ -445,8 +392,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/15/iOS内存管理方式/iOS内存管理方式/" rel="next" title="iOS内存管理方式">
-                <i class="fa fa-chevron-left"></i> iOS内存管理方式
+              <a href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" rel="next" title="响应者链条的一些思考">
+                <i class="fa fa-chevron-left"></i> 响应者链条的一些思考
               </a>
             
           </div>
@@ -455,8 +402,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" rel="prev" title="判断电脑是大端系统还是小端系统">
-                判断电脑是大端系统还是小端系统 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" rel="prev" title="OC runtime 源码阅读-1.环境搭建篇">
+                OC runtime 源码阅读-1.环境搭建篇 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -511,8 +458,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -583,6 +539,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-创建私有Pod"><span class="nav-number">2.</span> <span class="nav-text">一. 创建私有Pod</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

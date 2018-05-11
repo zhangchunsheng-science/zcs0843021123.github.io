@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="C, C++, Objective-C, iOS, Linux, bash" />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -86,16 +86,18 @@
 
 
 
-<meta name="description" content="张春生的技术博客 不定时更新 请原谅">
-<meta property="og:type" content="website">
-<meta property="og:title" content="凤凰苑">
-<meta property="og:url" content="https://zcs0843021123.github.io/archives/2017/05/index.html">
+<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 理论 我们常常用一个container来作为ScrollView的子View进行布局，如：  123456UIView *container = [UIView new];[scrollView addSubview:container];[con">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UIScrollView自动布局">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/12/10/UIScrollView自动布局/UIScrollView自动布局/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="张春生的技术博客 不定时更新 请原谅">
+<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 理论 我们常常用一个container来作为ScrollView的子View进行布局，如：  123456UIView *container = [UIView new];[scrollView addSubview:container];[con">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-11T08:14:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="凤凰苑">
-<meta name="twitter:description" content="张春生的技术博客 不定时更新 请原谅">
+<meta name="twitter:title" content="UIScrollView自动布局">
+<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 理论 我们常常用一个container来作为ScrollView的子View进行布局，如：  123456UIView *container = [UIView new];[scrollView addSubview:container];[con">
 
 
 
@@ -125,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://zcs0843021123.github.io/archives/2017/05/"/>
+  <link rel="canonical" href="https://zcs0843021123.github.io/2017/12/10/UIScrollView自动布局/UIScrollView自动布局/"/>
 
 
 
 
 
-  <title>归档 | 凤凰苑</title>
+  <title>UIScrollView自动布局 | 凤凰苑</title>
   
 
 
@@ -150,7 +152,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -244,74 +246,172 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        嗯..! 目前共计 14 篇日志。 继续努力。
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h2 class="archive-year" id="archive-year-2017">2017</h2>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/10/UIScrollView自动布局/UIScrollView自动布局/">
 
-      <h3 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">
-              
-                <span itemprop="name">响应者链条的一些思考</span>
-              
-            </a>
         
-      </h3>
+          <h2 class="post-title" itemprop="name headline">UIScrollView自动布局</h2>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-10T09:25:31+08:00"
-              content="2017-05-10" >
-          05-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-10T19:25:31+08:00">
+                2017-12-10
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
 
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-理论"><a href="#一-理论" class="headerlink" title="一. 理论"></a>一. 理论</h1><ul>
+<li>我们常常用一个container来作为ScrollView的子View进行布局，如：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">UIView *container = [UIView new];</span><br><span class="line">[scrollView addSubview:container];</span><br><span class="line">[container mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">    make.edges.equalTo(scrollView);</span><br><span class="line">    make.width.equalTo(scrollView);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>因为UIScrollView依靠与其subviews之间的约束来确定ContentSize的大小，<br>等价于代码，如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[scrollView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">    make.left.equalTo(v1.mas_left);</span><br><span class="line">    make.right.equalTo(v1.mas_right);</span><br><span class="line">    make.top.equalTo(v1.mas_top);</span><br><span class="line">    make.bottom.equalTo(v1.mas_bottom);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>UIScrollView是个非常特殊的view。 </li>
+<li>UIScrollView与其subview之间相对位置的约束，并不会直接用于frame的计算，而是会转化为对ContentSize的计算。</li>
+<li>换句话说 当UIScrollView知道了上下左右的约束分别指向subview什么位置之后，只要subview的位置固定下来了，ContentSize的大小就确定下来了。</li>
+</ul>
+<h1 id="二-简单粗暴布局法"><a href="#二-简单粗暴布局法" class="headerlink" title="二. 简单粗暴布局法"></a>二. 简单粗暴布局法</h1><ol>
+<li>最顶部的子View与ScrollView的顶部关联</li>
+<li>其他的子View的顶部必须和他上边的子View的底部关联</li>
+<li>最底部的子View与ScrollView的底部关联</li>
+</ol>
+<p>为了保证ScrollView垂直方向上滚动，必须保证子View的宽度不要大于ScrollView的宽度</p>
+<h3 id="注意-不要用-left、right-来决定子View的宽度。"><a href="#注意-不要用-left、right-来决定子View的宽度。" class="headerlink" title="注意:不要用 left、right 来决定子View的宽度。"></a>注意:不要用 left、right 来决定子View的宽度。</h3><ul>
+<li>比如：Label 此时如果你设置了 left、right 如果它的文字特别多，他也只有一行，ScrollView横着滚动了！！</li>
+<li>用 <code>left + 宽度</code> 代替 <code>left + right</code></li>
+</ul>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/" rel="next" title="iOS中使用矢量图">
+                <i class="fa fa-chevron-left"></i> iOS中使用矢量图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -319,6 +419,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -341,8 +445,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -413,6 +526,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-理论"><span class="nav-number">2.</span> <span class="nav-text">一. 理论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二-简单粗暴布局法"><span class="nav-number">3.</span> <span class="nav-text">二. 简单粗暴布局法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-不要用-left、right-来决定子View的宽度。"><span class="nav-number">3.0.1.</span> <span class="nav-text">注意:不要用 left、right 来决定子View的宽度。</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -555,6 +684,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
