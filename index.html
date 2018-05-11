@@ -333,39 +333,32 @@
             <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
 <li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
 </ol>
-<h1 id="一-方法"><a href="#一-方法" class="headerlink" title="一. 方法"></a>一. 方法</h1><p>1、png转SVG</p>
-<p>inkscape工具</p>
+<h1 id="一-方法"><a href="#一-方法" class="headerlink" title="一. 方法"></a>一. 方法</h1><p>1、png转SVG inkscape(一个工具)</p>
 <p>2、SVG转.ttf文件</p>
 <pre><code>A、登录阿里巴巴矢量图片库
 B、点击图标管理
 C、上传图标
 D、放到暂存架
-E、下载到本地，里边就有了矢量图对应的字体文件 .ttf 文件
-              里边还有一个.html文件，里边有字体文件对应的实体字符码。
-             详细信息都在HTML文件里边。
+E、下载到本地，里边就有了矢量图对应的字体文件 .ttf 文件，
+里边还有一个.html文件，里边有字体文件对应的实体字符码。详细信息都在HTML文件里边。
 </code></pre><p>3、把iconfont.ttf 添加到工程目录下</p>
-<p>4、在info.plist里边加上：</p>
-<pre><code>Fonts provided by application （它是一个数组）
-item0: iconfont.ttf
-</code></pre><p>5、Build Phase里边</p>
-<pre><code>CopyBundleResource的时候，把iconfont.ttf放进去，这样字体文件就被copy了，这样，字体文件就被安装上了。
-</code></pre><p>6、使用时</p>
+<p>4、在info.plist里, Fonts provided by application(它是一个数组)加上字体文件 <code>item0: iconfont.ttf</code></p>
+<p>5、Build Phase里, CopyBundleResource的时候，把iconfont.ttf放进去，这样字体文件就被copy了，这样，字体文件就被安装上了。</p>
+<p>6、使用时</p>
 <pre><code>UIFont *iconfont = [UIFont fontWithName:@&quot;uxIconFont&quot; size: 16];
     label.font = iconfont;
 这个uxIconFont是字体名字，不是iconfont.ttf的名字。
 label.text = @&quot;\U00003439 \U000035ad \U000035ae \U000035af \U000035eb \U000035ec&quot;;
 </code></pre><p>7、注意：</p>
-<pre><code>文本值为4个字节的Unicode码( UTF16 小端编码)，
+<pre><code>文本值为4个字节的Unicode码(UTF16 小端编码)，
 所以，要在\U 与 字体值之间补上0。
-13420/0x346c 这就是字体值，前边是十进制，后边是十六进制，我们使用的是十六进制。
+`13420/0x346c` 这就是字体值，前边是十进制，后边是十六进制，我们使用的是十六进制。
 </code></pre><p>8、使用BirdFont查看字体对应的编码，他可以直接打开.ttf文件。</p>
 <pre><code>A、打开BirdFont，打开字体文件（.tff文件）
 B、选择All Glyphs
 </code></pre><p>9、使用字体文件实现矢量图的原理：</p>
-<pre><code>就是造一个fontFamily
-里边有一种特定的font
-这种特定的font，它也是使用Unicode码，
-只不过这种font，用我们自己定义的图案，代替了原本的字符。
+<pre><code>就是造一个fontFamily, 里边有一种特定的font, 这种特定的font, 它也是使用Unicode码,
+只不过这种font, 用我们自己定义的图案, 代替了原本的字符。
 </code></pre>
           
         
@@ -1513,6 +1506,202 @@ B、选择All Glyphs
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2015/12/01/常用git命令/常用git命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/12/01/常用git命令/常用git命令/" itemprop="url">常用git命令</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-01T20:50:31+08:00">
+                2015-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一. Clone</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@gitlab.hecom.cn:hecom-ios/NewHongquanCRM.git BackUpCRM</span><br></pre></td></tr></table></figure>
+<p>二. 创建本地仓库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;init project&quot;</span><br></pre></td></tr></table></figure>
+<p>三. 推送到远程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">1. 查看你当前项目的远程git地址 </span><br><span class="line">	git remote -v # -v 为 --verbose (冗长的)的简写，取首字母</span><br><span class="line">2. 在远程建一个仓库 </span><br><span class="line">	如: https://github.com/zcs0843021123/Rei.git</span><br><span class="line">3. 关联本地库 </span><br><span class="line">	git remote add origin https://github.com/zcs0843021123/Rei.git </span><br><span class="line">	添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库。</span><br><span class="line">4. 推送当前分支并把远程设置成 upstream</span><br><span class="line">	git push --set-upstream origin master </span><br><span class="line"></span><br><span class="line">	Git中的upstream和downstream的概念是相对的：</span><br><span class="line">	如果A库中的分支x被push到B库中的分支y，则y就是x的upstream，而x就是y的downstream。</span><br><span class="line">	- 对于从远程库中clone或fetch得到的本地分支，都在远程库中有一个upstream分支。</span><br><span class="line">	- 对于在本地新建的本地分支，如果执行git push origin my_remote_branch_name</span><br><span class="line">	  是不会将my_remote_branch_name设置为新建的本地分支在远程库origin中的upstream分支的，</span><br><span class="line">	  可以执行如下操作：</span><br><span class="line">	  git push --set-upstream origin my_remote_branch_name #origin是远程库 master是远程分支</span><br><span class="line">	  或者</span><br><span class="line">	  git push -u origin my_remote_branch_name #--set-upstream  是 -u 的全称</span><br><span class="line">	- 此外，还可以执行如下操作直接为新建的本地分支设置在远程库中的upstream分支：</span><br><span class="line">	  git branch --set-upstream master origin/my_remote_branch_name #origin是远程库 master是本地分支</span><br></pre></td></tr></table></figure>
+<p>四. 分支</p>
+<p>查看分支(包括远程的分支)，当前的分支加了 * 号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -a</span><br></pre></td></tr></table></figure>
+<p>创建本地分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch develop</span><br></pre></td></tr></table></figure>
+<p>push本地分支到远程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --set-upstream origin develop</span><br></pre></td></tr></table></figure>
+<p>切换分支 (主模块、子模块都是)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br></pre></td></tr></table></figure>
+<p>git中有一个叫HEAD的分支 很危险 这样来把它重命名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -m HEAD newbranch</span><br></pre></td></tr></table></figure>
+<p>git删除本地分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d newbranch</span><br></pre></td></tr></table></figure>
+<p>五. 拉和推</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<p>六. 子模块</p>
+<p>查看子模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule</span><br></pre></td></tr></table></figure>
+<p>添加子模块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule add https://github.com/ReactiveCocoa/ReactiveObjC.git ReactiveObjC</span><br></pre></td></tr></table></figure></p>
+<p>初始化子模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule init</span><br></pre></td></tr></table></figure>
+<p>拉取子模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
+<p>每个子模块都pull</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
+<p>有时候，子模块拉不下来时候，用它</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init --recursive 递归增加子模块 (有时候 子模块拉不下来时候，用它)</span><br></pre></td></tr></table></figure>
+<p>每个子模块都切到crmDevelop分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule foreach git checkout crmDevelop</span><br></pre></td></tr></table></figure>
+<p>七. 提交</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add -A    添加所有文件</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;我修改了什么&quot;</span><br></pre></td></tr></table></figure>
+<p>八. log</p>
+<p>显示历史记录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git log</span><br><span class="line">--graph</span><br><span class="line">--pretty</span><br><span class="line">--committer zhangchunsheng</span><br></pre></td></tr></table></figure>
+<p>查找某段时间内的某人的提交记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --pretty=format:&quot;%s&quot;  --since=&quot;40 days ags&quot; --author=&quot;zhangchunsheng&quot;</span><br></pre></td></tr></table></figure></p>
+<p>九. 暂存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git stash </span><br><span class="line"></span><br><span class="line">#使用暂存</span><br><span class="line">git stash pop</span><br><span class="line"></span><br><span class="line">#获取本地的 stash</span><br><span class="line">git stash list    </span><br><span class="line"></span><br><span class="line">#清除本地的 stash</span><br><span class="line">git stash clear</span><br></pre></td></tr></table></figure>
+<p>十. 丢弃更改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout .</span><br></pre></td></tr></table></figure>
+<p>十一. Updates were rejected because tag already exists in the remote! (Sourcetree)<br>修改 提交时 不要提交所有标签</p>
+<p>十二. pathspec ‘master’ did not match any file(s) known<br>解决：<br>要在子模块下分别执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git checkout -b dev</span><br><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
+<p>十三. gitignore<br>编写.gitignore 你要先把你要ignore的文件删除，然后再写.gitignore，否则不好使。</p>
+<p>以斜杠“/”表示目录；<br>以星号“*”通配多个字符；<br>以问号“?”通配单个字符<br>以方括号“[]”包含单个字符的匹配列表；<br>以叹号“!”表示不忽略(跟踪)匹配到的文件或目录；</p>
+<p>示例：</p>
+<pre><code>+ 规则：`fd1/*` 说明：忽略目录 fd1 下的全部内容；
+  注意，不管是根目录下的 /fd1/ 目录，还是某个子目录 /child/fd1/ 目录，都会被忽略；
++ 规则：`/fd1/*` 说明：忽略根目录下的 /fd1/ 目录的全部内容；
+</code></pre><p>　　（3）规则：<br>　　<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">!.gitignore</span><br><span class="line">!/fw/bin/</span><br><span class="line">!/fw/sf/</span><br></pre></td></tr></table></figure></p>
+<pre><code>说明：忽略全部内容，但是不忽略 .gitignore 文件、根目录下的 /fw/bin/ 和 /fw/sf/ 目录；
+</code></pre><p>例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># Xcode</span><br><span class="line">#</span><br><span class="line"># gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore &amp; Swift.gitignore</span><br><span class="line"></span><br><span class="line">main.jsbundle</span><br><span class="line">node_modules/</span><br><span class="line"></span><br><span class="line">## Build generated</span><br><span class="line">build/</span><br><span class="line">DerivedData/</span><br><span class="line"></span><br><span class="line">## Various settings</span><br><span class="line">*.pbxuser</span><br><span class="line">!default.pbxuser</span><br><span class="line">*.mode1v3</span><br><span class="line">!default.mode1v3</span><br><span class="line">*.mode2v3</span><br><span class="line">!default.mode2v3</span><br><span class="line">*.perspectivev3</span><br><span class="line">!default.perspectivev3</span><br><span class="line">xcuserdata/</span><br><span class="line">xcshareddata/</span><br><span class="line">*.DS_Store</span><br><span class="line"></span><br><span class="line">## Other</span><br><span class="line">*.moved-aside</span><br><span class="line">*.xccheckout</span><br><span class="line">*.xcscmblueprint</span><br><span class="line">.idea/</span><br><span class="line">.sonar</span><br></pre></td></tr></table></figure></p>
+<p>十四. git打标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git tag -a v1.0 -m &apos;无错误 可以使用版本&apos;</span><br><span class="line">git tag -a 1.1.1 -m &apos;1.1.1&apos;</span><br><span class="line">git push --tags</span><br></pre></td></tr></table></figure>
+<p>十五. git merge</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge master # 把 master 分支 merge 到当前的分支</span><br></pre></td></tr></table></figure>
+<p>十六. lightweight 和 annotated</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">有两种tag :  lightweight 和 annotated. </span><br><span class="line">Lightweight tags are merely refs that point to some object.</span><br><span class="line">Annotated tags are a separate git object by themselves, and store a lot more information like author, committer, a commit message, etc.</span><br><span class="line">When you used git tag -a to create a tag, git would have created an annotated tag for you.</span><br><span class="line">The ^&#123;&#125; is the syntax used to dereference a tag. It is described in gitrevisions.</span><br><span class="line">  ● When used with tag objects, git would recursively dereference the tag until it finds a non-tag object.</span><br><span class="line">  ● When used with non-tag objects, it doesn&apos;t do anything and is equivalent to skipping the ^&#123;&#125;</span><br><span class="line">The refs/tags/v0.1.6 ref in your repository points to the tag object bb944682f7f65272137de74ed18605e49257356c, which in turn points to 771a930dc0ba86769d6862bc4dc100acc50170fa (a non-tag object) which I&apos;m guesssing is storing the commit information when you created the tag.</span><br><span class="line"></span><br><span class="line">So when you do refs/tags/v0.1.6^&#123;&#125;, git is going to dereference the tag and resolve it to 771a930dc0ba86769d6862bc4dc100acc50170fa - the non-tag object.</span><br><span class="line">There is also a git show-ref command that can be used to list only tags, and optionally dereference as follows, and in your case should produce the following output:</span><br><span class="line">$ git show-ref --tags</span><br><span class="line">bb944682f7f65272137de74ed18605e49257356c    refs/tags/v0.1.6</span><br><span class="line">a72251d945353a360087eb78ee75287c38a1c0e6    refs/tags/v0.1.7</span><br><span class="line"></span><br><span class="line">$ git show-ref --tags --dereference</span><br><span class="line">bb944682f7f65272137de74ed18605e49257356c    refs/tags/v0.1.6</span><br><span class="line">771a930dc0ba86769d6862bc4dc100acc50170fa    refs/tags/v0.1.6^&#123;&#125;</span><br><span class="line">a72251d945353a360087eb78ee75287c38a1c0e6    refs/tags/v0.1.7</span><br><span class="line">d69e66d7c915b9682618b7f304b80cc0ae4c7809    refs/tags/v0.1.7^&#123;&#125;</span><br><span class="line"></span><br><span class="line">To confirm this, you can use git show command to give you more details about the git object.</span><br><span class="line">This is the information from one of my test git repositories.</span><br><span class="line">$ git show 43f9a98886ba873c0468c608f24c408b9991414f</span><br><span class="line">tag v0.1</span><br><span class="line">Tagger: Ash &lt;tuxdude@OptimusPrime&gt;</span><br><span class="line">Date:   Sun Jul 15 00:14:43 2012 -0700</span><br><span class="line"></span><br><span class="line">Tagging Stable repo 0.1 :)</span><br><span class="line">-----BEGIN PGP SIGNATURE-----</span><br><span class="line">&lt;PGP-SIGNATURE&gt;</span><br><span class="line">-----END PGP SIGNATURE-----</span><br><span class="line"></span><br><span class="line">commit e55df25f2321a6b2c9a02fa80ccba7cbe3c38c08</span><br><span class="line">Merge: 796efcd 58e3a4d</span><br><span class="line">Author: Ash &lt;tuxdude@OptimusPrime&gt;</span><br><span class="line">Date:   Sun Jul 15 00:02:44 2012 -0700</span><br><span class="line"></span><br><span class="line">    Merge branch &apos;dev&apos; into &apos;master&apos; for stable 0.1.</span><br><span class="line"></span><br><span class="line">$ git show e55df25f2321a6b2c9a02fa80ccba7cbe3c38c08</span><br><span class="line">commit e55df25f2321a6b2c9a02fa80ccba7cbe3c38c08</span><br><span class="line">Merge: 796efcd 58e3a4d</span><br><span class="line">Author: Ash &lt;tuxdude@OptimusPrime&gt;</span><br><span class="line">Date:   Sun Jul 15 00:02:44 2012 -0700</span><br><span class="line"></span><br><span class="line">    Merge branch &apos;dev&apos; into &apos;master&apos; for stable 0.1.</span><br></pre></td></tr></table></figure>
+<p>十六. 如果 你往远程提交 代码 permission denied<br>那么很可能</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1) 本地的upper stream 没有设置</span><br><span class="line">2) git 的SSH Key 没有加到远程</span><br><span class="line">3) 远程没有给你开发者权限，你没有权利提交</span><br></pre></td></tr></table></figure>
+<p>十七. 有时候 .git/index.lock 存在 导致你 提交提交不了，检出也检出不了。你可以直接把他删除了 就好了</p>
+<p>十八. 补丁<br>创建补丁===&gt;产生一个 .diff 文件 ===&gt; 动作，应用补丁 ===&gt; 提交</p>
+<p>1.1、产生patch</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git format-patch 1e225fc -5</span><br></pre></td></tr></table></figure>
+<p>产生 从 1e225fc 开始的往前5个提交 （包括 1e225fc ）<br>产生 0001-.patch<br>0002-.patch<br>0003-.patch<br>0004-.patch<br>0005-.patch<br>0001-0005是按时间顺序来的，最早的在最前边，如果是别的分支merge过来的commit 那么不会出现在patch里</p>
+<p>1.2、产生diff</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff 1e225fc --binary &gt; ~/patch/patch/test.diff</span><br></pre></td></tr></table></figure>
+<p>diff 多次提交可以是一个文件，但是patch不行，因为它里面有commit记录</p>
+<p>十九. 如果一个提交丢了, 处于游离的状态 ，没有分支或tag指向他<br>那么我们可以把版本切到之前有他的版本，然后，找到他的提交的CommitID，然后检出这个Commit，然后创建一个分支。</p>
+<p>二十. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add &lt;name&gt; &lt;url&gt;</span><br></pre></td></tr></table></figure>
+<p>其中，name 表示你要给这个远程库起的名字，url 表示这个库的地址<br>提交的时候，先 add, commit。然后 git push <name> <branch> 就行<br>其中，name 表示你在上一步给它起的名字，branch 表示某一个分支<br>补充：<br>推送到远程库上面已经说了。<br>删除远程分支比较麻烦。<br>一种方式是，可以直接在 github 网页上操作，<br>另一种方式是：<code>git push &lt;name&gt; :&lt;branch&gt;</code> （注意冒号前的空格）</branch></name></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2015/09/12/如何区分开源许可证/如何区分开源许可证/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1621,227 +1810,13 @@ B、选择All Glyphs
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/" itemprop="url">Mac环境搭建HEXO+Github博客</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-05T13:54:33+08:00">
-                2015-08-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><p>  本系列文章是自己的工作总结,因此写的有些简略,如有不明白的地方,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></p>
-<h1 id="一-安装工具"><a href="#一-安装工具" class="headerlink" title="一. 安装工具"></a>一. 安装工具</h1><p>Hexo 官网指南 <a href="https://hexo.io/docs/index.html" target="_blank" rel="noopener">https://hexo.io/docs/index.html</a></p>
-<ol>
-<li>Git </li>
-<li>Node.js </li>
-<li>安装hexo  <code>npm install -g hexo-cli</code><br>注意：全局安装的npm第三方库在 /usr/local/lib/node_modules 里边,所以,安装hexo的结果可以在 /usr/local/lib/node_modules 中查看</li>
-</ol>
-<h1 id="二-配置hexo"><a href="#二-配置hexo" class="headerlink" title="二. 配置hexo"></a>二. 配置hexo</h1><h2 id="1-cd到自己要放博客源码的目录中去"><a href="#1-cd到自己要放博客源码的目录中去" class="headerlink" title="1. cd到自己要放博客源码的目录中去"></a>1. cd到自己要放博客源码的目录中去</h2><p>比如我的是在 /Users/zhangchunsheng/Documents</p>
-<ol>
-<li><p>创建myGithubBlog目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init myGithubBlog</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>进入到 myGithubBlog 中 </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> myGithubBlog</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装node_modules第三方库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动本地服务,预览页面</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server 	<span class="comment">#或是 hexo s （简写）</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>这时候 就可以在<a href="http://localhost:4000/就可以看到一个欢迎页面了" target="_blank" rel="noopener">http://localhost:4000/就可以看到一个欢迎页面了</a></p>
-</li>
-</ol>
-<h2 id="2-配置-config-yml-对属性进行修改-修改为自己定义的属性"><a href="#2-配置-config-yml-对属性进行修改-修改为自己定义的属性" class="headerlink" title="2. 配置 _config.yml 对属性进行修改,修改为自己定义的属性"></a>2. 配置 _config.yml 对属性进行修改,修改为自己定义的属性</h2><p>如：</p>
-<ol>
-<li>title.  subtitle. description. author. language 这些基本属性</li>
-<li>url属性（你的博客的网站, github默认就是 <a href="https://your_github_user_name.github.io/）" target="_blank" rel="noopener">https://your_github_user_name.github.io/）</a></li>
-<li><p>deploy是部署相关的配置属性: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/zcs0843021123/zcs0843021123.github.io.git,master</span><br></pre></td></tr></table></figure>
-<p>其中: type是类型, git,<br>repo就是你在github上的远程仓库, 例如 我的是 <a href="https://github.com/zcs0843021123/zcs0843021123.github.io.git" target="_blank" rel="noopener">https://github.com/zcs0843021123/zcs0843021123.github.io.git</a>,<br>后边跟上逗号,<br>master 表示是master分支</p>
-</li>
-<li>一个可用的例子:(以下例子只是可以照着修改对应的属性 不可以把原有的属性都删除了)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 凤凰苑</span><br><span class="line">subtitle: 张春生的个人博客</span><br><span class="line">description: 张春生的技术博客 不定时更新 请原谅</span><br><span class="line">author: 张春生</span><br><span class="line">language: zh-Hans</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://zcs0843021123.github.io/</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/zcs0843021123/zcs0843021123.github.io.git,master</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="3-在自己的github上创建一个仓库"><a href="#3-在自己的github上创建一个仓库" class="headerlink" title="3. 在自己的github上创建一个仓库"></a>3. 在自己的github上创建一个仓库</h2><p>仓库的名字就叫做 your_github_user_name.github.io<br>your_github_user_name.github.io 这个名字的格式是固定的 不可以谁便乱改<br>这个仓库一定要是空的，什么都没有，否则deploy不上去（deploy调用的就是 git push）</p>
-<p>有时hexo deploy不上去，不过有时候也不报错，具体表现为博客不更新或者是报404，是因为<br>1）你的GitHub的仓库里有东西，push不上去。<br>2）你没有给git设置upstream</p>
-<pre><code>- 执行hexo generate之后，在 .deploy_git 里边就是你要发布的博客。
-  先用 git remote -v 查看你的这个git仓库有木有远程仓库，一般来说没有
-  远程仓库 如: https://github.com/your_github_user_name/your_github_user_name.github.io
-- 关联本地库
-  git remote add origin https://github.com/your_github_user_name/your_github_user_name.github.io
-  添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库。
-- 推送当前分支并把远程设置成 upstream
-  git push --set-upstream origin master 
-</code></pre><h2 id="4-测试写一个博客并发布"><a href="#4-测试写一个博客并发布" class="headerlink" title="4. 测试写一个博客并发布"></a>4. 测试写一个博客并发布</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean      </span><br><span class="line">hexo generate #（简写 hexo g）</span><br><span class="line">hexo deploy   #（简写 hexo d）</span><br></pre></td></tr></table></figure>
-<h2 id="5-查看结果"><a href="#5-查看结果" class="headerlink" title="5. 查看结果"></a>5. 查看结果</h2><p>   本地预览: <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a><br>   github网页：<a href="https://zcs0843021123Zcs.github.io" target="_blank" rel="noopener">https://zcs0843021123Zcs.github.io</a></p>
-<h1 id="三-写博客-amp-发布博客"><a href="#三-写博客-amp-发布博客" class="headerlink" title="三. 写博客 &amp; 发布博客"></a>三. 写博客 &amp; 发布博客</h1><h2 id="1-写博客"><a href="#1-写博客" class="headerlink" title="1. 写博客"></a>1. 写博客</h2><p><code>hexo new &quot;a test article&quot;</code><br>就会产生一个文件 your_github_blog_local_path/source/_posts/a-test-article.md<br>文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: a test article</span><br><span class="line">date: 2017-09-05 13:46:21</span><br><span class="line">tags:</span><br><span class="line">---</span><br></pre></td></tr></table></figure></p>
-<p>然后就可以在a-test-article.md里边愉快的写博客了</p>
-<h2 id="2-发布博客"><a href="#2-发布博客" class="headerlink" title="2. 发布博客"></a>2. 发布博客</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-<h2 id="3-hexo主题"><a href="#3-hexo主题" class="headerlink" title="3. hexo主题"></a>3. hexo主题</h2><p>个人使用的是：iissnan/hexo-theme-next<br>源码地址在 <a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next</a><br>next 官网 <a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">http://theme-next.iissnan.com/getting-started.html</a></p>
-<ol>
-<li><p>下载主题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ cd myGithubBlog #我的博客的本地的目录就在 myGithubBlog</span><br><span class="line">$ ls</span><br><span class="line">_config.yml  node_modules  package.json  public  scaffolds  source  themes</span><br><span class="line">$ mkdir themes/next</span><br><span class="line"></span><br><span class="line"># 在myGithubBlog之外的另外一个目录里下载next主题的源码,</span><br><span class="line"># 记住千万不要直接clone进myGithubBlog,否则里边有一个子git你会很蛋疼</span><br><span class="line"># 而且你还需要修改 next 的配置</span><br><span class="line">$ git clone --branch v5.1.2 https://github.com/iissnan/hexo-theme-next themes/next</span><br><span class="line">$ git checkout master</span><br><span class="line">$ git pull</span><br><span class="line"></span><br><span class="line"># 再把源码拷贝进 themes/next</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>把 next 主题设为自己blog的主题, 修改 _config.yml 中的内容 theme: next</p>
-</li>
-<li><p>修改 _config.yml 中的内容 language: zh-Hans</p>
-</li>
-<li><p>创建一个 tags 文件<br><code>hexo new page &quot;tags&quot;</code><br>文件内容为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">title: All tags</span><br><span class="line">date: 2014-12-22 12:39:04</span><br><span class="line">type: &quot;tags&quot;</span><br></pre></td></tr></table></figure>
-<p>修改 themes/next/_config.yml 文件, 修改如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /</span><br><span class="line">  archives: /archives</span><br><span class="line">  tags: /tags</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>常用设置 (修改 themes/next/_config.yml 文件)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /</span><br><span class="line">  archives: /archives</span><br><span class="line">  tags: /tags</span><br><span class="line">favicon: /favicon.ico</span><br><span class="line">avatar: /default_avatar.png</span><br><span class="line">highlight_theme: normal</span><br><span class="line">fancybox: true</span><br><span class="line">since: 2013</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>类似的, 添加 about (关于) 页面, 也是这么添加的。</p>
-</li>
-<li><p>在 source/_data 目录下创建一个 next.yml 文件 (如果没有 _data 就创建一个 _data 目录)</p>
-</li>
-<li><p>把 _config.yml 和 themes/next 下的 _config.yml 内容都粘贴到 next.yml 中</p>
-</li>
-<li><p>以后使用 hexo clean . hexo g . hexo s .  hexo d 都要加上 <code>--config source/_data/next.yml</code><br>如: <code>hexo clean --config source/_data/next.yml &amp;&amp; hexo g --config source/_data/next.yml</code>.</p>
-</li>
-<li><p>根据自己的喜好,再看着 next.yml 里的注释, 进行自己的喜欢的风格的配置。<br>例如 </p>
-<ul>
-<li>设置头像 可以设置 next.yml 中的 avatar 属性。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 远程图片的URL</span><br><span class="line">avatar: https://avatars1.githubusercontent.com/u/12196768?v=4&amp;u=f5638036e2ae07181f94613dc4b95eb207ac0476&amp;s=400</span><br><span class="line"></span><br><span class="line"># 或者是 本地图片</span><br><span class="line">avatar: /images/12196768.jepg</span><br><span class="line"># 注意 本地图片 你需要把图片在 theme 目录下的 /images/ 和 网站目录下 /uploads/ 都存一份</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>一定要注意,以后要是修改配置文件需要 themes/next下的_config.yml.  _config.yml 与 next.yml 同时修改。<br>当然要是某个文件里,压根就木有那个属性,我们就不用修改。</p>
-</li>
-</ol>
-<h2 id="4-插入图片"><a href="#4-插入图片" class="headerlink" title="4. 插入图片"></a>4. 插入图片</h2><ol>
-<li>把主页配置文件 _config.yml 里的 post_asset_folder :这个选项设置为true<br>把 next.yml 里的 post_asset_folder:这个选项设置为true</li>
-<li>安装图片保存的第三方库 <code>npm install hexo-asset-image --save</code> </li>
-<li>在 /source/_posts 里边造一个和 your_md_name.md 同名的目录 your_md_name,把图片放在里边。</li>
-<li>md文件中应用图片<br>格式    <code>![你想输入的替代文字](图片所在的目录名/图片名.jpg)</code><br>如      <code>![测试图片](Mac环境搭建HEXO-Github博客/Snip20170906_5.png)</code><br> <img src="/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/Snip20170906_5.png" alt="测试图片"></li>
-</ol>
-<h1 id="四-注意事项"><a href="#四-注意事项" class="headerlink" title="四. 注意事项"></a>四. 注意事项</h1><ol>
-<li>注意事项 确保自己是 Hexo 3 (或者更高的版本)</li>
-<li><p>有时候报错 ERROR Deployer not found: git  这时候,需要加装第三方库： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>有时候在Safari上浏览 <a href="https://zcs0843021123.github.io">https://zcs0843021123.github.io</a> 看不到,报错404；可能是浏览器的问题,可以用Chrome 或者手机试试,也可以清空缓存试试（Safari的清空缓存 在Safari的开发菜单下边）</p>
-</li>
-<li>推荐安装从 finder 直接点击叫出shell 的工具 Go2Shell (当然你也可以不安装 直接一步一步cd进去）</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1891,7 +1866,7 @@ B、选择All Glyphs
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1904,7 +1879,7 @@ B、选择All Glyphs
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
