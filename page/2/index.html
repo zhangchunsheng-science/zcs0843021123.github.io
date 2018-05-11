@@ -259,6 +259,129 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/10/19/KVC-原理/KVC-原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/19/KVC-原理/KVC-原理/" itemprop="url">KVC 原理</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-19T16:42:31+08:00">
+                2017-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-KVC-查找过程"><a href="#一-KVC-查找过程" class="headerlink" title="一. KVC 查找过程"></a>一. KVC 查找过程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">以一个叫 name 的属性为例：</span><br><span class="line">//    setter and getter       // 0 第0步查找，最先查找</span><br><span class="line">//    NSString * _name;       // 1 第1步查找</span><br><span class="line">//    NSString * _isName;     // 2 第2步查找</span><br><span class="line">//    NSString * name;        // 3 第3步查找</span><br><span class="line">//    NSString * isName;      // 4 第4步查找</span><br><span class="line">//    UndefinedKey:           // 5 第5步查找</span><br></pre></td></tr></table></figure>
+<h1 id="二-像js一样任意给对象赋属性和取出属性"><a href="#二-像js一样任意给对象赋属性和取出属性" class="headerlink" title="二. 像js一样任意给对象赋属性和取出属性"></a>二. 像js一样任意给对象赋属性和取出属性</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (void)setValue:(id)value forUndefinedKey:(NSString *)key &#123;</span><br><span class="line">    if (value == nil) &#123;</span><br><span class="line">        value = [NSNull null];</span><br><span class="line">    &#125;</span><br><span class="line">    objc_setAssociatedObject(self, (__bridge const void *)(key), value, OBJC_ASSOCIATION_RETAIN);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)valueForUndefinedKey:(NSString *)key &#123;</span><br><span class="line">    id target = objc_getAssociatedObject(self, (__bridge const void *)(key));</span><br><span class="line">    if ([target isKindOfClass:[NSNull class]])</span><br><span class="line">        return nil;</span><br><span class="line">    return target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -983,137 +1106,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
-                2017-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
-<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
-<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
-<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
-<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
-<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/OC-Associated-Objects/OC-Associated-Objects/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1289,6 +1281,137 @@
 <li>关联对象的五种关联策略与属性的限定符非常类似，在绝大多数情况下，我们都会使用 OBJC_ASSOCIATION_RETAIN_NONATOMIC 的关联策略，这可以保证我们持有关联对象；</li>
 <li>关联对象的释放时机与移除时机并不总是一致，比如 OBJC_ASSOCIATION_ASSIGN 进行关联的对象，不知道什么时候就被释放了，但是并没有被移除，而再使用这个关联对象时就会造成 Crash。</li>
 </ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
+                2017-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
+<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
+<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
+<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
+<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
+<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
           
         
@@ -1650,239 +1773,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/15/iOS内存管理方式/iOS内存管理方式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/15/iOS内存管理方式/iOS内存管理方式/" itemprop="url">iOS内存管理方式</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-15T15:03:03+08:00">
-                2016-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>参考书: 《Objective-C高级编程:iOS与OS X多线程和内存管理》书中分别讲了GNUstep与Cocoa框架,有利于我们做比较和参考。</li>
-<li><p>参考资料(特别鸣谢这两个作者写了这么好的文章,让我受益匪浅):</p>
-<p> <a href="http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/#jtss-tsina" target="_blank" rel="noopener">http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/#jtss-tsina</a> (来源：雷纯锋的技术博客)</p>
-<p> <a href="http://www.jianshu.com/p/4f49c5c81021" target="_blank" rel="noopener">http://www.jianshu.com/p/4f49c5c81021</a> (作者：枫宇翔, 來源：简书)</p>
-</li>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-内存管理的思考方式"><a href="#一-内存管理的思考方式" class="headerlink" title="一. 内存管理的思考方式"></a>一. 内存管理的思考方式</h1><ol>
-<li>自己生成的对象，自己持有 如 <code>id object = [[NSObject alloc] init];</code><br>在iOS内存管理中有四个关键字 <strong>只有这四个关键字</strong> ，alloc、new、copy、mutableCopy，<br>自身使用这些关键字产生对象，那么自身就持有了对象</li>
-<li><p>非自己生成的对象，自己也能持有 </p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id object = [NSArray array];    // 此时 对象的引用计数为1</span><br><span class="line">[object retain];                // 此时 对象的引用计数为2</span><br></pre></td></tr></table></figure>
-<p>NSArray通过类方法array产生了对象(并没有使用alloc、new、copy、mutableCopt来产生对象),<br>因此该对象不属于obj自身产生的，因此，需要使用retain方法让对象计数器+1,<br>从而obj可以持有该对象(尽管该对象不是他产生的)</p>
-</li>
-<li>不再需要自己持有对象时释放<br>当obj不在需要持有的对象，那么，obj应该发送release消息</li>
-<li>非自己持有的对象无法释放 否则造成了野指针错误</li>
-</ol>
-<h1 id="二-引用计数管理"><a href="#二-引用计数管理" class="headerlink" title="二. 引用计数管理"></a>二. 引用计数管理</h1><ol>
-<li><p>苹果对于引用计数的管理是通过一张引用计数表进行管理的<br>表的键为 内存块地址的散列值 值为引用计数<br><code>![](https://static.oschina.net/uploads/img/201709/18171900_mHrO.png &quot;&quot;)</code><br><img src="/2016/09/15/iOS内存管理方式/iOS内存管理方式/image.png" alt="测试图片"></p>
-<ul>
-<li><p>alloc 的函数实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">id obj = [[NSObject alloc] init]; </span><br><span class="line">+ (id)alloc &#123; </span><br><span class="line">    return [self allocWithZone:NSDefaultMallocZone()]; </span><br><span class="line">&#125; </span><br><span class="line">+ (id)allocWithZone:(NSZone*)z &#123; </span><br><span class="line">    return NSAllocateObject(self,0,z); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>retainCount、  retain、  release 的简化的代码实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">- (NSUInteger)retainCount &#123; </span><br><span class="line">    return (NSUInteger)__CFDoExternRefOperation(OPERATION_retainCount,self); </span><br><span class="line">&#125;</span><br><span class="line">- (id)retain &#123; </span><br><span class="line">    return (id)__CFDoExternRefOperation(OPERATION_retain,self); </span><br><span class="line">&#125; </span><br><span class="line">- (void)release &#123; </span><br><span class="line">    return __CFDoExternRefOperation(OPERATION_release,self); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int __CFDoExternRefOperation(uintptr_r op, id obj) &#123; </span><br><span class="line">    CFBasicHashRef table = 取得对象对应的散列表(obj); </span><br><span class="line">    int count; </span><br><span class="line">    switch(op) &#123; </span><br><span class="line">        case OPERATION_retainCount: </span><br><span class="line">            count = CFBasicHashGetCountOfKey(table,obj); </span><br><span class="line">            // 获取引用计数</span><br><span class="line">            return count; </span><br><span class="line">        case OPERATION_retain: </span><br><span class="line">            CFBasicHashAddValue(table,obj); </span><br><span class="line">            // 引用计数加1</span><br><span class="line">            return obj; </span><br><span class="line">        case OPERATION_release: </span><br><span class="line">            count = CFBasicHashRemoveValue(table,obj); </span><br><span class="line">            // 引用计数减1, CFBasicHashRemoveValue返回0时, release调用dealloc</span><br><span class="line">            return 0 == count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>对象什么时候被释放的<br>若是release则减1，而且在CFBasicHashRemoveValue中将引用计数减少到0时会调用dealloc，从而调用NDDeallocateObject函数、free函数将对象所在内存释放</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">- (int)testArrayEnumerate:(NSError **)error &#123;</span><br><span class="line">    NSMutableArray *array = [NSMutableArray array];</span><br><span class="line">    int index = 0;</span><br><span class="line">    while (index &lt; 30) &#123;</span><br><span class="line">        [array addObject:@(index)];</span><br><span class="line">        index++;</span><br><span class="line">    &#125;</span><br><span class="line">    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</span><br><span class="line">        if (error) &#123;</span><br><span class="line">                *error = [[NSError alloc] initWithDomain:NSURLErrorDomain code:300 userInfo:@&#123;&#125;];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line">// 调用</span><br><span class="line">NSError *error = nil;</span><br><span class="line">[self testArrayEnumerate:&amp;error];</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>__strong</p>
-</li>
-</ol>
-<ul>
-<li><p>对象是通过alloc、new、copy、multyCopy来分配内存的</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// OC 代码</span><br><span class="line">&#123;</span><br><span class="line">    id __strong obj = [[NSObject alloc] init];</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">// 实际 runtime </span><br><span class="line">&#123;</span><br><span class="line">    id obj = objc_msgSend(NSObject,@selector(alloc));</span><br><span class="line">    objc_msgSend(obj,@selector(init));</span><br><span class="line">    ...</span><br><span class="line">    // 作用域结束时，插入release</span><br><span class="line">    objc_release(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对象不是自身生成，但是自身持有(一般这样的对象是通过除alloc、new、copy、multyCopy外方法产生的)</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// OC 代码</span><br><span class="line">&#123;</span><br><span class="line">    id __strong obj = [NSMutableArray array];</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">// 实际 runtime </span><br><span class="line">&#123;</span><br><span class="line">    id obj = objc_msgSend(NSMutableArray,@selector(array)); // 此时 对象的引用计数为1</span><br><span class="line">    // 代替我们调用retain方法,使得obj可以持有该对象</span><br><span class="line">    // 从而使得obj指向了一个引用计数为1的对象</span><br><span class="line">    objc_retainAutoreleasedReturnValue(obj); // 此时 对象的引用计数为2</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    // 作用域结束时，插入release</span><br><span class="line">    objc_release(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  不过，objc_retainAutoreleaseReturnValue有一个成对的函数objc_autoreleaseReturnValue，这两个函数可以用于最优化程序的运行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (id)array  &#123;</span><br><span class="line">        return [[NSMutableArray alloc] init];</span><br><span class="line">&#125;</span><br><span class="line">+ (id)array &#123;</span><br><span class="line">    id obj = objc_msgSend(NSMutableArray,@selector(alloc)); </span><br><span class="line">    objc_msgSend(obj,@selector(init)); </span><br><span class="line">    // 插入autorelease方法 </span><br><span class="line">    return objc_autoreleaseReturnValue(obj); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>  objc_autoreleaseReturnValue函数且这个函数会返回注册到自动释放池的对象，<br>  但是，这个函数有个特点，<strong>它会查看调用方的命令执行列表，如果发现接下来会调用objc_retainAutoreleasedReturnValue则不会返回注册到自动释放池的对象而仅仅返回一个对象而已</strong>。</p>
-</li>
-</ul>
-<ol start="4">
-<li><p>__weak</p>
-<ul>
-<li><p><strong>修饰的指针不会引起指向的对象的引用计数器变化</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id __weak obj = [[NSObject alloc] init];</span><br></pre></td></tr></table></figure>
-<p>编译器转换后的代码如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">id obj;</span><br><span class="line">id tmp = objc_msgSend(NSObject,@selector(alloc));</span><br><span class="line">objc_msgSend(tmp,@selector(init));</span><br><span class="line">objc_initweak(&amp;obj, tmp);</span><br><span class="line"></span><br><span class="line">objc_release(tmp);</span><br><span class="line">objc_destroyWeak(&amp;obj);</span><br></pre></td></tr></table></figure>
-<p>__weak内存管理也借助了类似于引用计数表的表，它通过对象的内存地址做为key，而对应的指针作为value进行管理，在上述代码中objc_initweak就是完成这部分操作，而objc_destroyWeak则是销毁该对象对应的value。<br>所以，weak在修饰只是让weak表增加了记录没有引起引用计数表的变化</p>
-</li>
-<li><p><strong>当指向的对象被销毁时，弱指针全部置为nil</strong></p>
-<p>对象通过objc_release释放对象内存的动作如下:<br><code>objc_release</code><br>因为引用计数为0 所以执行dealloc</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">_objc_rootDealloc</span><br><span class="line">objc_dispose</span><br><span class="line">objc_destructInstance</span><br><span class="line">objc_clear_deallocating</span><br></pre></td></tr></table></figure>
-<p>而在对象被废弃时最后调用了objc_clear_deallocating，该函数的动作如下:</p>
-<ol>
-<li>从weak表中获取已废弃对象内存地址对应的所有记录</li>
-<li>将已废弃对象内存地址对应的记录中所有以weak修饰的变量都置为nil</li>
-<li>从weak表删除已废弃对象内存地址对应的记录</li>
-<li>根据已废弃对象内存地址从引用计数表中找到对应记录删除</li>
-</ol>
-</li>
-<li><p><strong>建议:在程序中不能频繁的使用weak</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id __weak obj1 = obj; </span><br><span class="line">NSLog(@&quot;obj2-%@&quot;, obj1);</span><br></pre></td></tr></table></figure>
-<p>编译器转换上述代码如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">id obj1; </span><br><span class="line">objc_initweak(&amp;obj1, obj);</span><br><span class="line"></span><br><span class="line">// 从weak表中 获取有__weak修饰符的变量所引用的对象 并retain </span><br><span class="line">id tmp = objc_loadWeakRetained(&amp;obj1);</span><br><span class="line"></span><br><span class="line">// 将对象放入自动释放池</span><br><span class="line">objc_autorelease(tmp);</span><br><span class="line">NSLog(@&quot;%@&quot;, tmp);</span><br><span class="line">objc_destroyWeak(&amp;obj1);</span><br></pre></td></tr></table></figure>
-<p>据此当我们访问weak修饰指针指向的对象时，实际上是访问注册到自动释放池的对象。<br>因为该对象在运行过程中很有可能会被释放。<br>所以，需要将对象注册到自动释放池中并在自动释放池销毁时释放对象占用的内存。<br>因此，如果大量使用weak的话，在我们去访问weak修饰的对象时，会有大量对象注册到自动释放池,<br>这会影响程序的性能。</p>
-</li>
-</ul>
-</li>
-<li><p>__autoreleasing<br> 作用: 将对象放入自动释放池中，当自动释放池销毁时对自动释放池中的对象都进行一次release操作</p>
-<ul>
-<li><p>工具函数    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">extern void _objc_autoreleasePoolPrint(); //打印注册到自动释放池中的对象</span><br><span class="line">extern uintptr_t _objc_rootRetainCount(id obj);	//获取对象的引用计数</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ARC对象的声明:   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSArray * __autoreleasing array = nil;</span><br></pre></td></tr></table></figure>
-<p>不加<code>__autoreleasing</code>的话，默认是strong类型。（id * 和 指针类型 的对象除外, 例:NSArray ** array;默认是__autoreleasing类型）。</p>
-</li>
-</ul>
-</li>
-<li><p>autoreleasepool <code>@autoreleasepool {...}</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">- (void)testAutorelease</span><br><span class="line">&#123;</span><br><span class="line">    NSMutableArray * __autoreleasing arrayA = nil;</span><br><span class="line">    &#123;</span><br><span class="line">        NSMutableArray * __strong arrayS = nil;</span><br><span class="line">        @autoreleasepool &#123;</span><br><span class="line">            arrayS = [NSMutableArray arrayWithObject:@&quot;1&quot;];</span><br><span class="line">            unsigned long retainCount = _objc_rootRetainCount(arrayS);</span><br><span class="line">            NSLog(@&quot;arrayS retainCount1 = %ld&quot;, retainCount);</span><br><span class="line">        &#125;</span><br><span class="line">        arrayA = arrayS;</span><br><span class="line">        unsigned long retainCount = _objc_rootRetainCount(arrayA);</span><br><span class="line">        NSLog(@&quot;arrayA retainCount2 = %ld&quot;, retainCount);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    unsigned long retainCount = _objc_rootRetainCount(arrayA);</span><br><span class="line">    NSLog(@&quot;arrayA retainCount3 = %ld&quot;, retainCount);</span><br><span class="line">    </span><br><span class="line">    arrayA = [NSMutableArray arrayWithObject:@&quot;1&quot;];</span><br><span class="line">    retainCount = _objc_rootRetainCount(arrayA);</span><br><span class="line">    NSLog(@&quot;arrayA retainCount4 = %ld&quot;, retainCount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>autoreleasepool 是没有单独的内存结构的，它是通过以 AutoreleasePoolPage 为结点的双向链表来实现的。</p>
-<ul>
-<li>每一个线程的 autoreleasepool 其实就是一个指针的堆栈；</li>
-<li>每一个指针代表一个需要 release 的对象或者 POOL_SENTINEL（哨兵对象，代表一个 autoreleasepool 的边界）；</li>
-<li>一个 pool token 就是这个 pool 所对应的 POOL_SENTINEL 的内存地址。当这个 pool 被 pop 的时候，所有内存地址在 pool token 之后的对象都会被 release ；</li>
-<li>这个堆栈被划分成了一个以 page 为结点的双向链表。pages 会在必要的时候动态地增加或删除；</li>
-<li>Thread-local storage（线程局部存储）指向 hot page ，即最新添加的 autoreleased 对象所在的那个 page 。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class AutoreleasePoolPage </span><br><span class="line">&#123;</span><br><span class="line">    // ... 各种代码</span><br><span class="line">    magic_t const magic;                    // 用来校验 AutoreleasePoolPage 的结构是否完整</span><br><span class="line">    id *next;                               // 指向最新添加的 autoreleased 对象的下一个位置，初始化时指向 begin() </span><br><span class="line">    pthread_t const thread;                 // 指向当前线程</span><br><span class="line">    AutoreleasePoolPage * const parent;     // 指向父结点，第一个结点的 parent 值为 nil</span><br><span class="line">    AutoreleasePoolPage *child;             // 指向子结点，最后一个结点的 child 值为 nil</span><br><span class="line">    uint32_t const depth;                   // 代表深度，从 0 开始，往后递增 1</span><br><span class="line">    uint32_t hiwat;                         //代表 high water mark</span><br><span class="line">    // ... 各种代码</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>使用 clang -rewrite-objc 命令将下面的 Objective-C 代码重写成 C++ 代码：<br><code>@autoreleasepool {...}</code><br>转换后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">extern &quot;C&quot; __declspec(dllimport) void * objc_autoreleasePoolPush(void);</span><br><span class="line">extern &quot;C&quot; __declspec(dllimport) void objc_autoreleasePoolPop(void *);</span><br><span class="line">struct __AtAutoreleasePool &#123;</span><br><span class="line">    __AtAutoreleasePool() &#123;</span><br><span class="line">        atautoreleasepoolobj = objc_autoreleasePoolPush();</span><br><span class="line">    &#125;</span><br><span class="line">    ~__AtAutoreleasePool() &#123;</span><br><span class="line">        objc_autoreleasePoolPop(atautoreleasepoolobj);</span><br><span class="line">    &#125;</span><br><span class="line">    void * atautoreleasepoolobj;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>通过声明一个 <strong>AtAutoreleasePool 类型的局部变量 </strong>autoreleasepool 来实现 <code>@autoreleasepool {}</code> 。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/* @autoreleasepool 实际就是这样的 */ </span><br><span class="line">&#123;</span><br><span class="line"> 	__AtAutoreleasePool __autoreleasepool; // 创建时 调用了构造函数，作用域结束时调用析构函数，很巧妙</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<ol start="7">
-<li><p>push操作<br>一个 push 操作其实就是创建一个新的 autoreleasepool ，对应 AutoreleasePoolPage 的具体实现就是往<br>AutoreleasePoolPage 中的 next 位置插入一个 POOL_SENTINEL ，并且返回插入的 POOL_SENTINEL 的内存地<br>址。<br>当前 page 存在且没有满时，直接将对象添加到当前 page 中，即 next 指向的位置；<br>当前 page 存在且已满时，创建一个新的 page ，并将对象添加到新创建的 page 中；<br>当前 page 不存在时，即还没有 page 时，创建第一个 page ，并将对象添加到新创建的 page 中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">class AutoreleasePoolPage &#123; </span><br><span class="line">    static inline void *push() &#123; </span><br><span class="line">    // 相当于生成或持有NSAutoreleasePool类对象 </span><br><span class="line">    id *dest = autoreleaseFast(POOL_SENTINEL);</span><br><span class="line">                assert(*dest == POOL_SENTINEL);</span><br><span class="line">                return dest;</span><br><span class="line">    &#125; </span><br><span class="line">     static inline id *autoreleaseFast(id obj) &#123;</span><br><span class="line">    	AutoreleasePoolPage *page = hotPage();</span><br><span class="line">    	if (page &amp;&amp; !page-&gt;full()) &#123;</span><br><span class="line">        return page-&gt;add(obj);</span><br><span class="line">    &#125; else if (page) &#123;</span><br><span class="line">        return autoreleaseFullPage(obj, page);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return autoreleaseNoPage(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">static inline void *pop(void *token) &#123; </span><br><span class="line">    //相当于废弃NSAutoreleasePool类对象 releaseAll(); </span><br><span class="line">&#125; </span><br><span class="line">static inline id autorelease(id obj) &#123; </span><br><span class="line">    //相当于NSAutoreleasePool类的addObject类方法 </span><br><span class="line">    AutoreleasePoolPage *autoreleasePoolPage = 取得正在使用的AutoreleasePoolPage实例; </span><br><span class="line">    autoreleasePoolPage-&gt;add(obj); </span><br><span class="line">&#125; </span><br><span class="line">id *add(id obj) &#123; </span><br><span class="line">    //将对象追加到内部数组中 </span><br><span class="line">&#125; </span><br><span class="line">void releaseAll() &#123; </span><br><span class="line">    //调用内部数组中对象的release实例方法 </span><br><span class="line">&#125;</span><br><span class="line">&#125;; </span><br><span class="line">void *objc_autoreleasePoolPush(void) &#123; </span><br><span class="line">    if (UseGC) return nil;</span><br><span class="line">    return AutoreleasePoolPage::push();</span><br><span class="line">&#125; </span><br><span class="line">void objc_autoreleasePoolPage(void *ctxt) &#123; </span><br><span class="line">    AutoreleasePoolPage::pop(ctxt); </span><br><span class="line">&#125; </span><br><span class="line">id *objc_autorelease(id obj) &#123; </span><br><span class="line">    return AutoreleasePoolPage::autorelease(obj); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>autorelease操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">- (id)autorelease  &#123;</span><br><span class="line">    return ((id)self)-&gt;rootAutorelease();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)rootAutorelease() &#123;</span><br><span class="line">    __attribute__((noinline,used))</span><br><span class="line">    id objc_object::rootAutorelease2()</span><br><span class="line">    &#123;</span><br><span class="line">        assert(!isTaggedPointer());</span><br><span class="line">        return AutoreleasePoolPage::autorelease((id)this);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static inline id autorelease(id obj)</span><br><span class="line">&#123;</span><br><span class="line">    assert(obj);</span><br><span class="line">    assert(!obj-&gt;isTaggedPointer());</span><br><span class="line">    id *dest __unused = autoreleaseFast(obj);</span><br><span class="line">    assert(!dest  ||  *dest == obj);</span><br><span class="line">    return obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>pop操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void objc_autoreleasePoolPop(void *ctxt)</span><br><span class="line">&#123;</span><br><span class="line">    if (UseGC) return;</span><br><span class="line">    // fixme rdar://9167170</span><br><span class="line">    if (!ctxt) return;</span><br><span class="line">    AutoreleasePoolPage::pop(ctxt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>pop 函数的入参就是 push 函数的返回值，也就是<br>POOL_SENTINEL 的内存地址，即 pool token 。<br>当执行pop 操作时，内存地址在 pool token 之后的所有 autoreleased 对象都会被 release 。<br>直到 pool token 所在 page 的 next 指向 pool token 为止。</p>
-<p>每一个线程，包括主线程，都会拥有一个专属的 NSRunLoop 对象，并且会在有需要的时候自动创建。<br>在主线程的 NSRunLoop 对象的每个 event loop 开始前，系统会自动创建一个 autoreleasepool ，并在 event loop 结束时销毁 。每一个线程都会维护自己的 autoreleasepool 堆栈。换句话说 autoreleasepool 是与线程紧密相关的，每一个 autoreleasepool 只对应一个线程。</p>
-<h1 id="三-补充一点"><a href="#三-补充一点" class="headerlink" title="三. 补充一点"></a>三. 补充一点</h1><p><strong>viewDidLoad 与 viewWillAppear 在一个事件循环里</strong></p>
-<p><strong>viewDidAppear 在另一个事件循环里</strong></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1939,7 +1829,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
