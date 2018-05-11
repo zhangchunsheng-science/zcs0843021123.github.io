@@ -346,6 +346,8 @@
 <li>下载源码 地址 <a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a> </li>
 <li><p>下载后打开Xcode工程 文档结构图如下<br><img src="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/Snip20170920_1.png" alt=""></p>
 <p>若打不开图片,则可以看这个文字版的文档结构图:</p>
+</li>
+</ol>
 <ul>
 <li>objc<ul>
 <li>include (各种头文件, 不要以为是头文件就不重要, 这是C++代码, 很多函数都是直接写在了声明类的头文件里)</li>
@@ -362,8 +364,6 @@
 </ul>
 </li>
 </ul>
-</li>
-</ol>
 
           
         
@@ -1198,8 +1198,17 @@
 <li>一个可用的例子:(以下例子只是可以照着修改对应的属性 不可以把原有的属性都删除了)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 凤凰苑</span><br><span class="line">subtitle: 张春生的个人博客</span><br><span class="line">description: 张春生的技术博客 不定时更新 请原谅</span><br><span class="line">author: 张春生</span><br><span class="line">language: zh-Hans</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://zcs0843021123.github.io/</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/zcs0843021123/zcs0843021123.github.io.git,master</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="3-在自己的github上创建一个仓库"><a href="#3-在自己的github上创建一个仓库" class="headerlink" title="3. 在自己的github上创建一个仓库"></a>3. 在自己的github上创建一个仓库</h2><p>仓库的名字就叫做 your_github_user_name.github.io<br>your_github_user_name.github.io 这个名字的格式是固定的 不可以谁便乱改</p>
-<h2 id="4-测试写一个博客并发布"><a href="#4-测试写一个博客并发布" class="headerlink" title="4. 测试写一个博客并发布"></a>4. 测试写一个博客并发布</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean      </span><br><span class="line">hexo generate #（简写 hexo g）</span><br><span class="line">hexo deploy   #（简写 hexo d）</span><br></pre></td></tr></table></figure>
+<h2 id="3-在自己的github上创建一个仓库"><a href="#3-在自己的github上创建一个仓库" class="headerlink" title="3. 在自己的github上创建一个仓库"></a>3. 在自己的github上创建一个仓库</h2><p>仓库的名字就叫做 your_github_user_name.github.io<br>your_github_user_name.github.io 这个名字的格式是固定的 不可以谁便乱改<br>这个仓库一定要是空的，什么都没有，否则deploy不上去（deploy调用的就是 git push）</p>
+<p>有时hexo deploy不上去，不过有时候也不报错，具体表现为博客不更新，是因为<br>1）你的GitHub的仓库里有东西，push不上去。<br>2）你没有给git设置upstream</p>
+<pre><code>- 执行hexo generate之后，在 .deploy_git 里边就是你要发布的博客。
+  先用 git remote -v 查看你的这个git仓库有木有远程仓库，一般来说没有
+  远程仓库 如: https://github.com/your_github_user_name/your_github_user_name.github.io
+- 关联本地库
+  git remote add origin https://github.com/your_github_user_name/your_github_user_name.github.io
+  添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库。
+- 推送当前分支并把远程设置成 upstream
+  git push --set-upstream origin master 
+</code></pre><h2 id="4-测试写一个博客并发布"><a href="#4-测试写一个博客并发布" class="headerlink" title="4. 测试写一个博客并发布"></a>4. 测试写一个博客并发布</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean      </span><br><span class="line">hexo generate #（简写 hexo g）</span><br><span class="line">hexo deploy   #（简写 hexo d）</span><br></pre></td></tr></table></figure>
 <h2 id="5-查看结果"><a href="#5-查看结果" class="headerlink" title="5. 查看结果"></a>5. 查看结果</h2><p>   本地预览: <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a><br>   github网页：<a href="https://zcs0843021123Zcs.github.io" target="_blank" rel="noopener">https://zcs0843021123Zcs.github.io</a></p>
 <h1 id="三-写博客-amp-发布博客"><a href="#三-写博客-amp-发布博客" class="headerlink" title="三. 写博客 &amp; 发布博客"></a>三. 写博客 &amp; 发布博客</h1><h2 id="1-写博客"><a href="#1-写博客" class="headerlink" title="1. 写博客"></a>1. 写博客</h2><p><code>hexo new &quot;a test article&quot;</code><br>就会产生一个文件 your_github_blog_local_path/source/_posts/a-test-article.md<br>文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: a test article</span><br><span class="line">date: 2017-09-05 13:46:21</span><br><span class="line">tags:</span><br><span class="line">---</span><br></pre></td></tr></table></figure></p>
 <p>然后就可以在a-test-article.md里边愉快的写博客了</p>
