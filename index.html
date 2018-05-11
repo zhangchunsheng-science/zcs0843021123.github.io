@@ -1570,7 +1570,7 @@ B、选择All Glyphs
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/10/私有Pod/私有Pod/">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/11/Xcode-Subproject/Xcode-Subproject/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="张春生">
@@ -1589,7 +1589,7 @@ B、选择All Glyphs
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/10/私有Pod/私有Pod/" itemprop="url">私有Pod</a></h2>
+                <a class="post-title-link" href="/2017/06/11/Xcode-Subproject/Xcode-Subproject/" itemprop="url">Xcdoe Subproject</a></h2>
         
 
         <div class="post-meta">
@@ -1601,8 +1601,8 @@ B、选择All Glyphs
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-10T23:25:31+08:00">
-                2017-06-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T02:27:31+08:00">
+                2017-06-11
               </time>
             
 
@@ -1644,38 +1644,16 @@ B、选择All Glyphs
             <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
 <li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
 </ol>
-<h1 id="一-创建私有Pod"><a href="#一-创建私有Pod" class="headerlink" title="一. 创建私有Pod"></a>一. 创建私有Pod</h1><ol>
-<li><p>首先，你的代码要编译通过。</p>
-</li>
-<li><p>创建spec文件</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod spec create https://github.com/zcs0843021123/ZRPlayground</span><br><span class="line"># url 是github上的地址。不是下载地址，只是Github上那一页的地址</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>修改spec文件并提交 </li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |s|</span><br><span class="line">  s.name = &quot;ZRPlayground&quot;</span><br><span class="line">  s.version = &quot;0.0.4&quot;</span><br><span class="line">  s.summary = &quot;ZRPlayground&quot;</span><br><span class="line">  s.description = &lt;&lt;-DESC</span><br><span class="line">                      	ZRPlaygroundDescription</span><br><span class="line">                        DESC</span><br><span class="line">  s.homepage = &quot;https://github.com/zcs0843021123/ZRPlayground&quot;</span><br><span class="line">  s.author = &#123; &quot;zcs&quot; =&gt; &quot;1017295148@qq.com&quot; &#125;</span><br><span class="line">  s.source = &#123; :git =&gt; &quot;https://github.com/zcs0843021123/ZRPlayground.git&quot;, :tag =&gt; &quot;0.0.4&quot; &#125;</span><br><span class="line">  s.source_files = &quot;ZRPlayground/&quot;, &quot;ZRPlayground/**/*.&#123;h,m&#125;&quot;</span><br><span class="line">  s.public_header_files = &quot;ZRPlayground/**/*.h&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-<ul>
-<li>记住 version 和 tag 一定要对应你即将要打的tag（此时，你还没打tag，你要把这个spec文件也打进去）<br>就是说 ： 你的 tag 一定要与你的 spec 文件 一一对应。</li>
-<li>homepage、git、source_files、public_header_files 这几个是必须填写的</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &quot;XXXX&quot;</span><br><span class="line">git pull</span><br><span class="line">git push</span><br><span class="line">git tag -a 0.0.1 -m &quot;Tag release 0.0.1&quot;  #本地打tag标签</span><br><span class="line">git push --tags   						    #推送tag到远程</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>在引用这个Pod的Podfile中加入这一句。这里的URL是git仓库的地址。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;ZRPlayground&apos;, :git =&gt; &apos;https://github.com/zcs0843021123/ZRPlayground.git&apos;</span><br></pre></td></tr></table></figure>
-<p>或</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;ZRPlayground&apos;, :path =&gt; &apos;spec文件的路径&apos;</span><br></pre></td></tr></table></figure>
-<p>注意：以上两句都可以podfile中的指定，这只是指定spec文件在哪里，并不是指定源文件在哪里。在spec文件中指定源文件在哪里的。<br>所以 spec 文件是可以和 源文件 分开的。</p>
-<ol start="5">
-<li>安装Pod</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod install</span><br><span class="line">pod update</span><br></pre></td></tr></table></figure>
-<ol start="6">
-<li>相关说明</li>
-</ol>
-<p>Podfile.lock<br>这是CocoaPods创建的最重要的文件之一。它记录了需要被安装的pod的每个已安装的版本。如果你想知道已安装的pod是哪个版本，可以查看这个文件。推荐将Podfile.lock文件加入到版本控制中，这有助于整个团队的一致性。</p>
-<p>Manifest.lock<br>这是每次运行pod install时创建的Podfile.lock文件的副本。如果你见过“沙盒文件和Podfile.lock文件不同步”的错误，这个错误就是因Manifest.lock文件和Podfile.lock文件不一样引起。由于Pods所在的目录并不总在版本控制之下，这样可以保证开发者运行app之前都能更新他们的pods，否则app可能会crash，或者在一些不太明显的地方编译失败。</p>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>1、子项目必须可以编译成 framework 或者是 静态库<br>2、新建一个项目 要求是 framework 或者是 静态库</p>
+<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_1.png" alt="Xcode-Subproject"></p>
+<p>3、新建项目 要编译通过</p>
+<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_2.png" alt="Xcode-Subproject"></p>
+<p>4、把子项目放到你的工程的目录里去，通过 Add files to project 添加子项目，千万不要自己拖拽，因为Xcode有BUG</p>
+<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_3.png" alt="Xcode-Subproject"></p>
+<p>5、Build Phases 中 Link Binary With Libraries 中 加上你的静态库</p>
+<p>6、Build Settings  中 Header Search Paths 中 加上你的静态库所在的父目录 ZRIPSubProject</p>
+<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_4.png" alt="Xcode-Subproject"></p>
+<p>这里注意：<br>Header Search Paths 它只是寻找静态库或者是 framework 暴露出来的头文件，<br>你的头文件在哪，就写那个目录，（递归还是不递归，看情况），<br>Header Search Paths 是以 主项目 的 .xcodeproj 所在的目录为当前目录往下找的。</p>
 
           
         
@@ -1767,7 +1745,7 @@ B、选择All Glyphs
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

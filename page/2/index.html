@@ -259,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/10/私有Pod/私有Pod/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="张春生">
@@ -278,7 +278,7 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
+                <a class="post-title-link" href="/2017/06/10/私有Pod/私有Pod/" itemprop="url">私有Pod</a></h2>
         
 
         <div class="post-meta">
@@ -290,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
-                2017-05-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-10T23:25:31+08:00">
+                2017-06-10
               </time>
             
 
@@ -333,15 +333,38 @@
             <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
 <li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
 </ol>
-<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
-<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
-<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
-<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
-<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
-<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
+<h1 id="一-创建私有Pod"><a href="#一-创建私有Pod" class="headerlink" title="一. 创建私有Pod"></a>一. 创建私有Pod</h1><ol>
+<li><p>首先，你的代码要编译通过。</p>
 </li>
+<li><p>创建spec文件</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod spec create https://github.com/zcs0843021123/ZRPlayground</span><br><span class="line"># url 是github上的地址。不是下载地址，只是Github上那一页的地址</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>修改spec文件并提交 </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |s|</span><br><span class="line">  s.name = &quot;ZRPlayground&quot;</span><br><span class="line">  s.version = &quot;0.0.4&quot;</span><br><span class="line">  s.summary = &quot;ZRPlayground&quot;</span><br><span class="line">  s.description = &lt;&lt;-DESC</span><br><span class="line">                      	ZRPlaygroundDescription</span><br><span class="line">                        DESC</span><br><span class="line">  s.homepage = &quot;https://github.com/zcs0843021123/ZRPlayground&quot;</span><br><span class="line">  s.author = &#123; &quot;zcs&quot; =&gt; &quot;1017295148@qq.com&quot; &#125;</span><br><span class="line">  s.source = &#123; :git =&gt; &quot;https://github.com/zcs0843021123/ZRPlayground.git&quot;, :tag =&gt; &quot;0.0.4&quot; &#125;</span><br><span class="line">  s.source_files = &quot;ZRPlayground/&quot;, &quot;ZRPlayground/**/*.&#123;h,m&#125;&quot;</span><br><span class="line">  s.public_header_files = &quot;ZRPlayground/**/*.h&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<ul>
+<li>记住 version 和 tag 一定要对应你即将要打的tag（此时，你还没打tag，你要把这个spec文件也打进去）<br>就是说 ： 你的 tag 一定要与你的 spec 文件 一一对应。</li>
+<li>homepage、git、source_files、public_header_files 这几个是必须填写的</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &quot;XXXX&quot;</span><br><span class="line">git pull</span><br><span class="line">git push</span><br><span class="line">git tag -a 0.0.1 -m &quot;Tag release 0.0.1&quot;  #本地打tag标签</span><br><span class="line">git push --tags   						    #推送tag到远程</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>在引用这个Pod的Podfile中加入这一句。这里的URL是git仓库的地址。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;ZRPlayground&apos;, :git =&gt; &apos;https://github.com/zcs0843021123/ZRPlayground.git&apos;</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;ZRPlayground&apos;, :path =&gt; &apos;spec文件的路径&apos;</span><br></pre></td></tr></table></figure>
+<p>注意：以上两句都可以podfile中的指定，这只是指定spec文件在哪里，并不是指定源文件在哪里。在spec文件中指定源文件在哪里的。<br>所以 spec 文件是可以和 源文件 分开的。</p>
+<ol start="5">
+<li>安装Pod</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod install</span><br><span class="line">pod update</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>相关说明</li>
+</ol>
+<p>Podfile.lock<br>这是CocoaPods创建的最重要的文件之一。它记录了需要被安装的pod的每个已安装的版本。如果你想知道已安装的pod是哪个版本，可以查看这个文件。推荐将Podfile.lock文件加入到版本控制中，这有助于整个团队的一致性。</p>
+<p>Manifest.lock<br>这是每次运行pod install时创建的Podfile.lock文件的副本。如果你见过“沙盒文件和Podfile.lock文件不同步”的错误，这个错误就是因Manifest.lock文件和Podfile.lock文件不一样引起。由于Pods所在的目录并不总在版本控制之下，这样可以保证开发者运行app之前都能更新他们的pods，否则app可能会crash，或者在一些不太明显的地方编译失败。</p>
 
           
         
@@ -565,6 +588,137 @@
 <li>关联对象的五种关联策略与属性的限定符非常类似，在绝大多数情况下，我们都会使用 OBJC_ASSOCIATION_RETAIN_NONATOMIC 的关联策略，这可以保证我们持有关联对象；</li>
 <li>关联对象的释放时机与移除时机并不总是一致，比如 OBJC_ASSOCIATION_ASSIGN 进行关联的对象，不知道什么时候就被释放了，但是并没有被移除，而再使用这个关联对象时就会造成 Crash。</li>
 </ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
+                2017-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
+<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
+<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
+<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
+<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
+<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
           
         
@@ -1753,7 +1907,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
