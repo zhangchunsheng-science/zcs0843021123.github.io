@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 响应者链条 响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。 如果点击了一个你定义的View，流程是从你自定义的子类开始， 一级级找父类，找父类处理事件 [super touchesBegan:tou">
+<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开 Cell，SectionHeader，SectionFooter布局子View的布局要素：最上边一个子View：左，顶，宽中间子View：左，顶，宽">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="响应者链条的一些思考">
-<meta property="og:url" content="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/index.html">
+<meta property="og:title" content="UITableView自动撑开">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 响应者链条 响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。 如果点击了一个你定义的View，流程是从你自定义的子类开始， 一级级找父类，找父类处理事件 [super touchesBegan:tou">
+<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开 Cell，SectionHeader，SectionFooter布局子View的布局要素：最上边一个子View：左，顶，宽中间子View：左，顶，宽">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-11T07:41:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="响应者链条的一些思考">
-<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 响应者链条 响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。 如果点击了一个你定义的View，流程是从你自定义的子类开始， 一级级找父类，找父类处理事件 [super touchesBegan:tou">
+<meta name="twitter:title" content="UITableView自动撑开">
+<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开 Cell，SectionHeader，SectionFooter布局子View的布局要素：最上边一个子View：左，顶，宽中间子View：左，顶，宽">
 
 
 
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/"/>
+  <link rel="canonical" href="https://zcs0843021123.github.io/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/"/>
 
 
 
 
 
-  <title>响应者链条的一些思考 | 凤凰苑</title>
+  <title>UITableView自动撑开 | 凤凰苑</title>
   
 
 
@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="张春生">
@@ -277,7 +277,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">响应者链条的一些思考</h2>
+          <h2 class="post-title" itemprop="name headline">UITableView自动撑开</h2>
         
 
         <div class="post-meta">
@@ -289,8 +289,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
-                2017-05-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T21:28:42+08:00">
+                2017-09-23
               </time>
             
 
@@ -330,15 +330,17 @@
         <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
 <li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
 </ol>
-<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
-<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
-<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
-<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
-<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
-<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
+<h1 id="一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开"><a href="#一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开" class="headerlink" title="一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开"></a>一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开</h1><ol>
+<li><p>Cell，SectionHeader，SectionFooter布局<br>子View的布局要素：<br>最上边一个子View：左，顶，宽<br>中间子View：左，顶，宽<br>最下边的一个子View：左，顶，宽，底<br>// 注意最上边 中间 最下边 ： 可能是同一个控件，一个空间可能既是中间的也是最下边的，更可能也是最上边的一个。</p>
 </li>
-</ul>
+<li><p>使用TableView</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">UITableView * tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];</span><br><span class="line">    _tableView = tableView;</span><br><span class="line">    [self.view addSubview:tableView];</span><br><span class="line">    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];</span><br><span class="line">    tableView.delegate = self;</span><br><span class="line">    tableView.dataSource = self;</span><br><span class="line">    tableView.estimatedRowHeight = 100;</span><br><span class="line">    tableView.estimatedSectionHeaderHeight = 30;</span><br><span class="line">    tableView.estimatedSectionFooterHeight = 12;</span><br><span class="line">    tableView.rowHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionHeaderHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionFooterHeight = UITableViewAutomaticDimension;</span><br><span class="line">    [tableView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">        make.left.right.top.bottom.equalTo(self.view);</span><br><span class="line">    &#125;];</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>实现你要写的View</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- tableView: viewForHeaderInSection:</span><br><span class="line">- tableView: viewForFooterInSection:</span><br><span class="line">- tableView: cellForRowAtIndexPath:</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -369,8 +371,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" rel="next" title="判断电脑是大端系统还是小端系统">
-                <i class="fa fa-chevron-left"></i> 判断电脑是大端系统还是小端系统
+              <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" rel="next" title="OC runtime 源码阅读-1.环境搭建篇">
+                <i class="fa fa-chevron-left"></i> OC runtime 源码阅读-1.环境搭建篇
               </a>
             
           </div>
@@ -379,8 +381,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" rel="prev" title="OC runtime 源码阅读-1.环境搭建篇">
-                OC runtime 源码阅读-1.环境搭建篇 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/10/19/KVC-原理/KVC-原理/" rel="prev" title="KVC 原理">
+                KVC 原理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -526,7 +528,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-响应者链条"><span class="nav-number">2.</span> <span class="nav-text">一. 响应者链条</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开"><span class="nav-number">2.</span> <span class="nav-text">一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开</span></a></li></ol></div>
             
 
           </div>

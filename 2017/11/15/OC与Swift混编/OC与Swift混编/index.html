@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="一、OC 调用Swift 1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、进入TARGETS -&amp;gt;Build Settings -&amp;gt; Packaging 中设置Defines Module为YES设置 Pro">
+<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OC与Swift混编">
 <meta property="og:url" content="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="一、OC 调用Swift 1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、进入TARGETS -&amp;gt;Build Settings -&amp;gt; Packaging 中设置Defines Module为YES设置 Pro">
+<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-11T07:20:05.000Z">
+<meta property="og:updated_time" content="2018-05-11T07:41:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OC与Swift混编">
-<meta name="twitter:description" content="一、OC 调用Swift 1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、进入TARGETS -&amp;gt;Build Settings -&amp;gt; Packaging 中设置Defines Module为YES设置 Pro">
+<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
 
 
 
@@ -327,16 +327,17 @@
       
 
       
-        <p>一、OC 调用Swift</p>
-<p>1、创建一个类 选择语言用Swift</p>
+        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-OC-调用Swift"><a href="#一-OC-调用Swift" class="headerlink" title="一. OC 调用Swift"></a>一. OC 调用Swift</h1><p>1、创建一个类 选择语言用Swift</p>
 <p>2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成<br>    桥接文件名字：工程名-Bridging-Header.h<br>    这个桥接文件是 swift 调用OC文件的时候用的</p>
 <p>3、<br>进入TARGETS -&gt;Build Settings -&gt; Packaging 中<br>设置Defines Module为YES<br>设置 Product Module Name ，也可以不设置，默认为工程的名字。这个在后面会用到</p>
 <p>4、<br>在swift写一个类<br>注意这个类一定要继承NSObject，不然在OC中没法用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class hello: NSObject &#123;</span><br><span class="line"></span><br><span class="line">    var address : String</span><br><span class="line">    var gender: String</span><br><span class="line">   </span><br><span class="line">    init(address:String,gender:String)&#123;</span><br><span class="line">        self.address = address</span><br><span class="line">        self.gender = gender</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    func method() &#123;</span><br><span class="line">        print(&quot;message \(self.address + self.gender)&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>5、<br>在OC需要用到的swift文件中导入文件 “Product Module Name -Swift.h”<br>因为 Product Module Name 默认是工程的名字<br>所以直接导入 #import “工程名-Swift.h”</p>
 <p>6、<br>记着写完先 command + b 编译一下，如果没有报错就可以在OC文件调用swift中的类了</p>
-<p>二、Swift调用OC</p>
-<p>1、桥接文件名字：工程名-Bridging-Header.h</p>
+<h1 id="二-Swift调用OC"><a href="#二-Swift调用OC" class="headerlink" title="二. Swift调用OC"></a>二. Swift调用OC</h1><p>1、桥接文件名字：工程名-Bridging-Header.h</p>
 <p>2、在桥接文件中把需要用到OC的头文件导入进去</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OC_Flie.h&quot;</span><br></pre></td></tr></table></figure>
 <p>3、<br>编译一下，就可以在swift中用swift的语法调用OC文件的方法了</p>
@@ -437,8 +438,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -457,7 +467,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -509,6 +519,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-OC-调用Swift"><span class="nav-number">2.</span> <span class="nav-text">一. OC 调用Swift</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二-Swift调用OC"><span class="nav-number">3.</span> <span class="nav-text">二. Swift调用OC</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

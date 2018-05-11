@@ -478,16 +478,17 @@ B、选择All Glyphs
       
         
           
-            <p>一、OC 调用Swift</p>
-<p>1、创建一个类 选择语言用Swift</p>
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-OC-调用Swift"><a href="#一-OC-调用Swift" class="headerlink" title="一. OC 调用Swift"></a>一. OC 调用Swift</h1><p>1、创建一个类 选择语言用Swift</p>
 <p>2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成<br>    桥接文件名字：工程名-Bridging-Header.h<br>    这个桥接文件是 swift 调用OC文件的时候用的</p>
 <p>3、<br>进入TARGETS -&gt;Build Settings -&gt; Packaging 中<br>设置Defines Module为YES<br>设置 Product Module Name ，也可以不设置，默认为工程的名字。这个在后面会用到</p>
 <p>4、<br>在swift写一个类<br>注意这个类一定要继承NSObject，不然在OC中没法用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class hello: NSObject &#123;</span><br><span class="line"></span><br><span class="line">    var address : String</span><br><span class="line">    var gender: String</span><br><span class="line">   </span><br><span class="line">    init(address:String,gender:String)&#123;</span><br><span class="line">        self.address = address</span><br><span class="line">        self.gender = gender</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    func method() &#123;</span><br><span class="line">        print(&quot;message \(self.address + self.gender)&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>5、<br>在OC需要用到的swift文件中导入文件 “Product Module Name -Swift.h”<br>因为 Product Module Name 默认是工程的名字<br>所以直接导入 #import “工程名-Swift.h”</p>
 <p>6、<br>记着写完先 command + b 编译一下，如果没有报错就可以在OC文件调用swift中的类了</p>
-<p>二、Swift调用OC</p>
-<p>1、桥接文件名字：工程名-Bridging-Header.h</p>
+<h1 id="二-Swift调用OC"><a href="#二-Swift调用OC" class="headerlink" title="二. Swift调用OC"></a>二. Swift调用OC</h1><p>1、桥接文件名字：工程名-Bridging-Header.h</p>
 <p>2、在桥接文件中把需要用到OC的头文件导入进去</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OC_Flie.h&quot;</span><br></pre></td></tr></table></figure>
 <p>3、<br>编译一下，就可以在swift中用swift的语法调用OC文件的方法了</p>
@@ -616,6 +617,139 @@ B、选择All Glyphs
 </ol>
 <h1 id="一-KVC-查找过程"><a href="#一-KVC-查找过程" class="headerlink" title="一. KVC 查找过程"></a>一. KVC 查找过程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">以一个叫 name 的属性为例：</span><br><span class="line">//    setter and getter       // 0 第0步查找，最先查找</span><br><span class="line">//    NSString * _name;       // 1 第1步查找</span><br><span class="line">//    NSString * _isName;     // 2 第2步查找</span><br><span class="line">//    NSString * name;        // 3 第3步查找</span><br><span class="line">//    NSString * isName;      // 4 第4步查找</span><br><span class="line">//    UndefinedKey:           // 5 第5步查找</span><br></pre></td></tr></table></figure>
 <h1 id="二-像js一样任意给对象赋属性和取出属性"><a href="#二-像js一样任意给对象赋属性和取出属性" class="headerlink" title="二. 像js一样任意给对象赋属性和取出属性"></a>二. 像js一样任意给对象赋属性和取出属性</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (void)setValue:(id)value forUndefinedKey:(NSString *)key &#123;</span><br><span class="line">    if (value == nil) &#123;</span><br><span class="line">        value = [NSNull null];</span><br><span class="line">    &#125;</span><br><span class="line">    objc_setAssociatedObject(self, (__bridge const void *)(key), value, OBJC_ASSOCIATION_RETAIN);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)valueForUndefinedKey:(NSString *)key &#123;</span><br><span class="line">    id target = objc_getAssociatedObject(self, (__bridge const void *)(key));</span><br><span class="line">    if ([target isKindOfClass:[NSNull class]])</span><br><span class="line">        return nil;</span><br><span class="line">    return target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/" itemprop="url">UITableView自动撑开</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T21:28:42+08:00">
+                2017-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开"><a href="#一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开" class="headerlink" title="一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开"></a>一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开</h1><ol>
+<li><p>Cell，SectionHeader，SectionFooter布局<br>子View的布局要素：<br>最上边一个子View：左，顶，宽<br>中间子View：左，顶，宽<br>最下边的一个子View：左，顶，宽，底<br>// 注意最上边 中间 最下边 ： 可能是同一个控件，一个空间可能既是中间的也是最下边的，更可能也是最上边的一个。</p>
+</li>
+<li><p>使用TableView</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">UITableView * tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];</span><br><span class="line">    _tableView = tableView;</span><br><span class="line">    [self.view addSubview:tableView];</span><br><span class="line">    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];</span><br><span class="line">    tableView.delegate = self;</span><br><span class="line">    tableView.dataSource = self;</span><br><span class="line">    tableView.estimatedRowHeight = 100;</span><br><span class="line">    tableView.estimatedSectionHeaderHeight = 30;</span><br><span class="line">    tableView.estimatedSectionFooterHeight = 12;</span><br><span class="line">    tableView.rowHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionHeaderHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionFooterHeight = UITableViewAutomaticDimension;</span><br><span class="line">    [tableView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">        make.left.right.top.bottom.equalTo(self.view);</span><br><span class="line">    &#125;];</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>实现你要写的View</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- tableView: viewForHeaderInSection:</span><br><span class="line">- tableView: viewForFooterInSection:</span><br><span class="line">- tableView: cellForRowAtIndexPath:</span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -1577,7 +1711,10 @@ B、选择All Glyphs
       
         
           
-            <p>一. Clone</p>
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<p>一. Clone</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@gitlab.hecom.cn:hecom-ios/NewHongquanCRM.git BackUpCRM</span><br></pre></td></tr></table></figure>
 <p>二. 创建本地仓库</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;init project&quot;</span><br></pre></td></tr></table></figure>
@@ -1689,127 +1826,6 @@ B、选择All Glyphs
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2015/09/12/如何区分开源许可证/如何区分开源许可证/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/09/12/如何区分开源许可证/如何区分开源许可证/" itemprop="url">如何区分开源许可证</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-12T14:42:35+08:00">
-                2015-09-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="区分方法"><a href="#区分方法" class="headerlink" title="区分方法"></a>区分方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">let result = undefined;</span><br><span class="line"></span><br><span class="line">// WTFPL: DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE</span><br><span class="line">// CC0是来自CC的公开领域许可证</span><br><span class="line">// https://creativecommons.org/publicdomain/zero/1.0/legalcode</span><br><span class="line">// 发布在Public Domain 即公开领域的知名软件有SQLite;</span><br><span class="line">if (我无所谓) &#123;</span><br><span class="line">    result = &quot;WTFPL or CC0 or 公开领域&quot;;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if (修改源码后,需要采用同样的许可证) &#123;</span><br><span class="line">    if (新增代码需要采用相同或兼容的许可证) &#123;</span><br><span class="line">        //DMR: Digital Rights Management 的缩写,数字版权管理</span><br><span class="line">        if (禁止DRM,公布相关硬件) &#123; </span><br><span class="line">            result = &quot;GPLv3许可证&quot;;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;GPLv2许可证&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (禁止DRM,公布相关硬件) &#123;</span><br><span class="line">            result = &quot;LGPLv3许可证&quot;;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;LGPLv2许可证 or MPL许可证(Mozilla Public License)&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    if (每一个修改过的文件,都必须包含版权说明和更改处) &#123;</span><br><span class="line">        result = &quot;Apache License 2&quot;;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (可以采用版权拥有者的名字进行推广) &#123;</span><br><span class="line">            result = &quot;BSD(2-clause) or MIT许可证&quot;;</span><br><span class="line">            // BSD(2-clause) 也叫 Simplified BSD License 和 FreeBSD License</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;BSD(3-clause) &quot;;</span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://opensource.org/licenses" target="_blank" rel="noopener">https://opensource.org/licenses</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1866,7 +1882,7 @@ B、选择All Glyphs
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
