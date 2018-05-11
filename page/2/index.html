@@ -259,6 +259,576 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/" itemprop="url">UITableView自动撑开</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T21:28:42+08:00">
+                2017-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开"><a href="#一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开" class="headerlink" title="一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开"></a>一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开</h1><ol>
+<li><p>Cell，SectionHeader，SectionFooter布局<br>子View的布局要素：<br>最上边一个子View：左，顶，宽<br>中间子View：左，顶，宽<br>最下边的一个子View：左，顶，宽，底<br>// 注意最上边 中间 最下边 ： 可能是同一个控件，一个空间可能既是中间的也是最下边的，更可能也是最上边的一个。</p>
+</li>
+<li><p>使用TableView</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">UITableView * tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];</span><br><span class="line">    _tableView = tableView;</span><br><span class="line">    [self.view addSubview:tableView];</span><br><span class="line">    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];</span><br><span class="line">    tableView.delegate = self;</span><br><span class="line">    tableView.dataSource = self;</span><br><span class="line">    tableView.estimatedRowHeight = 100;</span><br><span class="line">    tableView.estimatedSectionHeaderHeight = 30;</span><br><span class="line">    tableView.estimatedSectionFooterHeight = 12;</span><br><span class="line">    tableView.rowHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionHeaderHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionFooterHeight = UITableViewAutomaticDimension;</span><br><span class="line">    [tableView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">        make.left.right.top.bottom.equalTo(self.view);</span><br><span class="line">    &#125;];</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>实现你要写的View</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- tableView: viewForHeaderInSection:</span><br><span class="line">- tableView: viewForFooterInSection:</span><br><span class="line">- tableView: cellForRowAtIndexPath:</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" itemprop="url">OC runtime 源码阅读-1.环境搭建篇</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T16:42:31+08:00">
+                2017-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li><p>参考资料</p>
+<ul>
+<li><a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a><br>这个是可以编译通过的runtime源码,特别鸣谢这位作者整理了我们可以编译通过runtime版本, 而且这位作者始终在更新, 十分感谢</li>
+<li><a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/objc4/</a><br>苹果官方网站源码,苹果的是不能编译通过的</li>
+</ul>
+</li>
+<li><p>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></p>
+</li>
+</ol>
+<h1 id="一-runtime-源码概述"><a href="#一-runtime-源码概述" class="headerlink" title="一. runtime 源码概述"></a>一. runtime 源码概述</h1><ol start="0">
+<li>首先明确一点 runtime 是C++代码 不是C代码; C语言和C++不是一种语言!!!</li>
+<li>本文采用的 runtime 源码为 objc4-709.1 </li>
+<li>下载源码 地址 <a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a> </li>
+<li><p>下载后打开Xcode工程 文档结构图如下<br><img src="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/Snip20170920_1.png" alt=""></p>
+<p>若打不开图片,则可以看这个文字版的文档结构图:</p>
+</li>
+</ol>
+<ul>
+<li>objc<ul>
+<li>include (各种头文件, 不要以为是头文件就不重要, 这是C++代码, 很多函数都是直接写在了声明类的头文件里)</li>
+<li>Public Headers  (公共头文件)</li>
+<li>Private Headers (私有头文件)</li>
+<li>Project Headers (项目头文件)</li>
+<li>Obsolete Headers(旧的,即将要废弃的头文件)</li>
+<li>Obsolete Source (旧的,即将要废弃的源代码)</li>
+<li>Source          (源代码)</li>
+<li>Other           (其他)</li>
+<li>debug-objc      (调试用的代码)</li>
+<li>Products        (生成的二进制文件)</li>
+<li>Frameworks      (用到的系统的动态库)</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/" itemprop="url">OC Fast Enumeration</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-15T22:03:03+08:00">
+                2017-07-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>参考资料<br> <a href="http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/" target="_blank" rel="noopener">http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/</a> (来源：雷纯锋的技术博客)</li>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
+<li><p>简介FastEnumeration<br>在 Objective-C 2.0 中提供了快速枚举的语法，它是我们遍历集合元素的首选方法，因为它具有以下优点：<br>● 比直接使用 NSEnumerator 更高效；<br>● 语法非常简洁；<br>● 如果集合在遍历的过程中被修改，它会抛出异常；<br>● 可以同时执行多个枚举。</p>
+</li>
+<li><p>解析NSFastEnumeration协议<br>在Objective-C中，我们要想实现快速枚举就必须要实现NSFastEnumeration协议，<br>在这个协议中，只声明了一个必须实现的方法：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state</span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf</span><br><span class="line">                                    count:(NSUInteger)len;</span><br></pre></td></tr></table></figure>
+<p>其中，结构体 NSFastEnumerationState 的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">	unsigned long state;</span><br><span class="line">   id __unsafe_unretained __nullable * __nullable itemsPtr;</span><br><span class="line">	unsigned long * __nullable mutationsPtr;</span><br><span class="line">	unsigned long extra[5];</span><br><span class="line">&#125; NSFastEnumerationState;</span><br></pre></td></tr></table></figure>
+<p>这个方法用于返回一系列的C数组，以供调用者进行遍历。<br>为什么是一系列的C数组呢？<br>因为，在一个for/in循环中，这个方法其实会被调用多次，每一次调用都会返回一个C数组。用C数组是为了提高效率了。</p>
+<p>既然要返回C数组，也就意味着我们需要返回一个数组的指针和数组的长度。<br>数组的长度就是通过这个方法的返回值来提供的，而数组的指针则是通过结构体NSFastEnumerationState的itemsPtr字段进行返回的。<br>所以，这两个值就一起定义了这个方法返回的C数组。</p>
+<p>通常来说，NSFastEnumeration允许我们直接返回一个指向内部存储的指针，但是并非所有的数据结构都能够满足内存连续的要求。<br>因此，NSFastEnumeration还为我们提供了另外一种实现方案，我们可以将元素拷贝到调用者提供的一个C数组上，即stackbuf。<br>它的长度由参数len指定。<br>而且使用stackbuf有点耗费内存，所以对于系统的NSArray等，forin的len等于16。</p>
+<p>如果集合在遍历的过程中被修改的话，NSFastEnumeration就会抛出异常。<br>而这个功能就是通过mutationsPtr字段来实现的，它指向一个这样的值，这个值在集合被修改时会发现改变。<br>因此，我们就可以利用它来判断集合在遍历的过程中是否被修改。<br>现在，我们还剩下NSFastEnumerationState中的state和extra字段没有进行介绍。<br>实际上，它们是调用者提供给被调用者自由使用的两个字段，调用者根本不关心这两个字段的值。<br>因此，我们可以利用它们来存储任何对自身有用的值。</p>
+<p>揭密快速枚举的内部实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    for (NSNumber *number in array) &#123;</span><br><span class="line">        if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog(@&quot;%@&quot;, number);</span><br><span class="line">        break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着，我们使用下面的 clang 命令将 main.m 文件重写成 C++ 代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -rewrite-objc main.m</span><br></pre></td></tr></table></figure>
+<p>得到 main.cpp 文件，其中 main 函数的代码如下：(代码略长，可以直接跳过，下边有精简版)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = ((NSArray *(*)(Class, SEL, const ObjectType *, NSUInteger))(void *)objc_msgSend)(objc_getClass(&quot;NSArray&quot;), sel_registerName(&quot;arrayWithObjects:count:&quot;), (const id *)__NSContainer_literal(3U, ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 2), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 3)).arr, 3U);</span><br><span class="line">    &#123;</span><br><span class="line">	NSNumber * number;</span><br><span class="line">	struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">	id __rw_items[16];</span><br><span class="line">	id l_collection = (id) array;</span><br><span class="line">	_WIN_NSUInteger limit =</span><br><span class="line">		((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16);</span><br><span class="line">	if (limit) &#123;</span><br><span class="line">	unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">	do &#123;</span><br><span class="line">		unsigned long counter = 0;</span><br><span class="line">		do &#123;</span><br><span class="line">			if (startMutations != *enumState.mutationsPtr)</span><br><span class="line">				objc_enumerationMutation(l_collection);</span><br><span class="line">			number = (NSNumber *)enumState.itemsPtr[counter++]; &#123;</span><br><span class="line">        if (((BOOL (*)(id, SEL, NSNumber *))(void *)objc_msgSend)((id)number, sel_registerName(&quot;isEqualToNumber:&quot;), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1))) &#123;</span><br><span class="line">            goto __continue_label_1;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog((NSString *)&amp;__NSConstantStringImpl__var_folders_l6_lnvw8nt94q70jwplqs_w3dkw0000gn_T_main_5025b8_mi_0, number);</span><br><span class="line">        goto __break_label_1;</span><br><span class="line">    &#125;;</span><br><span class="line">	__continue_label_1: ;</span><br><span class="line">		&#125; while (counter &lt; limit);</span><br><span class="line">	&#125; while ((limit = ((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16)));</span><br><span class="line">	number = ((NSNumber *)0);</span><br><span class="line">	__break_label_1: ;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">		number = ((NSNumber *)0);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>伪算法版</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line"></span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    NSNumber * number;</span><br><span class="line">    struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">    id __rw_items[16];</span><br><span class="line">    id l_collection = (id) array;</span><br><span class="line">    NSUInteger limit = [l_collection countByEnumeratingWithState: &amp;enumState </span><br><span class="line">                                                         objects: __rw_items</span><br><span class="line">                                                           count: 16];//对于系统的forin每次就是16</span><br><span class="line">    if (limit) &#123;</span><br><span class="line">        unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">        do &#123;</span><br><span class="line">            unsigned long counter = 0;</span><br><span class="line">            do &#123;</span><br><span class="line">                if (startMutations != *enumState.mutationsPtr) &#123;</span><br><span class="line">                    objc_enumerationMutation(l_collection);//抛异常</span><br><span class="line">                &#125;</span><br><span class="line">                number = (NSNumber *)enumState.itemsPtr[counter++];</span><br><span class="line">                if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">                	goto __continue_label_1;</span><br><span class="line">                &#125;</span><br><span class="line">	             //打印</span><br><span class="line">                NSLog(@&quot;%@&quot;, number);</span><br><span class="line">                goto __break_label_1;//continue</span><br><span class="line">                __continue_label_1: ;</span><br><span class="line">            &#125; while (counter &lt; limit);</span><br><span class="line">        &#125; while (limit = [l_collection countByEnumeratingWithState: &amp;enumState objects: __rw_items count: 16]);</span><br><span class="line">        number = @(0);</span><br><span class="line">        __break_label_1: ;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        number = @(0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上代码所示，快速枚举其实就是用两层do/while循环来实现的，<br>外层循环负责调用- countByEnumeratingWithState:objects:count:方法，获取C数组，<br>而内层循环则负责遍历获取到的C数组。<br>同时，我想你应该也注意到了它是如何利用mutationsPtr来检测集合在遍历过程中的突变的，以及使用objc_enumerationMutation函数来抛出异常。</p>
+<p>正如我们前面提到的，在快速枚举的实现中，确实没有用到结构体NSFastEnumerationState中的state和extra字段，<br>它们只是提供给-countByEnumeratingWithState:objects:count:方法的实现者自由使用的字段。</p>
+<p>值得一提的是，我特意在main.m中加入了continue和break语句。因此，我们有机会看到了在for/in语句中是如何利用goto来实现continue和break语句的。</p>
+<p>实现NSFastEnumeration协议<br>我们前面已经提到了，NSFastEnumeration在设计上允许我们使用两种不同的方式来实现它。<br>如果集合中的元素在内存上是连续的，那么我们可以直接返回这段内存的首地址；<br>如果不连续，比如链表，就只能使用调用者提供的C数组stackbuf了，将我们的元素拷贝到这个C数组上。<br>接下来，我们将通过一个自定义的集合类Array，来演示这两种不同的实现NSFastEnumeration协议的方式。<br>注：完整的项目代码可以在这里找到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">@interface Array : NSObject &lt;NSFastEnumeration&gt;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Array &#123;</span><br><span class="line">    std::vector&lt;NSNumber *&gt; _list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems &#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        for (NSUInteger i = 0; i &lt; numItems; i++) &#123;</span><br><span class="line">            _list.push_back(@(random()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#define USE_STACKBUF 1</span><br><span class="line"></span><br><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state </span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf </span><br><span class="line">                                    count:(NSUInteger)len &#123;</span><br><span class="line"></span><br><span class="line">    NSUInteger count = 0;</span><br><span class="line">    unsigned long countOfItemsAlreadyEnumerated = state-&gt;state;</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated == 0) &#123;</span><br><span class="line">        state-&gt;mutationsPtr = &amp;state-&gt;extra[0];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#if USE_STACKBUF</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line"></span><br><span class="line">        state-&gt;itemsPtr = stackbuf;</span><br><span class="line"></span><br><span class="line">        while (countOfItemsAlreadyEnumerated &lt; _list.size() &amp;&amp; count &lt; len) &#123;</span><br><span class="line"></span><br><span class="line">            stackbuf[count] = _list[countOfItemsAlreadyEnumerated];</span><br><span class="line">            countOfItemsAlreadyEnumerated++;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#else</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line">        __unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">        state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br><span class="line"></span><br><span class="line">        countOfItemsAlreadyEnumerated = _list.size();</span><br><span class="line">        count = _list.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">    state-&gt;state = countOfItemsAlreadyEnumerated;</span><br><span class="line">    return count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>在第二种方式的实现中，我们用到了ARC下不同所有权对象之间的相互转换，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br></pre></td></tr></table></figure>
+<p>其实，这里面涉及到两次类型转换，<br>第一次是从 <code>__strong NSNumber *</code> 类型转换到 <code>__unsafe_unretained const id *</code> 类型，<br>第二次是从 <code>__unsafe_unretained const id *</code> 类型转换到 <code>id __unsafe_unretained *</code> 类型</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/11/Xcode-Subproject/Xcode-Subproject/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/11/Xcode-Subproject/Xcode-Subproject/" itemprop="url">Xcdoe Subproject</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T02:27:31+08:00">
+                2017-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>1、子项目必须可以编译成 framework 或者是 静态库<br>2、新建一个项目 要求是 framework 或者是 静态库</p>
+<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_1.png" alt="Xcode-Subproject"></p>
+<p>3、新建项目 要编译通过</p>
+<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_2.png" alt="Xcode-Subproject"></p>
+<p>4、把子项目放到你的工程的目录里去，通过 Add files to project 添加子项目，千万不要自己拖拽，因为Xcode有BUG</p>
+<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_3.png" alt="Xcode-Subproject"></p>
+<p>5、Build Phases 中 Link Binary With Libraries 中 加上你的静态库</p>
+<p>6、Build Settings  中 Header Search Paths 中 加上你的静态库所在的父目录 ZRIPSubProject</p>
+<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_4.png" alt="Xcode-Subproject"></p>
+<p>这里注意：<br>Header Search Paths 它只是寻找静态库或者是 framework 暴露出来的头文件，<br>你的头文件在哪，就写那个目录，（递归还是不递归，看情况），<br>Header Search Paths 是以 主项目 的 .xcodeproj 所在的目录为当前目录往下找的。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/10/私有Pod/私有Pod/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -365,6 +935,137 @@
 </ol>
 <p>Podfile.lock<br>这是CocoaPods创建的最重要的文件之一。它记录了需要被安装的pod的每个已安装的版本。如果你想知道已安装的pod是哪个版本，可以查看这个文件。推荐将Podfile.lock文件加入到版本控制中，这有助于整个团队的一致性。</p>
 <p>Manifest.lock<br>这是每次运行pod install时创建的Podfile.lock文件的副本。如果你见过“沙盒文件和Podfile.lock文件不同步”的错误，这个错误就是因Manifest.lock文件和Podfile.lock文件不一样引起。由于Pods所在的目录并不总在版本控制之下，这样可以保证开发者运行app之前都能更新他们的pods，否则app可能会crash，或者在一些不太明显的地方编译失败。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
+                2017-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
+<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
+<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
+<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
+<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
+<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
           
         
@@ -588,137 +1289,6 @@
 <li>关联对象的五种关联策略与属性的限定符非常类似，在绝大多数情况下，我们都会使用 OBJC_ASSOCIATION_RETAIN_NONATOMIC 的关联策略，这可以保证我们持有关联对象；</li>
 <li>关联对象的释放时机与移除时机并不总是一致，比如 OBJC_ASSOCIATION_ASSIGN 进行关联的对象，不知道什么时候就被释放了，但是并没有被移除，而再使用这个关联对象时就会造成 Crash。</li>
 </ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
-                2017-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
-<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
-<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
-<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
-<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
-<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
 
           
         
@@ -1313,549 +1883,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2015/12/01/常用git命令/常用git命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/12/01/常用git命令/常用git命令/" itemprop="url">常用git命令</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-01T20:50:31+08:00">
-                2015-12-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<p>一. Clone</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@gitlab.hecom.cn:hecom-ios/NewHongquanCRM.git BackUpCRM</span><br></pre></td></tr></table></figure>
-<p>二. 创建本地仓库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;init project&quot;</span><br></pre></td></tr></table></figure>
-<p>三. 推送到远程</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">1. 查看你当前项目的远程git地址 </span><br><span class="line">	git remote -v # -v 为 --verbose (冗长的)的简写，取首字母</span><br><span class="line">2. 在远程建一个仓库 </span><br><span class="line">	如: https://github.com/zcs0843021123/Rei.git</span><br><span class="line">3. 关联本地库 </span><br><span class="line">	git remote add origin https://github.com/zcs0843021123/Rei.git </span><br><span class="line">	添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库。</span><br><span class="line">4. 推送当前分支并把远程设置成 upstream</span><br><span class="line">	git push --set-upstream origin master </span><br><span class="line"></span><br><span class="line">	Git中的upstream和downstream的概念是相对的：</span><br><span class="line">	如果A库中的分支x被push到B库中的分支y，则y就是x的upstream，而x就是y的downstream。</span><br><span class="line">	- 对于从远程库中clone或fetch得到的本地分支，都在远程库中有一个upstream分支。</span><br><span class="line">	- 对于在本地新建的本地分支，如果执行git push origin my_remote_branch_name</span><br><span class="line">	  是不会将my_remote_branch_name设置为新建的本地分支在远程库origin中的upstream分支的，</span><br><span class="line">	  可以执行如下操作：</span><br><span class="line">	  git push --set-upstream origin my_remote_branch_name #origin是远程库 master是远程分支</span><br><span class="line">	  或者</span><br><span class="line">	  git push -u origin my_remote_branch_name #--set-upstream  是 -u 的全称</span><br><span class="line">	- 此外，还可以执行如下操作直接为新建的本地分支设置在远程库中的upstream分支：</span><br><span class="line">	  git branch --set-upstream master origin/my_remote_branch_name #origin是远程库 master是本地分支</span><br></pre></td></tr></table></figure>
-<p>四. 分支</p>
-<p>查看分支(包括远程的分支)，当前的分支加了 * 号</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -a</span><br></pre></td></tr></table></figure>
-<p>创建本地分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch develop</span><br></pre></td></tr></table></figure>
-<p>push本地分支到远程</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --set-upstream origin develop</span><br></pre></td></tr></table></figure>
-<p>切换分支 (主模块、子模块都是)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br></pre></td></tr></table></figure>
-<p>git中有一个叫HEAD的分支 很危险 这样来把它重命名</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -m HEAD newbranch</span><br></pre></td></tr></table></figure>
-<p>git删除本地分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d newbranch</span><br></pre></td></tr></table></figure>
-<p>五. 拉和推</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
-<p>六. 子模块</p>
-<p>查看子模块</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule</span><br></pre></td></tr></table></figure>
-<p>添加子模块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule add https://github.com/ReactiveCocoa/ReactiveObjC.git ReactiveObjC</span><br></pre></td></tr></table></figure></p>
-<p>初始化子模块</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule init</span><br></pre></td></tr></table></figure>
-<p>拉取子模块</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
-<p>每个子模块都pull</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
-<p>有时候，子模块拉不下来时候，用它</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init --recursive 递归增加子模块 (有时候 子模块拉不下来时候，用它)</span><br></pre></td></tr></table></figure>
-<p>每个子模块都切到crmDevelop分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule foreach git checkout crmDevelop</span><br></pre></td></tr></table></figure>
-<p>七. 提交</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add -A    添加所有文件</span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;我修改了什么&quot;</span><br></pre></td></tr></table></figure>
-<p>八. log</p>
-<p>显示历史记录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git log</span><br><span class="line">--graph</span><br><span class="line">--pretty</span><br><span class="line">--committer zhangchunsheng</span><br></pre></td></tr></table></figure>
-<p>查找某段时间内的某人的提交记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --pretty=format:&quot;%s&quot;  --since=&quot;40 days ags&quot; --author=&quot;zhangchunsheng&quot;</span><br></pre></td></tr></table></figure></p>
-<p>九. 暂存</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git stash </span><br><span class="line"></span><br><span class="line">#使用暂存</span><br><span class="line">git stash pop</span><br><span class="line"></span><br><span class="line">#获取本地的 stash</span><br><span class="line">git stash list    </span><br><span class="line"></span><br><span class="line">#清除本地的 stash</span><br><span class="line">git stash clear</span><br></pre></td></tr></table></figure>
-<p>十. 丢弃更改</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout .</span><br></pre></td></tr></table></figure>
-<p>十一. Updates were rejected because tag already exists in the remote! (Sourcetree)<br>修改 提交时 不要提交所有标签</p>
-<p>十二. pathspec ‘master’ did not match any file(s) known<br>解决：<br>要在子模块下分别执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git checkout -b dev</span><br><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
-<p>十三. gitignore<br>编写.gitignore 你要先把你要ignore的文件删除，然后再写.gitignore，否则不好使。</p>
-<p>以斜杠“/”表示目录；<br>以星号“*”通配多个字符；<br>以问号“?”通配单个字符<br>以方括号“[]”包含单个字符的匹配列表；<br>以叹号“!”表示不忽略(跟踪)匹配到的文件或目录；</p>
-<p>示例：</p>
-<pre><code>+ 规则：`fd1/*` 说明：忽略目录 fd1 下的全部内容；
-  注意，不管是根目录下的 /fd1/ 目录，还是某个子目录 /child/fd1/ 目录，都会被忽略；
-+ 规则：`/fd1/*` 说明：忽略根目录下的 /fd1/ 目录的全部内容；
-</code></pre><p>　　（3）规则：<br>　　<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">!.gitignore</span><br><span class="line">!/fw/bin/</span><br><span class="line">!/fw/sf/</span><br></pre></td></tr></table></figure></p>
-<pre><code>说明：忽略全部内容，但是不忽略 .gitignore 文件、根目录下的 /fw/bin/ 和 /fw/sf/ 目录；
-</code></pre><p>例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># Xcode</span><br><span class="line">#</span><br><span class="line"># gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore &amp; Swift.gitignore</span><br><span class="line"></span><br><span class="line">main.jsbundle</span><br><span class="line">node_modules/</span><br><span class="line"></span><br><span class="line">## Build generated</span><br><span class="line">build/</span><br><span class="line">DerivedData/</span><br><span class="line"></span><br><span class="line">## Various settings</span><br><span class="line">*.pbxuser</span><br><span class="line">!default.pbxuser</span><br><span class="line">*.mode1v3</span><br><span class="line">!default.mode1v3</span><br><span class="line">*.mode2v3</span><br><span class="line">!default.mode2v3</span><br><span class="line">*.perspectivev3</span><br><span class="line">!default.perspectivev3</span><br><span class="line">xcuserdata/</span><br><span class="line">xcshareddata/</span><br><span class="line">*.DS_Store</span><br><span class="line"></span><br><span class="line">## Other</span><br><span class="line">*.moved-aside</span><br><span class="line">*.xccheckout</span><br><span class="line">*.xcscmblueprint</span><br><span class="line">.idea/</span><br><span class="line">.sonar</span><br></pre></td></tr></table></figure></p>
-<p>十四. git打标签</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git tag -a v1.0 -m &apos;无错误 可以使用版本&apos;</span><br><span class="line">git tag -a 1.1.1 -m &apos;1.1.1&apos;</span><br><span class="line">git push --tags</span><br></pre></td></tr></table></figure>
-<p>十五. git merge</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge master # 把 master 分支 merge 到当前的分支</span><br></pre></td></tr></table></figure>
-<p>十六. lightweight 和 annotated</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">有两种tag :  lightweight 和 annotated. </span><br><span class="line">Lightweight tags are merely refs that point to some object.</span><br><span class="line">Annotated tags are a separate git object by themselves, and store a lot more information like author, committer, a commit message, etc.</span><br><span class="line">When you used git tag -a to create a tag, git would have created an annotated tag for you.</span><br><span class="line">The ^&#123;&#125; is the syntax used to dereference a tag. It is described in gitrevisions.</span><br><span class="line">  ● When used with tag objects, git would recursively dereference the tag until it finds a non-tag object.</span><br><span class="line">  ● When used with non-tag objects, it doesn&apos;t do anything and is equivalent to skipping the ^&#123;&#125;</span><br><span class="line">The refs/tags/v0.1.6 ref in your repository points to the tag object bb944682f7f65272137de74ed18605e49257356c, which in turn points to 771a930dc0ba86769d6862bc4dc100acc50170fa (a non-tag object) which I&apos;m guesssing is storing the commit information when you created the tag.</span><br><span class="line"></span><br><span class="line">So when you do refs/tags/v0.1.6^&#123;&#125;, git is going to dereference the tag and resolve it to 771a930dc0ba86769d6862bc4dc100acc50170fa - the non-tag object.</span><br><span class="line">There is also a git show-ref command that can be used to list only tags, and optionally dereference as follows, and in your case should produce the following output:</span><br><span class="line">$ git show-ref --tags</span><br><span class="line">bb944682f7f65272137de74ed18605e49257356c    refs/tags/v0.1.6</span><br><span class="line">a72251d945353a360087eb78ee75287c38a1c0e6    refs/tags/v0.1.7</span><br><span class="line"></span><br><span class="line">$ git show-ref --tags --dereference</span><br><span class="line">bb944682f7f65272137de74ed18605e49257356c    refs/tags/v0.1.6</span><br><span class="line">771a930dc0ba86769d6862bc4dc100acc50170fa    refs/tags/v0.1.6^&#123;&#125;</span><br><span class="line">a72251d945353a360087eb78ee75287c38a1c0e6    refs/tags/v0.1.7</span><br><span class="line">d69e66d7c915b9682618b7f304b80cc0ae4c7809    refs/tags/v0.1.7^&#123;&#125;</span><br><span class="line"></span><br><span class="line">To confirm this, you can use git show command to give you more details about the git object.</span><br><span class="line">This is the information from one of my test git repositories.</span><br><span class="line">$ git show 43f9a98886ba873c0468c608f24c408b9991414f</span><br><span class="line">tag v0.1</span><br><span class="line">Tagger: Ash &lt;tuxdude@OptimusPrime&gt;</span><br><span class="line">Date:   Sun Jul 15 00:14:43 2012 -0700</span><br><span class="line"></span><br><span class="line">Tagging Stable repo 0.1 :)</span><br><span class="line">-----BEGIN PGP SIGNATURE-----</span><br><span class="line">&lt;PGP-SIGNATURE&gt;</span><br><span class="line">-----END PGP SIGNATURE-----</span><br><span class="line"></span><br><span class="line">commit e55df25f2321a6b2c9a02fa80ccba7cbe3c38c08</span><br><span class="line">Merge: 796efcd 58e3a4d</span><br><span class="line">Author: Ash &lt;tuxdude@OptimusPrime&gt;</span><br><span class="line">Date:   Sun Jul 15 00:02:44 2012 -0700</span><br><span class="line"></span><br><span class="line">    Merge branch &apos;dev&apos; into &apos;master&apos; for stable 0.1.</span><br><span class="line"></span><br><span class="line">$ git show e55df25f2321a6b2c9a02fa80ccba7cbe3c38c08</span><br><span class="line">commit e55df25f2321a6b2c9a02fa80ccba7cbe3c38c08</span><br><span class="line">Merge: 796efcd 58e3a4d</span><br><span class="line">Author: Ash &lt;tuxdude@OptimusPrime&gt;</span><br><span class="line">Date:   Sun Jul 15 00:02:44 2012 -0700</span><br><span class="line"></span><br><span class="line">    Merge branch &apos;dev&apos; into &apos;master&apos; for stable 0.1.</span><br></pre></td></tr></table></figure>
-<p>十六. 如果 你往远程提交 代码 permission denied<br>那么很可能</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1) 本地的upper stream 没有设置</span><br><span class="line">2) git 的SSH Key 没有加到远程</span><br><span class="line">3) 远程没有给你开发者权限，你没有权利提交</span><br></pre></td></tr></table></figure>
-<p>十七. 有时候 .git/index.lock 存在 导致你 提交提交不了，检出也检出不了。你可以直接把他删除了 就好了</p>
-<p>十八. 补丁<br>创建补丁===&gt;产生一个 .diff 文件 ===&gt; 动作，应用补丁 ===&gt; 提交</p>
-<p>1.1、产生patch</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git format-patch 1e225fc -5</span><br></pre></td></tr></table></figure>
-<p>产生 从 1e225fc 开始的往前5个提交 （包括 1e225fc ）<br>产生 0001-.patch<br>0002-.patch<br>0003-.patch<br>0004-.patch<br>0005-.patch<br>0001-0005是按时间顺序来的，最早的在最前边，如果是别的分支merge过来的commit 那么不会出现在patch里</p>
-<p>1.2、产生diff</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff 1e225fc --binary &gt; ~/patch/patch/test.diff</span><br></pre></td></tr></table></figure>
-<p>diff 多次提交可以是一个文件，但是patch不行，因为它里面有commit记录</p>
-<p>十九. 如果一个提交丢了, 处于游离的状态 ，没有分支或tag指向他<br>那么我们可以把版本切到之前有他的版本，然后，找到他的提交的CommitID，然后检出这个Commit，然后创建一个分支。</p>
-<p>二十. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add &lt;name&gt; &lt;url&gt;</span><br></pre></td></tr></table></figure>
-<p>其中，name 表示你要给这个远程库起的名字，url 表示这个库的地址<br>提交的时候，先 add, commit。然后 git push <name> <branch> 就行<br>其中，name 表示你在上一步给它起的名字，branch 表示某一个分支<br>补充：<br>推送到远程库上面已经说了。<br>删除远程分支比较麻烦。<br>一种方式是，可以直接在 github 网页上操作，<br>另一种方式是：<code>git push &lt;name&gt; :&lt;branch&gt;</code> （注意冒号前的空格）</branch></name></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2015/09/12/如何区分开源许可证/如何区分开源许可证/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/09/12/如何区分开源许可证/如何区分开源许可证/" itemprop="url">如何区分开源许可证</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-12T14:42:35+08:00">
-                2015-09-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="区分方法"><a href="#区分方法" class="headerlink" title="区分方法"></a>区分方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">let result = undefined;</span><br><span class="line"></span><br><span class="line">// WTFPL: DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE</span><br><span class="line">// CC0是来自CC的公开领域许可证</span><br><span class="line">// https://creativecommons.org/publicdomain/zero/1.0/legalcode</span><br><span class="line">// 发布在Public Domain 即公开领域的知名软件有SQLite;</span><br><span class="line">if (我无所谓) &#123;</span><br><span class="line">    result = &quot;WTFPL or CC0 or 公开领域&quot;;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if (修改源码后,需要采用同样的许可证) &#123;</span><br><span class="line">    if (新增代码需要采用相同或兼容的许可证) &#123;</span><br><span class="line">        //DMR: Digital Rights Management 的缩写,数字版权管理</span><br><span class="line">        if (禁止DRM,公布相关硬件) &#123; </span><br><span class="line">            result = &quot;GPLv3许可证&quot;;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;GPLv2许可证&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (禁止DRM,公布相关硬件) &#123;</span><br><span class="line">            result = &quot;LGPLv3许可证&quot;;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;LGPLv2许可证 or MPL许可证(Mozilla Public License)&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    if (每一个修改过的文件,都必须包含版权说明和更改处) &#123;</span><br><span class="line">        result = &quot;Apache License 2&quot;;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (可以采用版权拥有者的名字进行推广) &#123;</span><br><span class="line">            result = &quot;BSD(2-clause) or MIT许可证&quot;;</span><br><span class="line">            // BSD(2-clause) 也叫 Simplified BSD License 和 FreeBSD License</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            result = &quot;BSD(3-clause) &quot;;</span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://opensource.org/licenses" target="_blank" rel="noopener">https://opensource.org/licenses</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/" itemprop="url">Mac环境搭建HEXO+Github博客</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-05T13:54:33+08:00">
-                2015-08-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><p>  本系列文章是自己的工作总结,因此写的有些简略,如有不明白的地方,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></p>
-<h1 id="一-安装工具"><a href="#一-安装工具" class="headerlink" title="一. 安装工具"></a>一. 安装工具</h1><p>Hexo 官网指南 <a href="https://hexo.io/docs/index.html" target="_blank" rel="noopener">https://hexo.io/docs/index.html</a></p>
-<ol>
-<li>Git </li>
-<li>Node.js </li>
-<li>安装hexo  <code>npm install -g hexo-cli</code><br>注意：全局安装的npm第三方库在 /usr/local/lib/node_modules 里边,所以,安装hexo的结果可以在 /usr/local/lib/node_modules 中查看</li>
-</ol>
-<h1 id="二-配置hexo"><a href="#二-配置hexo" class="headerlink" title="二. 配置hexo"></a>二. 配置hexo</h1><h2 id="1-cd到自己要放博客源码的目录中去"><a href="#1-cd到自己要放博客源码的目录中去" class="headerlink" title="1. cd到自己要放博客源码的目录中去"></a>1. cd到自己要放博客源码的目录中去</h2><p>比如我的是在 /Users/zhangchunsheng/Documents</p>
-<ol>
-<li><p>创建myGithubBlog目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init myGithubBlog</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>进入到 myGithubBlog 中 </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> myGithubBlog</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装node_modules第三方库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动本地服务,预览页面</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server 	<span class="comment">#或是 hexo s （简写）</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>这时候 就可以在<a href="http://localhost:4000/就可以看到一个欢迎页面了" target="_blank" rel="noopener">http://localhost:4000/就可以看到一个欢迎页面了</a></p>
-</li>
-</ol>
-<h2 id="2-配置-config-yml-对属性进行修改-修改为自己定义的属性"><a href="#2-配置-config-yml-对属性进行修改-修改为自己定义的属性" class="headerlink" title="2. 配置 _config.yml 对属性进行修改,修改为自己定义的属性"></a>2. 配置 _config.yml 对属性进行修改,修改为自己定义的属性</h2><p>如：</p>
-<ol>
-<li>title.  subtitle. description. author. language 这些基本属性</li>
-<li>url属性（你的博客的网站, github默认就是 <a href="https://your_github_user_name.github.io/）" target="_blank" rel="noopener">https://your_github_user_name.github.io/）</a></li>
-<li><p>deploy是部署相关的配置属性: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/zcs0843021123/zcs0843021123.github.io.git,master</span><br></pre></td></tr></table></figure>
-<p>其中: type是类型, git,<br>repo就是你在github上的远程仓库, 例如 我的是 <a href="https://github.com/zcs0843021123/zcs0843021123.github.io.git" target="_blank" rel="noopener">https://github.com/zcs0843021123/zcs0843021123.github.io.git</a>,<br>后边跟上逗号,<br>master 表示是master分支</p>
-</li>
-<li>一个可用的例子:(以下例子只是可以照着修改对应的属性 不可以把原有的属性都删除了)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 凤凰苑</span><br><span class="line">subtitle: 张春生的个人博客</span><br><span class="line">description: 张春生的技术博客 不定时更新 请原谅</span><br><span class="line">author: 张春生</span><br><span class="line">language: zh-Hans</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: https://zcs0843021123.github.io/</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/zcs0843021123/zcs0843021123.github.io.git,master</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="3-在自己的github上创建一个仓库"><a href="#3-在自己的github上创建一个仓库" class="headerlink" title="3. 在自己的github上创建一个仓库"></a>3. 在自己的github上创建一个仓库</h2><p>仓库的名字就叫做 your_github_user_name.github.io<br>your_github_user_name.github.io 这个名字的格式是固定的 不可以谁便乱改<br>这个仓库一定要是空的，什么都没有，否则deploy不上去（deploy调用的就是 git push）</p>
-<p>有时hexo deploy不上去，不过有时候也不报错，具体表现为博客不更新或者是报404，是因为<br>1）你的GitHub的仓库里有东西，push不上去。<br>2）你没有给git设置upstream</p>
-<pre><code>- 执行hexo generate之后，在 .deploy_git 里边就是你要发布的博客。
-  先用 git remote -v 查看你的这个git仓库有木有远程仓库，一般来说没有
-  远程仓库 如: https://github.com/your_github_user_name/your_github_user_name.github.io
-- 关联本地库
-  git remote add origin https://github.com/your_github_user_name/your_github_user_name.github.io
-  添加后，远程库的名字就是origin，这是Git默认的叫法，也可以改成别的，但是origin这个名字一看就知道是远程库。
-- 推送当前分支并把远程设置成 upstream
-  git push --set-upstream origin master 
-</code></pre><h2 id="4-测试写一个博客并发布"><a href="#4-测试写一个博客并发布" class="headerlink" title="4. 测试写一个博客并发布"></a>4. 测试写一个博客并发布</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean      </span><br><span class="line">hexo generate #（简写 hexo g）</span><br><span class="line">hexo deploy   #（简写 hexo d）</span><br></pre></td></tr></table></figure>
-<h2 id="5-查看结果"><a href="#5-查看结果" class="headerlink" title="5. 查看结果"></a>5. 查看结果</h2><p>   本地预览: <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a><br>   github网页：<a href="https://zcs0843021123Zcs.github.io" target="_blank" rel="noopener">https://zcs0843021123Zcs.github.io</a></p>
-<h1 id="三-写博客-amp-发布博客"><a href="#三-写博客-amp-发布博客" class="headerlink" title="三. 写博客 &amp; 发布博客"></a>三. 写博客 &amp; 发布博客</h1><h2 id="1-写博客"><a href="#1-写博客" class="headerlink" title="1. 写博客"></a>1. 写博客</h2><p><code>hexo new &quot;a test article&quot;</code><br>就会产生一个文件 your_github_blog_local_path/source/_posts/a-test-article.md<br>文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: a test article</span><br><span class="line">date: 2017-09-05 13:46:21</span><br><span class="line">tags:</span><br><span class="line">---</span><br></pre></td></tr></table></figure></p>
-<p>然后就可以在a-test-article.md里边愉快的写博客了</p>
-<h2 id="2-发布博客"><a href="#2-发布博客" class="headerlink" title="2. 发布博客"></a>2. 发布博客</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-<h2 id="3-hexo主题"><a href="#3-hexo主题" class="headerlink" title="3. hexo主题"></a>3. hexo主题</h2><p>个人使用的是：iissnan/hexo-theme-next<br>源码地址在 <a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next</a><br>next 官网 <a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">http://theme-next.iissnan.com/getting-started.html</a></p>
-<ol>
-<li><p>下载主题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ cd myGithubBlog #我的博客的本地的目录就在 myGithubBlog</span><br><span class="line">$ ls</span><br><span class="line">_config.yml  node_modules  package.json  public  scaffolds  source  themes</span><br><span class="line">$ mkdir themes/next</span><br><span class="line"></span><br><span class="line"># 在myGithubBlog之外的另外一个目录里下载next主题的源码,</span><br><span class="line"># 记住千万不要直接clone进myGithubBlog,否则里边有一个子git你会很蛋疼</span><br><span class="line"># 而且你还需要修改 next 的配置</span><br><span class="line">$ git clone --branch v5.1.2 https://github.com/iissnan/hexo-theme-next themes/next</span><br><span class="line">$ git checkout master</span><br><span class="line">$ git pull</span><br><span class="line"></span><br><span class="line"># 再把源码拷贝进 themes/next</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>把 next 主题设为自己blog的主题, 修改 _config.yml 中的内容 theme: next</p>
-</li>
-<li><p>修改 _config.yml 中的内容 language: zh-Hans</p>
-</li>
-<li><p>创建一个 tags 文件<br><code>hexo new page &quot;tags&quot;</code><br>文件内容为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">title: All tags</span><br><span class="line">date: 2014-12-22 12:39:04</span><br><span class="line">type: &quot;tags&quot;</span><br></pre></td></tr></table></figure>
-<p>修改 themes/next/_config.yml 文件, 修改如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /</span><br><span class="line">  archives: /archives</span><br><span class="line">  tags: /tags</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>常用设置 (修改 themes/next/_config.yml 文件)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /</span><br><span class="line">  archives: /archives</span><br><span class="line">  tags: /tags</span><br><span class="line">favicon: /favicon.ico</span><br><span class="line">avatar: /default_avatar.png</span><br><span class="line">highlight_theme: normal</span><br><span class="line">fancybox: true</span><br><span class="line">since: 2013</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>类似的, 添加 about (关于) 页面, 也是这么添加的。</p>
-</li>
-<li><p>在 source/_data 目录下创建一个 next.yml 文件 (如果没有 _data 就创建一个 _data 目录)</p>
-</li>
-<li><p>把 _config.yml 和 themes/next 下的 _config.yml 内容都粘贴到 next.yml 中</p>
-</li>
-<li><p>以后使用 hexo clean . hexo g . hexo s .  hexo d 都要加上 <code>--config source/_data/next.yml</code><br>如: <code>hexo clean --config source/_data/next.yml &amp;&amp; hexo g --config source/_data/next.yml</code>.</p>
-</li>
-<li><p>根据自己的喜好,再看着 next.yml 里的注释, 进行自己的喜欢的风格的配置。<br>例如 </p>
-<ul>
-<li>设置头像 可以设置 next.yml 中的 avatar 属性。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 远程图片的URL</span><br><span class="line">avatar: https://avatars1.githubusercontent.com/u/12196768?v=4&amp;u=f5638036e2ae07181f94613dc4b95eb207ac0476&amp;s=400</span><br><span class="line"></span><br><span class="line"># 或者是 本地图片</span><br><span class="line">avatar: /images/12196768.jepg</span><br><span class="line"># 注意 本地图片 你需要把图片在 theme 目录下的 /images/ 和 网站目录下 /uploads/ 都存一份</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>一定要注意,以后要是修改配置文件需要 themes/next下的_config.yml.  _config.yml 与 next.yml 同时修改。<br>当然要是某个文件里,压根就木有那个属性,我们就不用修改。</p>
-</li>
-</ol>
-<h2 id="4-插入图片"><a href="#4-插入图片" class="headerlink" title="4. 插入图片"></a>4. 插入图片</h2><ol>
-<li>把主页配置文件 _config.yml 里的 post_asset_folder :这个选项设置为true<br>把 next.yml 里的 post_asset_folder:这个选项设置为true</li>
-<li>安装图片保存的第三方库 <code>npm install hexo-asset-image --save</code> </li>
-<li>在 /source/_posts 里边造一个和 your_md_name.md 同名的目录 your_md_name,把图片放在里边。</li>
-<li>md文件中应用图片<br>格式    <code>![你想输入的替代文字](图片所在的目录名/图片名.jpg)</code><br>如      <code>![测试图片](Mac环境搭建HEXO-Github博客/Snip20170906_5.png)</code><br> <img src="/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/Snip20170906_5.png" alt="测试图片"></li>
-</ol>
-<h1 id="四-注意事项"><a href="#四-注意事项" class="headerlink" title="四. 注意事项"></a>四. 注意事项</h1><ol>
-<li>注意事项 确保自己是 Hexo 3 (或者更高的版本)</li>
-<li><p>有时候报错 ERROR Deployer not found: git  这时候,需要加装第三方库： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>有时候在Safari上浏览 <a href="https://zcs0843021123.github.io">https://zcs0843021123.github.io</a> 看不到,报错404；可能是浏览器的问题,可以用Chrome 或者手机试试,也可以清空缓存试试（Safari的清空缓存 在Safari的开发菜单下边）</p>
-</li>
-<li>推荐安装从 finder 直接点击叫出shell 的工具 Go2Shell (当然你也可以不安装 直接一步一步cd进去）</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1907,7 +1939,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

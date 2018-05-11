@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
+<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一.Protocol其中实就是一个对象结构体1typedef struct objc_object Protocol; 而对于Protocol，runtime提供了一系列函数来对其进行操作，这些函数包括： 123456789101112131415161">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OC与Swift混编">
-<meta property="og:url" content="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/index.html">
+<meta property="og:title" content="OC Protocol">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/11/12/OC-Protocol/OC-Protocol/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
+<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一.Protocol其中实就是一个对象结构体1typedef struct objc_object Protocol; 而对于Protocol，runtime提供了一系列函数来对其进行操作，这些函数包括： 123456789101112131415161">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-11T17:31:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OC与Swift混编">
-<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
+<meta name="twitter:title" content="OC Protocol">
+<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一.Protocol其中实就是一个对象结构体1typedef struct objc_object Protocol; 而对于Protocol，runtime提供了一系列函数来对其进行操作，这些函数包括： 123456789101112131415161">
 
 
 
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/"/>
+  <link rel="canonical" href="https://zcs0843021123.github.io/2017/11/12/OC-Protocol/OC-Protocol/"/>
 
 
 
 
 
-  <title>OC与Swift混编 | 凤凰苑</title>
+  <title>OC Protocol | 凤凰苑</title>
   
 
 
@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/12/OC-Protocol/OC-Protocol/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="张春生">
@@ -277,7 +277,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">OC与Swift混编</h2>
+          <h2 class="post-title" itemprop="name headline">OC Protocol</h2>
         
 
         <div class="post-meta">
@@ -289,8 +289,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-15T21:15:31+08:00">
-                2017-11-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-12T12:27:31+08:00">
+                2017-11-12
               </time>
             
 
@@ -330,18 +330,10 @@
         <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
 <li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
 </ol>
-<h1 id="一-OC-调用Swift"><a href="#一-OC-调用Swift" class="headerlink" title="一. OC 调用Swift"></a>一. OC 调用Swift</h1><p>1、创建一个类 选择语言用Swift</p>
-<p>2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成<br>    桥接文件名字：工程名-Bridging-Header.h<br>    这个桥接文件是 swift 调用OC文件的时候用的</p>
-<p>3、<br>进入TARGETS -&gt;Build Settings -&gt; Packaging 中<br>设置Defines Module为YES<br>设置 Product Module Name ，也可以不设置，默认为工程的名字。这个在后面会用到</p>
-<p>4、<br>在swift写一个类<br>注意这个类一定要继承NSObject，不然在OC中没法用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class hello: NSObject &#123;</span><br><span class="line"></span><br><span class="line">    var address : String</span><br><span class="line">    var gender: String</span><br><span class="line">   </span><br><span class="line">    init(address:String,gender:String)&#123;</span><br><span class="line">        self.address = address</span><br><span class="line">        self.gender = gender</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    func method() &#123;</span><br><span class="line">        print(&quot;message \(self.address + self.gender)&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>5、<br>在OC需要用到的swift文件中导入文件 “Product Module Name -Swift.h”<br>因为 Product Module Name 默认是工程的名字<br>所以直接导入 #import “工程名-Swift.h”</p>
-<p>6、<br>记着写完先 command + b 编译一下，如果没有报错就可以在OC文件调用swift中的类了</p>
-<h1 id="二-Swift调用OC"><a href="#二-Swift调用OC" class="headerlink" title="二. Swift调用OC"></a>二. Swift调用OC</h1><p>1、桥接文件名字：工程名-Bridging-Header.h</p>
-<p>2、在桥接文件中把需要用到OC的头文件导入进去</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OC_Flie.h&quot;</span><br></pre></td></tr></table></figure>
-<p>3、<br>编译一下，就可以在swift中用swift的语法调用OC文件的方法了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let oc_flie = OC_Flie()</span><br><span class="line">oc_flie.actionMake()</span><br></pre></td></tr></table></figure>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>Protocol其中实就是一个对象结构体<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_object Protocol;</span><br></pre></td></tr></table></figure></p>
+<p>而对于Protocol，runtime提供了一系列函数来对其进行操作，这些函数包括：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">// 返回指定的协议</span><br><span class="line">Protocol * objc_getProtocol ( const char *name );</span><br><span class="line"></span><br><span class="line">// 获取运行时所知道的所有协议的数组</span><br><span class="line">Protocol ** objc_copyProtocolList ( unsigned int *outCount );</span><br><span class="line"></span><br><span class="line">// 创建新的协议实例</span><br><span class="line">Protocol * objc_allocateProtocol ( const char *name );</span><br><span class="line"></span><br><span class="line">// 在运行时中注册新创建的协议</span><br><span class="line">void objc_registerProtocol ( Protocol *proto );</span><br><span class="line"></span><br><span class="line">// 为协议添加方法</span><br><span class="line">void protocol_addMethodDescription ( Protocol *proto, SEL name, const char *types, BOOL isRequiredMethod, BOOL isInstanceMethod );</span><br><span class="line"></span><br><span class="line">// 添加一个已注册的协议到协议中</span><br><span class="line">void protocol_addProtocol ( Protocol *proto, Protocol *addition );</span><br><span class="line"></span><br><span class="line">// 为协议添加属性</span><br><span class="line">void protocol_addProperty ( Protocol *proto, const char *name, const objc_property_attribute_t *attributes, unsigned int attributeCount, BOOL isRequiredProperty, BOOL isInstanceProperty );</span><br><span class="line"></span><br><span class="line">// 返回协议名</span><br><span class="line">const char * protocol_getName ( Protocol *p );</span><br><span class="line"></span><br><span class="line">// 测试两个协议是否相等</span><br><span class="line">BOOL protocol_isEqual ( Protocol *proto, Protocol *other );</span><br><span class="line"></span><br><span class="line">// 获取协议中指定条件的方法的方法描述数组</span><br><span class="line">struct objc_method_description * protocol_copyMethodDescriptionList ( Protocol *p, BOOL isRequiredMethod, BOOL isInstanceMethod, unsigned int *outCount );</span><br><span class="line"></span><br><span class="line">// 获取协议中指定方法的方法描述</span><br><span class="line">struct objc_method_description protocol_getMethodDescription ( Protocol *p, SEL aSel, BOOL isRequiredMethod, BOOL isInstanceMethod );</span><br><span class="line"></span><br><span class="line">// 获取协议中的属性列表</span><br><span class="line">objc_property_t * protocol_copyPropertyList ( Protocol *proto, unsigned int *outCount );</span><br><span class="line"></span><br><span class="line">// 获取协议的指定属性</span><br><span class="line">objc_property_t protocol_getProperty ( Protocol *proto, const char *name, BOOL isRequiredProperty, BOOL isInstanceProperty );</span><br><span class="line"></span><br><span class="line">// 获取协议采用的协议</span><br><span class="line">Protocol ** protocol_copyProtocolList ( Protocol *proto, unsigned int *outCount );</span><br><span class="line"></span><br><span class="line">// 查看协议是否采用了另一个协议</span><br><span class="line">BOOL protocol_conformsToProtocol ( Protocol *proto, Protocol *other );</span><br></pre></td></tr></table></figure>
+<p>objc_getProtocol函数，需要注意的是如果仅仅是声明了一个协议，而未在任何类中实现这个协议，则该函数返回的是nil。<br>objc_copyProtocolList函数，获取到的数组需要使用free来释放<br>objc_allocateProtocol函数，如果同名的协议已经存在，则返回nil<br>objc_registerProtocol函数，创建一个新的协议后，必须调用该函数以在运行时中注册新的协议。协议注册后便可以使用，但不能再做修改，即注册完后不能再向协议添加方法或协议.<br>需要强调的是，协议一旦注册后就不可再修改，即无法再通过调用protocol_addMethodDescription、protocol_addProtocol和protocol_addProperty往协议中添加方法等。</p>
 
       
     </div>
@@ -372,8 +364,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/12/OC-Protocol/OC-Protocol/" rel="next" title="OC Protocol">
-                <i class="fa fa-chevron-left"></i> OC Protocol
+              <a href="/2017/11/11/OC-Category/OC-Category/" rel="next" title="OC Category">
+                <i class="fa fa-chevron-left"></i> OC Category
               </a>
             
           </div>
@@ -382,8 +374,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/01/OC的load与initialize/OC的load与initialize/" rel="prev" title="OC的load与initialize">
-                OC的load与initialize <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/15/OC与Swift混编/OC与Swift混编/" rel="prev" title="OC与Swift混编">
+                OC与Swift混编 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -529,7 +521,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-OC-调用Swift"><span class="nav-number">2.</span> <span class="nav-text">一. OC 调用Swift</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二-Swift调用OC"><span class="nav-number">3.</span> <span class="nav-text">二. Swift调用OC</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一"><span class="nav-number">2.</span> <span class="nav-text">一.</span></a></li></ol></div>
             
 
           </div>

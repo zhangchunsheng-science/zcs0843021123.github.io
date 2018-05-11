@@ -382,6 +382,168 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/11/OC-Method-Swizzling/OC-Method-Swizzling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/11/OC-Method-Swizzling/OC-Method-Swizzling/" itemprop="url">OC Method Swizzling</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-11T12:27:31+08:00">
+                2017-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>Objective-C 中的 Method Swizzling 是一项异常强大的技术，它可以允许我们动态地替换方法的实现，实现 Hook 功能，是一种比子类化更加灵活的“重写”方法的方式。</p>
+<ol>
+<li>Method Swizzling 的原理</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">typedef struct method_t *Method;</span><br><span class="line">struct method_t &#123;</span><br><span class="line">    SEL name;</span><br><span class="line">    const char *types;</span><br><span class="line">    IMP imp;</span><br><span class="line"></span><br><span class="line">    // 结构体里冒号的特殊用法: 仿函数</span><br><span class="line">    struct SortBySELAddress : public std::binary_function&lt;const method_t&amp;,  const method_t&amp;, bool&gt; &#123;</span><br><span class="line">        bool operator() (const method_t&amp; lhs, const method_t&amp; rhs) &#123; </span><br><span class="line">            return lhs.name &lt; rhs.name; </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>本质上，它就是 struct method_t 类型的指针，所以我们重点看下结构体 method_t 的定义。<br>在结构体 method_t 中定义了三个成员变量和一个成员函数：</p>
+<ol>
+<li>name 表示的是方法的名称，用于唯一标识某个方法，比如 @selector(viewWillAppear:) ；</li>
+<li>types 表示的是方法的返回值和参数类型（可以查阅苹果官方文档中的 Type Encodings）；</li>
+<li>imp 是一个函数指针，指向方法的实现；</li>
+<li>SortBySELAddress 顾名思义，是一个根据 name 的地址对方法进行排序的函数。</li>
+</ol>
+<p>由此，我们也可以发现 Objective-C 中的方法名是不包括参数类型的，<br>也就是说下面两个方法在 runtime 看来就是同一个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewWillAppear:(BOOL)animated;</span><br><span class="line">- (void)viewWillAppear:(NSString *)string;</span><br></pre></td></tr></table></figure>
+<p>而下面两个方法却是可以共存的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewWillAppear:(BOOL)animated;</span><br><span class="line">+ (void)viewWillAppear:(BOOL)animated;</span><br></pre></td></tr></table></figure>
+<p>因为实例方法和类方法是分别保存在类对象和元类对象中的<br>原则上，方法的名称 name 和方法的实现 imp 是一一对应的，而 Method Swizzling 的原理就是动态地改变它们的对应关系，以达到替换方法实现的目的。</p>
+<p>Method Swizzling 有什么用<br>用过友盟统计的同学应该知道，要实现页面的统计功能，我们需要在每个页面的 view controller 中添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewWillAppear:(BOOL)animated &#123;</span><br><span class="line">    [super viewWillAppear:animated];</span><br><span class="line">    [MobClick beginLogPageView:@&quot;PageOne&quot;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)viewWillDisappear:(BOOL)animated &#123;</span><br><span class="line">    [super viewWillDisappear:animated];</span><br><span class="line">    [MobClick endLogPageView:@&quot;PageOne&quot;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>要达到这个目的，我们有两种比较常规的实现方式：</p>
+<ol>
+<li>直接修改每个页面的 ViewController 代码，简单粗暴；</li>
+<li>子类化 ViewController ，并让我们的 ViewController 都继承这些子类。<br>第 1 种方式的缺点是不言而喻的，这样做不仅会产生大量重复的代码，而且还很容易遗漏某些页面，非常难维护；<br>第 2 种方式稍微好一点，但是也同样需要我们子类化 UIViewController 、UITableViewController 和 UITabBarController 等不同类型的 ViewController 。<br>也许你跟我一样陷入了思考，难道就没有一种简单优雅的解决方案吗？<br>答案是肯定的，Method Swizzling 就是解决此类问题的最佳方式。</li>
+</ol>
+<p>Method Swizzling 的最佳实践<br>下面我们就以替换 viewWillAppear 方法为例谈谈 Method Swizzling 的最佳实践，话不多说，直接上代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">@interface UIViewController (MRCUMAnalytics)</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation UIViewController (MRCUMAnalytics)</span><br><span class="line"></span><br><span class="line">+ (void)load &#123;</span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        Class class = [self class];</span><br><span class="line"></span><br><span class="line">        SEL originalSelector = @selector(viewWillAppear:);</span><br><span class="line">        SEL swizzledSelector = @selector(mrc_viewWillAppear:);</span><br><span class="line"></span><br><span class="line">        Method originalMethod = class_getInstanceMethod(class, originalSelector);</span><br><span class="line">        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        //success用于判断当前类是不是自己实现了viewWillAppear:方法</span><br><span class="line">        BOOL success = class_addMethod(class, </span><br><span class="line">                                        originalSelector, </span><br><span class="line">                                        method_getImplementation(swizzledMethod), </span><br><span class="line">                                        method_getTypeEncoding(swizzledMethod));</span><br><span class="line">        if (success) &#123;</span><br><span class="line">            class_replaceMethod(class, </span><br><span class="line">                                swizzledSelector, </span><br><span class="line">                                method_getImplementation(originalMethod), </span><br><span class="line">                                method_getTypeEncoding(originalMethod));</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            method_exchangeImplementations(originalMethod, swizzledMethod);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - Method Swizzling</span><br><span class="line"></span><br><span class="line">- (void)mrc_viewWillAppear:(BOOL)animated &#123;</span><br><span class="line">    [self mrc_viewWillAppear:animated];</span><br><span class="line">    [MobClick beginLogPageView:NSStringFromClass([self class])];</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>解析：在上面的代码中有三个关键点需要引起我们的注意：</p>
+<ol>
+<li>为什么是在 +load 方法中实现 Method Swizzling 的逻辑，而不是其他的什么方法，比如 +initialize 等；</li>
+<li>为什么 Method Swizzling 的逻辑需要用 dispatch_once 来进行调度；</li>
+<li>为什么需要调用 class_addMethod 方法，并且以它的结果为依据分别处理两种不同的情况。</li>
+</ol>
+<p>第 1 个：<br>+load 和 +initialize 是 Objective-C runtime 会自动调用的两个类方法。<br>但是它们被调用的时机却是有差别的，+load 方法是在类被加载的时候调用的，<br>而 +initialize 方法是在类或它的子类收到第一条消息之前被调用的，这里所指的消息包括实例方法和类方法的调用。<br>也就是说 +initialize 方法是以懒加载的方式被调用的，如果程序一直没有给某个类或它的子类发送消息，那么这个类的 +initialize 方法是永远不会被调用的。<br>此外 +load 方法还有一个非常重要的特性，那就是子类、父类和分类中的 +load 方法的实现是被区别对待的。<br>换句话说在 Objective-C runtime 自动调用 +load 方法时，分类中的 +load 方法并不会对主类中的 +load 方法造成覆盖。<br>综上所述，+load 方法是实现 Method Swizzling 逻辑的最佳“场所”。</p>
+<p>第 2 个：我们上面提到，+load 方法在类加载的时候会被 runtime 自动调用一次，但是它并没有限制程序员对 +load 方法的手动调用。<br>第 3 个：我们使用 Method Swizzling 的目的通常都是为了给程序增加功能，而不是完全地替换某个功能，所以我们一般都需要在自定义的实现中调用原始的实现。所以这里就会有两种情况需要我们分别进行处理：</p>
+<p>第 1 种情况：主类本身有实现需要替换的方法，也就是 class_addMethod 方法返回 NO 。这种情况的处理比较简单，直接交换两个方法的实现就可以了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewWillAppear:(BOOL)animated &#123;</span><br><span class="line">    /// 先调用原始实现，由于主类本身有实现该方法，所以这里实际调用的是主类的实现</span><br><span class="line">    [self mrc_viewWillAppear:animated];</span><br><span class="line">    /// 我们增加的功能</span><br><span class="line">    [MobClick beginLogPageView:NSStringFromClass([self class])];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)mrc_viewWillAppear:(BOOL)animated &#123;</span><br><span class="line">    /// 主类的实现</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第 2 种情况：主类本身没有实现需要替换的方法，而是继承了父类的实现，即 class_addMethod 方法返回 YES 。这时使用 class_getInstanceMethod 函数获取到的 originalSelector 指向的就是父类的方法，我们再通过执行 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class_replaceMethod(class, </span><br><span class="line">                    swizzledSelector, </span><br><span class="line">                    method_getImplementation(originalMethod), </span><br><span class="line">                    method_getTypeEncoding(originalMethod));</span><br></pre></td></tr></table></figure>
+<p>将父类的实现替换到我们自定义的 mrc_viewWillAppear 方法中。这样就达到了在 mrc_viewWillAppear 方法的实现中调用父类实现的目的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewWillAppear:(BOOL)animated &#123;</span><br><span class="line">    /// 先调用原始实现，由于主类本身并没有实现该方法，所以这里实际调用的是父类的实现</span><br><span class="line">    [self mrc_viewWillAppear:animated];</span><br><span class="line">    /// 我们增加的功能</span><br><span class="line">    [MobClick beginLogPageView:NSStringFromClass([self class])];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)mrc_viewWillAppear:(BOOL)animated &#123;</span><br><span class="line">    /// 父类的实现</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/10/UIScrollView自动布局/UIScrollView自动布局/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -480,6 +642,154 @@
 <li>用 <code>left + 宽度</code> 代替 <code>left + right</code></li>
 </ul>
 
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/" itemprop="url">iOS中使用矢量图</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T20:50:31+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-方法"><a href="#一-方法" class="headerlink" title="一. 方法"></a>一. 方法</h1><p>1、png转SVG inkscape(一个工具)</p>
+<p>2、SVG转.ttf文件</p>
+<pre><code>A、登录阿里巴巴矢量图片库
+B、点击图标管理
+C、上传图标
+D、放到暂存架
+E、下载到本地，里边就有了矢量图对应的字体文件 .ttf 文件，
+里边还有一个.html文件，里边有字体文件对应的实体字符码。详细信息都在HTML文件里边。
+</code></pre><p>3、把iconfont.ttf 添加到工程目录下</p>
+<p>4、在info.plist里, Fonts provided by application(它是一个数组)加上字体文件 <code>item0: iconfont.ttf</code></p>
+<p>5、Build Phase里, CopyBundleResource的时候，把iconfont.ttf放进去，这样字体文件就被copy了，这样，字体文件就被安装上了。</p>
+<p>6、使用时</p>
+<pre><code>UIFont *iconfont = [UIFont fontWithName:@&quot;uxIconFont&quot; size: 16];
+    label.font = iconfont;
+这个uxIconFont是字体名字，不是iconfont.ttf的名字。
+label.text = @&quot;\U00003439 \U000035ad \U000035ae \U000035af \U000035eb \U000035ec&quot;;
+</code></pre><p>7、注意：</p>
+<pre><code>文本值为4个字节的Unicode码(UTF16 小端编码)，
+所以，要在\U 与 字体值之间补上0。
+`13420/0x346c` 这就是字体值，前边是十进制，后边是十六进制，我们使用的是十六进制。
+</code></pre><p>8、使用BirdFont查看字体对应的编码，他可以直接打开.ttf文件。</p>
+<pre><code>A、打开BirdFont，打开字体文件（.tff文件）
+B、选择All Glyphs
+</code></pre><p>9、使用字体文件实现矢量图的原理：</p>
+<pre><code>就是造一个fontFamily, 里边有一种特定的font, 这种特定的font, 它也是使用Unicode码,
+只不过这种font, 用我们自己定义的图案, 代替了原本的字符。
+</code></pre>
           
         
       
@@ -727,154 +1037,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/" itemprop="url">iOS中使用矢量图</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T20:50:31+08:00">
-                2017-12-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-方法"><a href="#一-方法" class="headerlink" title="一. 方法"></a>一. 方法</h1><p>1、png转SVG inkscape(一个工具)</p>
-<p>2、SVG转.ttf文件</p>
-<pre><code>A、登录阿里巴巴矢量图片库
-B、点击图标管理
-C、上传图标
-D、放到暂存架
-E、下载到本地，里边就有了矢量图对应的字体文件 .ttf 文件，
-里边还有一个.html文件，里边有字体文件对应的实体字符码。详细信息都在HTML文件里边。
-</code></pre><p>3、把iconfont.ttf 添加到工程目录下</p>
-<p>4、在info.plist里, Fonts provided by application(它是一个数组)加上字体文件 <code>item0: iconfont.ttf</code></p>
-<p>5、Build Phase里, CopyBundleResource的时候，把iconfont.ttf放进去，这样字体文件就被copy了，这样，字体文件就被安装上了。</p>
-<p>6、使用时</p>
-<pre><code>UIFont *iconfont = [UIFont fontWithName:@&quot;uxIconFont&quot; size: 16];
-    label.font = iconfont;
-这个uxIconFont是字体名字，不是iconfont.ttf的名字。
-label.text = @&quot;\U00003439 \U000035ad \U000035ae \U000035af \U000035eb \U000035ec&quot;;
-</code></pre><p>7、注意：</p>
-<pre><code>文本值为4个字节的Unicode码(UTF16 小端编码)，
-所以，要在\U 与 字体值之间补上0。
-`13420/0x346c` 这就是字体值，前边是十进制，后边是十六进制，我们使用的是十六进制。
-</code></pre><p>8、使用BirdFont查看字体对应的编码，他可以直接打开.ttf文件。</p>
-<pre><code>A、打开BirdFont，打开字体文件（.tff文件）
-B、选择All Glyphs
-</code></pre><p>9、使用字体文件实现矢量图的原理：</p>
-<pre><code>就是造一个fontFamily, 里边有一种特定的font, 这种特定的font, 它也是使用Unicode码,
-只不过这种font, 用我们自己定义的图案, 代替了原本的字符。
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -961,6 +1123,404 @@ B、选择All Glyphs
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OC_Flie.h&quot;</span><br></pre></td></tr></table></figure>
 <p>3、<br>编译一下，就可以在swift中用swift的语法调用OC文件的方法了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let oc_flie = OC_Flie()</span><br><span class="line">oc_flie.actionMake()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/12/OC-Protocol/OC-Protocol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/12/OC-Protocol/OC-Protocol/" itemprop="url">OC Protocol</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-12T12:27:31+08:00">
+                2017-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>Protocol其中实就是一个对象结构体<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_object Protocol;</span><br></pre></td></tr></table></figure></p>
+<p>而对于Protocol，runtime提供了一系列函数来对其进行操作，这些函数包括：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">// 返回指定的协议</span><br><span class="line">Protocol * objc_getProtocol ( const char *name );</span><br><span class="line"></span><br><span class="line">// 获取运行时所知道的所有协议的数组</span><br><span class="line">Protocol ** objc_copyProtocolList ( unsigned int *outCount );</span><br><span class="line"></span><br><span class="line">// 创建新的协议实例</span><br><span class="line">Protocol * objc_allocateProtocol ( const char *name );</span><br><span class="line"></span><br><span class="line">// 在运行时中注册新创建的协议</span><br><span class="line">void objc_registerProtocol ( Protocol *proto );</span><br><span class="line"></span><br><span class="line">// 为协议添加方法</span><br><span class="line">void protocol_addMethodDescription ( Protocol *proto, SEL name, const char *types, BOOL isRequiredMethod, BOOL isInstanceMethod );</span><br><span class="line"></span><br><span class="line">// 添加一个已注册的协议到协议中</span><br><span class="line">void protocol_addProtocol ( Protocol *proto, Protocol *addition );</span><br><span class="line"></span><br><span class="line">// 为协议添加属性</span><br><span class="line">void protocol_addProperty ( Protocol *proto, const char *name, const objc_property_attribute_t *attributes, unsigned int attributeCount, BOOL isRequiredProperty, BOOL isInstanceProperty );</span><br><span class="line"></span><br><span class="line">// 返回协议名</span><br><span class="line">const char * protocol_getName ( Protocol *p );</span><br><span class="line"></span><br><span class="line">// 测试两个协议是否相等</span><br><span class="line">BOOL protocol_isEqual ( Protocol *proto, Protocol *other );</span><br><span class="line"></span><br><span class="line">// 获取协议中指定条件的方法的方法描述数组</span><br><span class="line">struct objc_method_description * protocol_copyMethodDescriptionList ( Protocol *p, BOOL isRequiredMethod, BOOL isInstanceMethod, unsigned int *outCount );</span><br><span class="line"></span><br><span class="line">// 获取协议中指定方法的方法描述</span><br><span class="line">struct objc_method_description protocol_getMethodDescription ( Protocol *p, SEL aSel, BOOL isRequiredMethod, BOOL isInstanceMethod );</span><br><span class="line"></span><br><span class="line">// 获取协议中的属性列表</span><br><span class="line">objc_property_t * protocol_copyPropertyList ( Protocol *proto, unsigned int *outCount );</span><br><span class="line"></span><br><span class="line">// 获取协议的指定属性</span><br><span class="line">objc_property_t protocol_getProperty ( Protocol *proto, const char *name, BOOL isRequiredProperty, BOOL isInstanceProperty );</span><br><span class="line"></span><br><span class="line">// 获取协议采用的协议</span><br><span class="line">Protocol ** protocol_copyProtocolList ( Protocol *proto, unsigned int *outCount );</span><br><span class="line"></span><br><span class="line">// 查看协议是否采用了另一个协议</span><br><span class="line">BOOL protocol_conformsToProtocol ( Protocol *proto, Protocol *other );</span><br></pre></td></tr></table></figure>
+<p>objc_getProtocol函数，需要注意的是如果仅仅是声明了一个协议，而未在任何类中实现这个协议，则该函数返回的是nil。<br>objc_copyProtocolList函数，获取到的数组需要使用free来释放<br>objc_allocateProtocol函数，如果同名的协议已经存在，则返回nil<br>objc_registerProtocol函数，创建一个新的协议后，必须调用该函数以在运行时中注册新的协议。协议注册后便可以使用，但不能再做修改，即注册完后不能再向协议添加方法或协议.<br>需要强调的是，协议一旦注册后就不可再修改，即无法再通过调用protocol_addMethodDescription、protocol_addProtocol和protocol_addProperty往协议中添加方法等。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/11/OC-Category/OC-Category/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/11/OC-Category/OC-Category/" itemprop="url">OC Category</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-11T12:27:31+08:00">
+                2017-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
+<li>简介</li>
+</ol>
+<p>对设计模式有一定了解的朋友应该听说过装饰模式，Objective-C 中的 Category 就是对装饰模式的一种具体实现。<br>它的主要作用是在不改变原有类的前提下，动态地给这个类添加一些方法。<br>在 Objective-C 中的具体体现为：实例（类）方法、属性和协议。是的，在 Objective-C 中可以用 Category 来实现协议。<br>本文将结合 runtime（objc4-646.tar.gz) 的源码来探究它实现的原理。</p>
+<p>使用场景<br>根据苹果官方文档对 Category 的描述，它的使用场景主要有三个：</p>
+<ol>
+<li>给现有的类添加方法；</li>
+<li>将一个类的实现拆分成多个独立的源文件；</li>
+<li>声明私有的方法。<br>其中，第 1 个是最典型的使用场景，应用最广泛。</li>
+</ol>
+<p>注：Category 有一个非常容易误用的场景，那就是用 Category 来覆写父类或主类的方法。<br>虽然目前 Objective-C 是允许这么做的，但是这种使用场景是非常不推荐的。<br>使用 Category 来覆写方法有很多缺点，比如不能覆写 Category 中的方法、无法调用主类中的原始实现等，且很容易造成无法预估的行为。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// Category是表示一个指向分类的结构体的指针，其定义如下：</span><br><span class="line"></span><br><span class="line">typedef struct objc_category *Category;</span><br><span class="line"></span><br><span class="line">// 对外的结构体</span><br><span class="line">struct objc_category &#123;</span><br><span class="line">    char *category_name                                      OBJC2_UNAVAILABLE;</span><br><span class="line">    char *class_name                                         OBJC2_UNAVAILABLE;</span><br><span class="line">    struct objc_method_list *instance_methods                OBJC2_UNAVAILABLE;</span><br><span class="line">    struct objc_method_list *class_methods                   OBJC2_UNAVAILABLE;</span><br><span class="line">    struct objc_protocol_list *protocols                     OBJC2_UNAVAILABLE;</span><br><span class="line">&#125;                                                            OBJC2_UNAVAILABLE;</span><br><span class="line"></span><br><span class="line">// 这个结构体主要包含了分类定义的实例方法与类方法，</span><br><span class="line">// 其中instance_methods列表是objc_class中方法列表的一个子集，</span><br><span class="line">// 而class_methods列表是元类方法列表的一个子集。</span><br><span class="line"></span><br><span class="line">// 对内的结构体</span><br><span class="line">struct category_t &#123;</span><br><span class="line">    const char *name;</span><br><span class="line">    classref_t cls;</span><br><span class="line">    struct method_list_t *instanceMethods;</span><br><span class="line">    struct method_list_t *classMethods;</span><br><span class="line">    struct protocol_list_t *protocols;</span><br><span class="line">    struct property_list_t *instanceProperties;</span><br><span class="line">    // Fields below this point are not always present on disk.</span><br><span class="line">    struct property_list_t *_classProperties;</span><br><span class="line"></span><br><span class="line">    method_list_t *methodsForMeta(bool isMeta) &#123;</span><br><span class="line">        if (isMeta) return classMethods;</span><br><span class="line">        else return instanceMethods;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    property_list_t *propertiesForMeta(bool isMeta, struct header_info *hi);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>实现原理<br>我们知道，无论我们有没有主动引入 Category 的头文件，Category 中的方法都会被添加进主类中。<br>我们可以通过 - performSelector: 等方式对 Category 中的相应方法进行调用，<br>之所以需要在调用的地方引入 Category 的头文件，只是为了“照顾”编译器的感受。</p>
+<p>下面，我们将结合 runtime 的源码探究下 Category 的实现原理。<br>打开 runtime 源码工程，在文件 objc-runtime-new.mm 中找到以下函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">void _read_images(header_info **hList, uint32_t hCount)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">        _free_internal(resolvedFutureClasses);</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    // 遍历所有的Category </span><br><span class="line">    for (EACH_HEADER) &#123;</span><br><span class="line">        category_t **catlist = _getObjc2CategoryList(hi, &amp;count);</span><br><span class="line">        for (i = 0; i &lt; count; i++) &#123;</span><br><span class="line">            category_t *cat = catlist[i];</span><br><span class="line">            Class cls = remapClass(cat-&gt;cls);</span><br><span class="line"></span><br><span class="line">            if (!cls) &#123;</span><br><span class="line">                // Category 的 Class 没了 (可能是 weak-linked).</span><br><span class="line">                // 销毁这个 Category 的所有信息</span><br><span class="line">                catlist[i] = nil;</span><br><span class="line">                // 打印错误信息</span><br><span class="line">                if (PrintConnecting) &#123;</span><br><span class="line">                    _objc_inform(&quot;CLASS: IGNORING category \?\?\?(%s) %p with &quot; </span><br><span class="line">                                &quot;missing weak-linked target class&quot;,</span><br><span class="line">                                cat-&gt;name, cat);</span><br><span class="line">                &#125;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 处理分类</span><br><span class="line">            // 先把分类注册到主类上去</span><br><span class="line">            // 若主类realized了，重建主类和元类的 method lists (etc)等</span><br><span class="line">            BOOL classExists = NO;</span><br><span class="line">            if (cat-&gt;instanceMethods </span><br><span class="line">                ||  cat-&gt;protocols</span><br><span class="line">                ||  cat-&gt;instanceProperties)</span><br><span class="line">            &#123;</span><br><span class="line">                // 往主类里边加函数，注册到哈希表中</span><br><span class="line">                addUnattachedCategoryForClass(cat, cls, hi);</span><br><span class="line">                if (cls-&gt;isRealized()) &#123;</span><br><span class="line">                    // 如果主类已实现，那么重建它的方法列表。</span><br><span class="line">                    remethodizeClass(cls);</span><br><span class="line">                    classExists = YES;</span><br><span class="line">                &#125;</span><br><span class="line">                if (PrintConnecting) &#123;</span><br><span class="line">                    _objc_inform(&quot;CLASS: found category -%s(%s) %s&quot;,</span><br><span class="line">                                 cls-&gt;nameForLogging(), cat-&gt;name,</span><br><span class="line">                                 classExists ? &quot;on existing class&quot; : &quot;&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (cat-&gt;classMethods  ||  cat-&gt;protocols)</span><br><span class="line">            &#123;</span><br><span class="line">                // 往主类的元类里边加函数，注册到哈希表中</span><br><span class="line">                addUnattachedCategoryForClass(cat, cls-&gt;ISA(), hi);</span><br><span class="line">                if (cls-&gt;ISA()-&gt;isRealized()) &#123;</span><br><span class="line">                    // 如果元类已实现，那么重建它的方法列表。</span><br><span class="line">                    remethodizeClass(cls-&gt;ISA());</span><br><span class="line">                &#125;</span><br><span class="line">                if (PrintConnecting) &#123;</span><br><span class="line">                    _objc_inform(&quot;CLASS: found category +%s(%s)&quot;,</span><br><span class="line">                                 cls-&gt;nameForLogging(), cat-&gt;name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 遍历分类的过程一定要在最后。</span><br><span class="line">    // Category discovery MUST BE LAST to avoid potential races </span><br><span class="line">    // when other threads call the new category code before </span><br><span class="line">    // this thread finishes its fixups.</span><br><span class="line"></span><br><span class="line">    // +load handled by prepare_load_methods()</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Category 中的协议被同时整合到了主类和元类中<br>我们注意到，不管是哪种情况，最终都是通过调用 <code>static void remethodizeClass(Class cls)</code> 函数来重新整理类的数据的。<br>这个函数的主要作用是将 Category 中的方法、属性和协议整合到类（主类或元类）中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">static void remethodizeClass(Class cls)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">        cls-&gt;nameForLogging(), isMeta ? &quot;(meta)&quot; : &quot;&quot;);</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">        // Update methods, properties, protocols</span><br><span class="line"></span><br><span class="line">        attachCategoryMethods(cls, cats, YES);</span><br><span class="line"></span><br><span class="line">        newproperties = buildPropertyList(nil, cats, isMeta);</span><br><span class="line">        if (newproperties) &#123;</span><br><span class="line">            newproperties-&gt;next = cls-&gt;data()-&gt;properties;</span><br><span class="line">            cls-&gt;data()-&gt;properties = newproperties;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        newprotos = buildProtocolList(cats, nil, cls-&gt;data()-&gt;protocols);</span><br><span class="line">        if (cls-&gt;data()-&gt;protocols  &amp;&amp;  cls-&gt;data()-&gt;protocols != newprotos) &#123;</span><br><span class="line">            _free_internal(cls-&gt;data()-&gt;protocols);</span><br><span class="line">        &#125;</span><br><span class="line">        cls-&gt;data()-&gt;protocols = newprotos;</span><br><span class="line"></span><br><span class="line">        _free_internal(cats);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 它的主要作用就是将类中的旧有方法和 Category 中新添加的方法整合成一个新的方法列表，并赋值给 method_lists 或 method_list 。</span><br><span class="line">// 主类中的方法和 Category 中的方法在 runtime 看来并没有区别，它们是被同等对待的，都保存在主类的方法列表中。</span><br><span class="line"></span><br><span class="line">static void attachMethodLists(Class cls, </span><br><span class="line">                            method_list_t **addedLists, </span><br><span class="line">                            int addedCount, </span><br><span class="line">                            bool baseMethods, </span><br><span class="line">                            bool methodsFromBundle, </span><br><span class="line">                            bool flushCaches) &#123;</span><br><span class="line">    ...</span><br><span class="line">        newLists[newCount++] = mlist;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    // Copy old methods to the method list array</span><br><span class="line">    for (i = 0; i &lt; oldCount; i++) &#123;</span><br><span class="line">        newLists[newCount++] = oldLists[i];</span><br><span class="line">    &#125;</span><br><span class="line">    if (oldLists  &amp;&amp;  oldLists != oldBuf) free(oldLists);</span><br><span class="line"></span><br><span class="line">    // nil-terminate</span><br><span class="line">    newLists[newCount] = nil;</span><br><span class="line"></span><br><span class="line">    // 类的方法列表字段有一点特殊，它的结构是联合体，method_lists 和 method_list 共用同一块内存地址。</span><br><span class="line">    // 当 newCount 的个数大于 1 时，使用 method_lists 来保存 newLists ，并将方法列表的标志位置为 RW_METHOD_ARRAY ，</span><br><span class="line">    // 此时类的方法列表字段是 method_list_t 类型的指针数组；</span><br><span class="line">    // 否则，使用 method_list 来保存 newLists ，并将方法列表的标志位置空，此时类的方法列表字段是 method_list_t 类型的指针</span><br><span class="line">    if (newCount &gt; 1) &#123;</span><br><span class="line">        assert(newLists != newBuf);</span><br><span class="line">        cls-&gt;data()-&gt;method_lists = newLists;</span><br><span class="line">        cls-&gt;setInfo(RW_METHOD_ARRAY);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        assert(newLists == newBuf);</span><br><span class="line">        cls-&gt;data()-&gt;method_list = newLists[0];</span><br><span class="line">        assert(!(cls-&gt;data()-&gt;flags &amp; RW_METHOD_ARRAY));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// class&apos;s method list is an array of method lists</span><br><span class="line">#define RW_METHOD_ARRAY       (1&lt;&lt;20)</span><br><span class="line"></span><br><span class="line">union &#123;</span><br><span class="line">    method_list_t **method_lists;  // RW_METHOD_ARRAY == 1</span><br><span class="line">    method_list_t *method_list;    // RW_METHOD_ARRAY == 0</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>runtime 对 Category 中方法的处理过程并没有对 +load 方法进行什么特殊地处理。<br>因此，严格意义上讲 Category 中的 +load 方法跟普通方法一样也会对主类中的 +load 方法造成覆盖，<br>只不过 runtime 在自动调用主类和 Category 中的 +load 方法时是直接使用各自方法的指针进行调用的。<br>所以才会使我们觉得主类和 Category 中的 +load 方法好像互不影响一样。<br>因此，当我们手动给主类发送 +load 消息时，调用的一直会是分类中的 +load 方法 。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/11/OC-runtime-其他知识/OC-runtime-其他知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/11/OC-runtime-其他知识/OC-runtime-其他知识/" itemprop="url">OC runtime 其他知识</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-11T12:27:31+08:00">
+                2017-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>1.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 获取所有加载的Objective-C框架和动态库的名称</span><br><span class="line">const char ** objc_copyImageNames ( unsigned int *outCount );</span><br><span class="line">// 获取指定类所在动态库</span><br><span class="line">const char * class_getImageName ( Class cls );</span><br><span class="line">// 获取指定库或框架中所有类的类名</span><br><span class="line">const char ** objc_copyClassNamesForImage ( const char *image, unsigned int *outCount );</span><br></pre></td></tr></table></figure>
+<p>2.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 创建一个指针函数的指针，该函数调用时会调用特定的block</span><br><span class="line">IMP imp_implementationWithBlock ( id block );</span><br><span class="line">// 返回与IMP(使用imp_implementationWithBlock创建的)相关的block</span><br><span class="line">id imp_getBlock ( IMP anImp );</span><br><span class="line">// 解除block与IMP(使用imp_implementationWithBlock创建的)的关联关系，并释放block的拷贝</span><br><span class="line">BOOL imp_removeBlock ( IMP anImp );</span><br></pre></td></tr></table></figure>
+<p>imp_implementationWithBlock函数：参数block的签名必须是method_return_type ^(id self, method_args …)形式的。<br>该方法能让我们使用block作为IMP。如下代码所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@interface MyRuntimeBlock : NSObject</span><br><span class="line">@end	</span><br><span class="line">@implementation MyRuntimeBlock</span><br><span class="line">@end</span><br><span class="line">// 测试代码</span><br><span class="line">IMP imp = imp_implementationWithBlock(^(id obj, NSString *str) &#123;</span><br><span class="line">    NSLog(@&quot;%@&quot;, str);</span><br><span class="line">&#125;);</span><br><span class="line">class_addMethod(MyRuntimeBlock.class, @selector(testBlock:), imp, &quot;v@:@&quot;);</span><br><span class="line">MyRuntimeBlock *runtime = [[MyRuntimeBlock alloc] init];</span><br><span class="line">[runtime performSelector:@selector(testBlock:) withObject:@&quot;hello world!&quot;];</span><br></pre></td></tr></table></figure>
+<p>3.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 加载弱引用指针引用的对象并返回</span><br><span class="line">id objc_loadWeak ( id *location );</span><br><span class="line">// 存储__weak变量的新值</span><br><span class="line">id objc_storeWeak ( id *location, id obj );</span><br></pre></td></tr></table></figure>
+<p>objc_loadWeak函数：该函数加载一个弱指针引用的对象，并在对其做retain和autoreleasing操作后返回它。<br>这样，对象就可以在调用者使用它时保持足够长的生命周期。该函数典型的用法是在任何有使用<strong>weak变量的表达式中使用。<br>objc_storeWeak函数：该函数的典型用法是用于</strong>weak变量做为赋值对象时。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define nil  __DARWIN_NULL</span><br><span class="line">#define Nil  __DARWIN_NULL</span><br><span class="line">其中nil用于空的实例对象，而Nil用于空类对象。</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1119,581 +1679,11 @@ B、选择All Glyphs
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/" itemprop="url">UITableView自动撑开</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T21:28:42+08:00">
-                2017-09-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开"><a href="#一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开" class="headerlink" title="一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开"></a>一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开</h1><ol>
-<li><p>Cell，SectionHeader，SectionFooter布局<br>子View的布局要素：<br>最上边一个子View：左，顶，宽<br>中间子View：左，顶，宽<br>最下边的一个子View：左，顶，宽，底<br>// 注意最上边 中间 最下边 ： 可能是同一个控件，一个空间可能既是中间的也是最下边的，更可能也是最上边的一个。</p>
-</li>
-<li><p>使用TableView</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">UITableView * tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];</span><br><span class="line">    _tableView = tableView;</span><br><span class="line">    [self.view addSubview:tableView];</span><br><span class="line">    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];</span><br><span class="line">    tableView.delegate = self;</span><br><span class="line">    tableView.dataSource = self;</span><br><span class="line">    tableView.estimatedRowHeight = 100;</span><br><span class="line">    tableView.estimatedSectionHeaderHeight = 30;</span><br><span class="line">    tableView.estimatedSectionFooterHeight = 12;</span><br><span class="line">    tableView.rowHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionHeaderHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionFooterHeight = UITableViewAutomaticDimension;</span><br><span class="line">    [tableView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">        make.left.right.top.bottom.equalTo(self.view);</span><br><span class="line">    &#125;];</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>实现你要写的View</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- tableView: viewForHeaderInSection:</span><br><span class="line">- tableView: viewForFooterInSection:</span><br><span class="line">- tableView: cellForRowAtIndexPath:</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" itemprop="url">OC runtime 源码阅读-1.环境搭建篇</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T16:42:31+08:00">
-                2017-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li><p>参考资料</p>
-<ul>
-<li><a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a><br>这个是可以编译通过的runtime源码,特别鸣谢这位作者整理了我们可以编译通过runtime版本, 而且这位作者始终在更新, 十分感谢</li>
-<li><a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/objc4/</a><br>苹果官方网站源码,苹果的是不能编译通过的</li>
-</ul>
-</li>
-<li><p>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></p>
-</li>
-</ol>
-<h1 id="一-runtime-源码概述"><a href="#一-runtime-源码概述" class="headerlink" title="一. runtime 源码概述"></a>一. runtime 源码概述</h1><ol start="0">
-<li>首先明确一点 runtime 是C++代码 不是C代码; C语言和C++不是一种语言!!!</li>
-<li>本文采用的 runtime 源码为 objc4-709.1 </li>
-<li>下载源码 地址 <a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a> </li>
-<li><p>下载后打开Xcode工程 文档结构图如下<br><img src="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/Snip20170920_1.png" alt=""></p>
-<p>若打不开图片,则可以看这个文字版的文档结构图:</p>
-</li>
-</ol>
-<ul>
-<li>objc<ul>
-<li>include (各种头文件, 不要以为是头文件就不重要, 这是C++代码, 很多函数都是直接写在了声明类的头文件里)</li>
-<li>Public Headers  (公共头文件)</li>
-<li>Private Headers (私有头文件)</li>
-<li>Project Headers (项目头文件)</li>
-<li>Obsolete Headers(旧的,即将要废弃的头文件)</li>
-<li>Obsolete Source (旧的,即将要废弃的源代码)</li>
-<li>Source          (源代码)</li>
-<li>Other           (其他)</li>
-<li>debug-objc      (调试用的代码)</li>
-<li>Products        (生成的二进制文件)</li>
-<li>Frameworks      (用到的系统的动态库)</li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/" itemprop="url">OC Fast Enumeration</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-15T22:03:03+08:00">
-                2017-07-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>参考资料<br> <a href="http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/" target="_blank" rel="noopener">http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/</a> (来源：雷纯锋的技术博客)</li>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
-<li><p>简介FastEnumeration<br>在 Objective-C 2.0 中提供了快速枚举的语法，它是我们遍历集合元素的首选方法，因为它具有以下优点：<br>● 比直接使用 NSEnumerator 更高效；<br>● 语法非常简洁；<br>● 如果集合在遍历的过程中被修改，它会抛出异常；<br>● 可以同时执行多个枚举。</p>
-</li>
-<li><p>解析NSFastEnumeration协议<br>在Objective-C中，我们要想实现快速枚举就必须要实现NSFastEnumeration协议，<br>在这个协议中，只声明了一个必须实现的方法：</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state</span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf</span><br><span class="line">                                    count:(NSUInteger)len;</span><br></pre></td></tr></table></figure>
-<p>其中，结构体 NSFastEnumerationState 的定义如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">	unsigned long state;</span><br><span class="line">   id __unsafe_unretained __nullable * __nullable itemsPtr;</span><br><span class="line">	unsigned long * __nullable mutationsPtr;</span><br><span class="line">	unsigned long extra[5];</span><br><span class="line">&#125; NSFastEnumerationState;</span><br></pre></td></tr></table></figure>
-<p>这个方法用于返回一系列的C数组，以供调用者进行遍历。<br>为什么是一系列的C数组呢？<br>因为，在一个for/in循环中，这个方法其实会被调用多次，每一次调用都会返回一个C数组。用C数组是为了提高效率了。</p>
-<p>既然要返回C数组，也就意味着我们需要返回一个数组的指针和数组的长度。<br>数组的长度就是通过这个方法的返回值来提供的，而数组的指针则是通过结构体NSFastEnumerationState的itemsPtr字段进行返回的。<br>所以，这两个值就一起定义了这个方法返回的C数组。</p>
-<p>通常来说，NSFastEnumeration允许我们直接返回一个指向内部存储的指针，但是并非所有的数据结构都能够满足内存连续的要求。<br>因此，NSFastEnumeration还为我们提供了另外一种实现方案，我们可以将元素拷贝到调用者提供的一个C数组上，即stackbuf。<br>它的长度由参数len指定。<br>而且使用stackbuf有点耗费内存，所以对于系统的NSArray等，forin的len等于16。</p>
-<p>如果集合在遍历的过程中被修改的话，NSFastEnumeration就会抛出异常。<br>而这个功能就是通过mutationsPtr字段来实现的，它指向一个这样的值，这个值在集合被修改时会发现改变。<br>因此，我们就可以利用它来判断集合在遍历的过程中是否被修改。<br>现在，我们还剩下NSFastEnumerationState中的state和extra字段没有进行介绍。<br>实际上，它们是调用者提供给被调用者自由使用的两个字段，调用者根本不关心这两个字段的值。<br>因此，我们可以利用它们来存储任何对自身有用的值。</p>
-<p>揭密快速枚举的内部实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    for (NSNumber *number in array) &#123;</span><br><span class="line">        if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog(@&quot;%@&quot;, number);</span><br><span class="line">        break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接着，我们使用下面的 clang 命令将 main.m 文件重写成 C++ 代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -rewrite-objc main.m</span><br></pre></td></tr></table></figure>
-<p>得到 main.cpp 文件，其中 main 函数的代码如下：(代码略长，可以直接跳过，下边有精简版)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = ((NSArray *(*)(Class, SEL, const ObjectType *, NSUInteger))(void *)objc_msgSend)(objc_getClass(&quot;NSArray&quot;), sel_registerName(&quot;arrayWithObjects:count:&quot;), (const id *)__NSContainer_literal(3U, ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 2), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 3)).arr, 3U);</span><br><span class="line">    &#123;</span><br><span class="line">	NSNumber * number;</span><br><span class="line">	struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">	id __rw_items[16];</span><br><span class="line">	id l_collection = (id) array;</span><br><span class="line">	_WIN_NSUInteger limit =</span><br><span class="line">		((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16);</span><br><span class="line">	if (limit) &#123;</span><br><span class="line">	unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">	do &#123;</span><br><span class="line">		unsigned long counter = 0;</span><br><span class="line">		do &#123;</span><br><span class="line">			if (startMutations != *enumState.mutationsPtr)</span><br><span class="line">				objc_enumerationMutation(l_collection);</span><br><span class="line">			number = (NSNumber *)enumState.itemsPtr[counter++]; &#123;</span><br><span class="line">        if (((BOOL (*)(id, SEL, NSNumber *))(void *)objc_msgSend)((id)number, sel_registerName(&quot;isEqualToNumber:&quot;), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1))) &#123;</span><br><span class="line">            goto __continue_label_1;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog((NSString *)&amp;__NSConstantStringImpl__var_folders_l6_lnvw8nt94q70jwplqs_w3dkw0000gn_T_main_5025b8_mi_0, number);</span><br><span class="line">        goto __break_label_1;</span><br><span class="line">    &#125;;</span><br><span class="line">	__continue_label_1: ;</span><br><span class="line">		&#125; while (counter &lt; limit);</span><br><span class="line">	&#125; while ((limit = ((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16)));</span><br><span class="line">	number = ((NSNumber *)0);</span><br><span class="line">	__break_label_1: ;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">		number = ((NSNumber *)0);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>伪算法版</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line"></span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    NSNumber * number;</span><br><span class="line">    struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">    id __rw_items[16];</span><br><span class="line">    id l_collection = (id) array;</span><br><span class="line">    NSUInteger limit = [l_collection countByEnumeratingWithState: &amp;enumState </span><br><span class="line">                                                         objects: __rw_items</span><br><span class="line">                                                           count: 16];//对于系统的forin每次就是16</span><br><span class="line">    if (limit) &#123;</span><br><span class="line">        unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">        do &#123;</span><br><span class="line">            unsigned long counter = 0;</span><br><span class="line">            do &#123;</span><br><span class="line">                if (startMutations != *enumState.mutationsPtr) &#123;</span><br><span class="line">                    objc_enumerationMutation(l_collection);//抛异常</span><br><span class="line">                &#125;</span><br><span class="line">                number = (NSNumber *)enumState.itemsPtr[counter++];</span><br><span class="line">                if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">                	goto __continue_label_1;</span><br><span class="line">                &#125;</span><br><span class="line">	             //打印</span><br><span class="line">                NSLog(@&quot;%@&quot;, number);</span><br><span class="line">                goto __break_label_1;//continue</span><br><span class="line">                __continue_label_1: ;</span><br><span class="line">            &#125; while (counter &lt; limit);</span><br><span class="line">        &#125; while (limit = [l_collection countByEnumeratingWithState: &amp;enumState objects: __rw_items count: 16]);</span><br><span class="line">        number = @(0);</span><br><span class="line">        __break_label_1: ;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        number = @(0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上代码所示，快速枚举其实就是用两层do/while循环来实现的，<br>外层循环负责调用- countByEnumeratingWithState:objects:count:方法，获取C数组，<br>而内层循环则负责遍历获取到的C数组。<br>同时，我想你应该也注意到了它是如何利用mutationsPtr来检测集合在遍历过程中的突变的，以及使用objc_enumerationMutation函数来抛出异常。</p>
-<p>正如我们前面提到的，在快速枚举的实现中，确实没有用到结构体NSFastEnumerationState中的state和extra字段，<br>它们只是提供给-countByEnumeratingWithState:objects:count:方法的实现者自由使用的字段。</p>
-<p>值得一提的是，我特意在main.m中加入了continue和break语句。因此，我们有机会看到了在for/in语句中是如何利用goto来实现continue和break语句的。</p>
-<p>实现NSFastEnumeration协议<br>我们前面已经提到了，NSFastEnumeration在设计上允许我们使用两种不同的方式来实现它。<br>如果集合中的元素在内存上是连续的，那么我们可以直接返回这段内存的首地址；<br>如果不连续，比如链表，就只能使用调用者提供的C数组stackbuf了，将我们的元素拷贝到这个C数组上。<br>接下来，我们将通过一个自定义的集合类Array，来演示这两种不同的实现NSFastEnumeration协议的方式。<br>注：完整的项目代码可以在这里找到。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">@interface Array : NSObject &lt;NSFastEnumeration&gt;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Array &#123;</span><br><span class="line">    std::vector&lt;NSNumber *&gt; _list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems &#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        for (NSUInteger i = 0; i &lt; numItems; i++) &#123;</span><br><span class="line">            _list.push_back(@(random()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#define USE_STACKBUF 1</span><br><span class="line"></span><br><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state </span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf </span><br><span class="line">                                    count:(NSUInteger)len &#123;</span><br><span class="line"></span><br><span class="line">    NSUInteger count = 0;</span><br><span class="line">    unsigned long countOfItemsAlreadyEnumerated = state-&gt;state;</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated == 0) &#123;</span><br><span class="line">        state-&gt;mutationsPtr = &amp;state-&gt;extra[0];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#if USE_STACKBUF</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line"></span><br><span class="line">        state-&gt;itemsPtr = stackbuf;</span><br><span class="line"></span><br><span class="line">        while (countOfItemsAlreadyEnumerated &lt; _list.size() &amp;&amp; count &lt; len) &#123;</span><br><span class="line"></span><br><span class="line">            stackbuf[count] = _list[countOfItemsAlreadyEnumerated];</span><br><span class="line">            countOfItemsAlreadyEnumerated++;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#else</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line">        __unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">        state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br><span class="line"></span><br><span class="line">        countOfItemsAlreadyEnumerated = _list.size();</span><br><span class="line">        count = _list.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">    state-&gt;state = countOfItemsAlreadyEnumerated;</span><br><span class="line">    return count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>在第二种方式的实现中，我们用到了ARC下不同所有权对象之间的相互转换，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br></pre></td></tr></table></figure>
-<p>其实，这里面涉及到两次类型转换，<br>第一次是从 <code>__strong NSNumber *</code> 类型转换到 <code>__unsafe_unretained const id *</code> 类型，<br>第二次是从 <code>__unsafe_unretained const id *</code> 类型转换到 <code>id __unsafe_unretained *</code> 类型</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/11/Xcode-Subproject/Xcode-Subproject/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/11/Xcode-Subproject/Xcode-Subproject/" itemprop="url">Xcdoe Subproject</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T02:27:31+08:00">
-                2017-06-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>1、子项目必须可以编译成 framework 或者是 静态库<br>2、新建一个项目 要求是 framework 或者是 静态库</p>
-<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_1.png" alt="Xcode-Subproject"></p>
-<p>3、新建项目 要编译通过</p>
-<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_2.png" alt="Xcode-Subproject"></p>
-<p>4、把子项目放到你的工程的目录里去，通过 Add files to project 添加子项目，千万不要自己拖拽，因为Xcode有BUG</p>
-<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_3.png" alt="Xcode-Subproject"></p>
-<p>5、Build Phases 中 Link Binary With Libraries 中 加上你的静态库</p>
-<p>6、Build Settings  中 Header Search Paths 中 加上你的静态库所在的父目录 ZRIPSubProject</p>
-<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_4.png" alt="Xcode-Subproject"></p>
-<p>这里注意：<br>Header Search Paths 它只是寻找静态库或者是 framework 暴露出来的头文件，<br>你的头文件在哪，就写那个目录，（递归还是不递归，看情况），<br>Header Search Paths 是以 主项目 的 .xcodeproj 所在的目录为当前目录往下找的。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1745,7 +1735,7 @@ B、选择All Glyphs
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

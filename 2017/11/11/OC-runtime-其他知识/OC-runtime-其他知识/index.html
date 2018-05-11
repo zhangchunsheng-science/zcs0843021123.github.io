@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
+<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一.1. 123456// 获取所有加载的Objective-C框架和动态库的名称const char ** objc_copyImageNames ( unsigned int *outCount );// 获取指定类所在动态库const char *">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OC与Swift混编">
-<meta property="og:url" content="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/index.html">
+<meta property="og:title" content="OC runtime 其他知识">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/11/11/OC-runtime-其他知识/OC-runtime-其他知识/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
+<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一.1. 123456// 获取所有加载的Objective-C框架和动态库的名称const char ** objc_copyImageNames ( unsigned int *outCount );// 获取指定类所在动态库const char *">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-11T17:31:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OC与Swift混编">
-<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. OC 调用Swift1、创建一个类 选择语言用Swift 2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成    桥接文件名字：工程名-Bridging-Header.h    这个桥接文件是 swift 调用OC文件的时候用的 3、">
+<meta name="twitter:title" content="OC runtime 其他知识">
+<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一.1. 123456// 获取所有加载的Objective-C框架和动态库的名称const char ** objc_copyImageNames ( unsigned int *outCount );// 获取指定类所在动态库const char *">
 
 
 
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/"/>
+  <link rel="canonical" href="https://zcs0843021123.github.io/2017/11/11/OC-runtime-其他知识/OC-runtime-其他知识/"/>
 
 
 
 
 
-  <title>OC与Swift混编 | 凤凰苑</title>
+  <title>OC runtime 其他知识 | 凤凰苑</title>
   
 
 
@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/11/OC-runtime-其他知识/OC-runtime-其他知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="张春生">
@@ -277,7 +277,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">OC与Swift混编</h2>
+          <h2 class="post-title" itemprop="name headline">OC runtime 其他知识</h2>
         
 
         <div class="post-meta">
@@ -289,8 +289,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-15T21:15:31+08:00">
-                2017-11-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-11T12:27:31+08:00">
+                2017-11-11
               </time>
             
 
@@ -330,18 +330,16 @@
         <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
 <li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
 </ol>
-<h1 id="一-OC-调用Swift"><a href="#一-OC-调用Swift" class="headerlink" title="一. OC 调用Swift"></a>一. OC 调用Swift</h1><p>1、创建一个类 选择语言用Swift</p>
-<p>2、桥接文件，Xcode 默认会问你是否生成桥接文件，你要生成<br>    桥接文件名字：工程名-Bridging-Header.h<br>    这个桥接文件是 swift 调用OC文件的时候用的</p>
-<p>3、<br>进入TARGETS -&gt;Build Settings -&gt; Packaging 中<br>设置Defines Module为YES<br>设置 Product Module Name ，也可以不设置，默认为工程的名字。这个在后面会用到</p>
-<p>4、<br>在swift写一个类<br>注意这个类一定要继承NSObject，不然在OC中没法用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class hello: NSObject &#123;</span><br><span class="line"></span><br><span class="line">    var address : String</span><br><span class="line">    var gender: String</span><br><span class="line">   </span><br><span class="line">    init(address:String,gender:String)&#123;</span><br><span class="line">        self.address = address</span><br><span class="line">        self.gender = gender</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    func method() &#123;</span><br><span class="line">        print(&quot;message \(self.address + self.gender)&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>5、<br>在OC需要用到的swift文件中导入文件 “Product Module Name -Swift.h”<br>因为 Product Module Name 默认是工程的名字<br>所以直接导入 #import “工程名-Swift.h”</p>
-<p>6、<br>记着写完先 command + b 编译一下，如果没有报错就可以在OC文件调用swift中的类了</p>
-<h1 id="二-Swift调用OC"><a href="#二-Swift调用OC" class="headerlink" title="二. Swift调用OC"></a>二. Swift调用OC</h1><p>1、桥接文件名字：工程名-Bridging-Header.h</p>
-<p>2、在桥接文件中把需要用到OC的头文件导入进去</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;OC_Flie.h&quot;</span><br></pre></td></tr></table></figure>
-<p>3、<br>编译一下，就可以在swift中用swift的语法调用OC文件的方法了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let oc_flie = OC_Flie()</span><br><span class="line">oc_flie.actionMake()</span><br></pre></td></tr></table></figure>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>1.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 获取所有加载的Objective-C框架和动态库的名称</span><br><span class="line">const char ** objc_copyImageNames ( unsigned int *outCount );</span><br><span class="line">// 获取指定类所在动态库</span><br><span class="line">const char * class_getImageName ( Class cls );</span><br><span class="line">// 获取指定库或框架中所有类的类名</span><br><span class="line">const char ** objc_copyClassNamesForImage ( const char *image, unsigned int *outCount );</span><br></pre></td></tr></table></figure>
+<p>2.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 创建一个指针函数的指针，该函数调用时会调用特定的block</span><br><span class="line">IMP imp_implementationWithBlock ( id block );</span><br><span class="line">// 返回与IMP(使用imp_implementationWithBlock创建的)相关的block</span><br><span class="line">id imp_getBlock ( IMP anImp );</span><br><span class="line">// 解除block与IMP(使用imp_implementationWithBlock创建的)的关联关系，并释放block的拷贝</span><br><span class="line">BOOL imp_removeBlock ( IMP anImp );</span><br></pre></td></tr></table></figure>
+<p>imp_implementationWithBlock函数：参数block的签名必须是method_return_type ^(id self, method_args …)形式的。<br>该方法能让我们使用block作为IMP。如下代码所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@interface MyRuntimeBlock : NSObject</span><br><span class="line">@end	</span><br><span class="line">@implementation MyRuntimeBlock</span><br><span class="line">@end</span><br><span class="line">// 测试代码</span><br><span class="line">IMP imp = imp_implementationWithBlock(^(id obj, NSString *str) &#123;</span><br><span class="line">    NSLog(@&quot;%@&quot;, str);</span><br><span class="line">&#125;);</span><br><span class="line">class_addMethod(MyRuntimeBlock.class, @selector(testBlock:), imp, &quot;v@:@&quot;);</span><br><span class="line">MyRuntimeBlock *runtime = [[MyRuntimeBlock alloc] init];</span><br><span class="line">[runtime performSelector:@selector(testBlock:) withObject:@&quot;hello world!&quot;];</span><br></pre></td></tr></table></figure>
+<p>3.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 加载弱引用指针引用的对象并返回</span><br><span class="line">id objc_loadWeak ( id *location );</span><br><span class="line">// 存储__weak变量的新值</span><br><span class="line">id objc_storeWeak ( id *location, id obj );</span><br></pre></td></tr></table></figure>
+<p>objc_loadWeak函数：该函数加载一个弱指针引用的对象，并在对其做retain和autoreleasing操作后返回它。<br>这样，对象就可以在调用者使用它时保持足够长的生命周期。该函数典型的用法是在任何有使用<strong>weak变量的表达式中使用。<br>objc_storeWeak函数：该函数的典型用法是用于</strong>weak变量做为赋值对象时。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define nil  __DARWIN_NULL</span><br><span class="line">#define Nil  __DARWIN_NULL</span><br><span class="line">其中nil用于空的实例对象，而Nil用于空类对象。</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -372,8 +370,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/12/OC-Protocol/OC-Protocol/" rel="next" title="OC Protocol">
-                <i class="fa fa-chevron-left"></i> OC Protocol
+              <a href="/2017/10/19/KVC-原理/KVC-原理/" rel="next" title="KVC 原理">
+                <i class="fa fa-chevron-left"></i> KVC 原理
               </a>
             
           </div>
@@ -382,8 +380,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/01/OC的load与initialize/OC的load与initialize/" rel="prev" title="OC的load与initialize">
-                OC的load与initialize <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/11/OC-Category/OC-Category/" rel="prev" title="OC Category">
+                OC Category <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -529,7 +527,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-OC-调用Swift"><span class="nav-number">2.</span> <span class="nav-text">一. OC 调用Swift</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二-Swift调用OC"><span class="nav-number">3.</span> <span class="nav-text">二. Swift调用OC</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一"><span class="nav-number">2.</span> <span class="nav-text">一.</span></a></li></ol></div>
             
 
           </div>
