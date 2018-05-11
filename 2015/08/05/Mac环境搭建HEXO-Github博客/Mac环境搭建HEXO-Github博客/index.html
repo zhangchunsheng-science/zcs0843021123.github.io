@@ -95,7 +95,7 @@
 <meta property="og:description" content="零. 写在前边的话  本系列文章是自己的工作总结,因此写的有些简略,如有不明白的地方,可以给我发邮件, 我的邮箱 1017295148@qq.com 一. 安装工具Hexo 官网指南 https://hexo.io/docs/index.html  Git  Node.js  安装hexo  npm install -g hexo-cli注意：全局安装的npm第三方库在 /usr/local/li">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://zcs0843021123.github.io/2015/08/05/Mac环境搭建HEXO-Github博客/Mac环境搭建HEXO-Github博客/Snip20170906_5.png">
-<meta property="og:updated_time" content="2018-05-11T02:47:22.000Z">
+<meta property="og:updated_time" content="2018-05-11T02:56:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac环境搭建HEXO+Github博客">
 <meta name="twitter:description" content="零. 写在前边的话  本系列文章是自己的工作总结,因此写的有些简略,如有不明白的地方,可以给我发邮件, 我的邮箱 1017295148@qq.com 一. 安装工具Hexo 官网指南 https://hexo.io/docs/index.html  Git  Node.js  安装hexo  npm install -g hexo-cli注意：全局安装的npm第三方库在 /usr/local/li">
@@ -365,7 +365,7 @@
 </li>
 </ol>
 <h2 id="3-在自己的github上创建一个仓库"><a href="#3-在自己的github上创建一个仓库" class="headerlink" title="3. 在自己的github上创建一个仓库"></a>3. 在自己的github上创建一个仓库</h2><p>仓库的名字就叫做 your_github_user_name.github.io<br>your_github_user_name.github.io 这个名字的格式是固定的 不可以谁便乱改<br>这个仓库一定要是空的，什么都没有，否则deploy不上去（deploy调用的就是 git push）</p>
-<p>有时hexo deploy不上去，不过有时候也不报错，具体表现为博客不更新，是因为<br>1）你的GitHub的仓库里有东西，push不上去。<br>2）你没有给git设置upstream</p>
+<p>有时hexo deploy不上去，不过有时候也不报错，具体表现为博客不更新或者是报404，是因为<br>1）你的GitHub的仓库里有东西，push不上去。<br>2）你没有给git设置upstream</p>
 <pre><code>- 执行hexo generate之后，在 .deploy_git 里边就是你要发布的博客。
   先用 git remote -v 查看你的这个git仓库有木有远程仓库，一般来说没有
   远程仓库 如: https://github.com/your_github_user_name/your_github_user_name.github.io
