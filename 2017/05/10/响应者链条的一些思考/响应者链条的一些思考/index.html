@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="C语言," />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
-<meta name="keywords" content="C语言">
+<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 响应者链条 响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。 如果点击了一个你定义的View，流程是从你自定义的子类开始， 一级级找父类，找父类处理事件 [super touchesBegan:tou">
+<meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="double类型数据的存储结构">
-<meta property="og:url" content="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/index.html">
+<meta property="og:title" content="响应者链条的一些思考">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
+<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 响应者链条 响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。 如果点击了一个你定义的View，流程是从你自定义的子类开始， 一级级找父类，找父类处理事件 [super touchesBegan:tou">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-11T03:43:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="double类型数据的存储结构">
-<meta name="twitter:description" content="一. 基础知识 double 类型的大小为:8字节float  类型的大小为:4字节注意:在一些单片机里,double的大小为 4字节本文以 8字节的double为讨论对象（4字节的同理） 12printf(&amp;quot;%zd\n&amp;quot;, sizeof(double));printf(&amp;quot;%zd\n&amp;quot;, sizeof(double)); double型    位(从0开始)">
+<meta name="twitter:title" content="响应者链条的一些思考">
+<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 响应者链条 响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。 如果点击了一个你定义的View，流程是从你自定义的子类开始， 一级级找父类，找父类处理事件 [super touchesBegan:tou">
 
 
 
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/"/>
+  <link rel="canonical" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/"/>
 
 
 
 
 
-  <title>double类型数据的存储结构 | 凤凰苑</title>
+  <title>响应者链条的一些思考 | 凤凰苑</title>
   
 
 
@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="张春生">
@@ -277,7 +277,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">double类型数据的存储结构</h2>
+          <h2 class="post-title" itemprop="name headline">响应者链条的一些思考</h2>
         
 
         <div class="post-meta">
@@ -289,8 +289,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-30T11:08:42+08:00">
-                2016-09-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
+                2017-05-10
               </time>
             
 
@@ -327,92 +327,16 @@
       
 
       
-        <p>一. 基础知识</p>
-<p>double 类型的大小为:8字节<br>float  类型的大小为:4字节<br>注意:在一些单片机里,double的大小为 4字节<br>本文以 8字节的double为讨论对象（4字节的同理）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br></pre></td></tr></table></figure>
-<p>double型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">位(从0开始)</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">64</td>
-<td style="text-align:center">符号位 0正 1负</td>
-</tr>
-<tr>
-<td style="text-align:center">52-62 (共 11 位)</td>
-<td style="text-align:center">指数部分</td>
-</tr>
-<tr>
-<td style="text-align:center">0-51  (共 52 位)</td>
-<td style="text-align:center">尾数部分</td>
-</tr>
-</tbody>
-</table>
-<p>float型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">位(从0开始)</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">31</td>
-<td style="text-align:center">符号位 0正 1负</td>
-</tr>
-<tr>
-<td style="text-align:center">23-30 (共 8 位)</td>
-<td style="text-align:center">指数部分</td>
-</tr>
-<tr>
-<td style="text-align:center">0-22  (共 23 位)</td>
-<td style="text-align:center">尾数部分</td>
-</tr>
-</tbody>
-</table>
-<p>值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">double </span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-1023)</span><br><span class="line">float</span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-127)</span><br></pre></td></tr></table></figure></p>
-<p>二. 例子</p>
-<p>以0.9为例 看看我们的结论是否正确 代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">union Double &#123;</span><br><span class="line">    double doubleValue;</span><br><span class="line">    int intValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    </span><br><span class="line">    union Double d;</span><br><span class="line">    d.doubleValue = 0.9;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>其中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">intValue[0] 是 -858993459 转成二进制是 11001100110011001100110011001101</span><br><span class="line">intValue[1] 是 1072483532 转成二进制是 00111111111011001100110011001100</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>连接连个整数的二进制<br>  我是根据两个整数的值来判断的<br>  intValue[0] 小于 0， intValue[1] 大于 0，而我们的0.9 大于零，<br>  因此，连个整数在内存中的排列是形如下图的: </li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">前</th>
-<th style="text-align:center">后</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">intValue[1]</td>
-<td style="text-align:center">intValue[0]</td>
-</tr>
-<tr>
-<td style="text-align:center">00111111111011001100110011001100</td>
-<td style="text-align:center">11001100110011001100110011001101</td>
-</tr>
-</tbody>
-</table>
-<pre><code>最科学的方法当然是 要知道自己的电脑是 大端系统 还是 小端系统；
-本文只是作者的实际操作，可能不是很科学。
-两个整数连接在一起，前半段是 intValue[1] 的二进制；后半段是 intValue[0] 的二进制
-0011111111101100110011001100110011001100110011001100110011001101
-</code></pre><ul>
-<li><p>验证结论<br>  把二进制按位分开 分别 1，11，52 位<br>  63位:    0<br>  52-62位:   01111111110<br>  0-51位:    1100110011001100110011001100110011001100110011001101</p>
-<p>  63位 是0， 表示是正数<br>  52-62位 是01111111110 大小为 0x3FE 十进制是 1022<br>  0-51位 是二进制的小数部分 转成十六进制是 0xCCCCCCCCCCCCD</p>
-<p>  其实这个小数部分可以很方便的计算<br>  但是我发现这其实是一个无限循环小数，我们完全可以用无穷级数求和来计算:</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">值 = 12 * 16^-1 + 12 * 16^-2 + 12 * 16^-3 + ......</span><br><span class="line">值 = (12/16) / (1 - 1/16)</span><br><span class="line">值 = 4/5</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>计算结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.9 = -1^0 * (1 + 4/5) * 2^(1022-1023)</span><br></pre></td></tr></table></figure>
+        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
+<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
+<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
+<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
+<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
+<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 
@@ -432,7 +356,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C语言/" rel="tag"># C语言</a>
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
           
         </div>
       
@@ -445,8 +369,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/15/iOS内存管理方式/iOS内存管理方式/" rel="next" title="iOS内存管理方式">
-                <i class="fa fa-chevron-left"></i> iOS内存管理方式
+              <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" rel="next" title="判断电脑是大端系统还是小端系统">
+                <i class="fa fa-chevron-left"></i> 判断电脑是大端系统还是小端系统
               </a>
             
           </div>
@@ -455,8 +379,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" rel="prev" title="判断电脑是大端系统还是小端系统">
-                判断电脑是大端系统还是小端系统 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" rel="prev" title="OC runtime 源码阅读-1.环境搭建篇">
+                OC runtime 源码阅读-1.环境搭建篇 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -511,8 +435,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -583,6 +516,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-响应者链条"><span class="nav-number">2.</span> <span class="nav-text">一. 响应者链条</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

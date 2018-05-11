@@ -259,6 +259,284 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?v=4&u=f5638036e2ae07181f94613dc4b95eb207ac0476&s=400">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/" itemprop="url">iOS中使用矢量图</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T20:50:31+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-方法"><a href="#一-方法" class="headerlink" title="一. 方法"></a>一. 方法</h1><p>1、png转SVG</p>
+<p>inkscape工具</p>
+<p>2、SVG转.ttf文件</p>
+<pre><code>A、登录阿里巴巴矢量图片库
+B、点击图标管理
+C、上传图标
+D、放到暂存架
+E、下载到本地，里边就有了矢量图对应的字体文件 .ttf 文件
+              里边还有一个.html文件，里边有字体文件对应的实体字符码。
+             详细信息都在HTML文件里边。
+</code></pre><p>3、把iconfont.ttf 添加到工程目录下</p>
+<p>4、在info.plist里边加上：</p>
+<pre><code>Fonts provided by application （它是一个数组）
+item0: iconfont.ttf
+</code></pre><p>5、Build Phase里边</p>
+<pre><code>CopyBundleResource的时候，把iconfont.ttf放进去，这样字体文件就被copy了，这样，字体文件就被安装上了。
+</code></pre><p>6、使用时</p>
+<pre><code>UIFont *iconfont = [UIFont fontWithName:@&quot;uxIconFont&quot; size: 16];
+    label.font = iconfont;
+这个uxIconFont是字体名字，不是iconfont.ttf的名字。
+label.text = @&quot;\U00003439 \U000035ad \U000035ae \U000035af \U000035eb \U000035ec&quot;;
+</code></pre><p>7、注意：</p>
+<pre><code>文本值为4个字节的Unicode码( UTF16 小端编码)，
+所以，要在\U 与 字体值之间补上0。
+13420/0x346c 这就是字体值，前边是十进制，后边是十六进制，我们使用的是十六进制。
+</code></pre><p>8、使用BirdFont查看字体对应的编码，他可以直接打开.ttf文件。</p>
+<pre><code>A、打开BirdFont，打开字体文件（.tff文件）
+B、选择All Glyphs
+</code></pre><p>9、使用字体文件实现矢量图的原理：</p>
+<pre><code>就是造一个fontFamily
+里边有一种特定的font
+这种特定的font，它也是使用Unicode码，
+只不过这种font，用我们自己定义的图案，代替了原本的字符。
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/10/19/KVC-原理/KVC-原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?v=4&u=f5638036e2ae07181f94613dc4b95eb207ac0476&s=400">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/19/KVC-原理/KVC-原理/" itemprop="url">KVC 原理</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-19T16:42:31+08:00">
+                2017-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-KVC-查找过程"><a href="#一-KVC-查找过程" class="headerlink" title="一. KVC 查找过程"></a>一. KVC 查找过程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">以一个叫 name 的属性为例：</span><br><span class="line">//    setter and getter       // 0 第0步查找，最先查找</span><br><span class="line">//    NSString * _name;       // 1 第1步查找</span><br><span class="line">//    NSString * _isName;     // 2 第2步查找</span><br><span class="line">//    NSString * name;        // 3 第3步查找</span><br><span class="line">//    NSString * isName;      // 4 第4步查找</span><br><span class="line">//    UndefinedKey:           // 5 第5步查找</span><br></pre></td></tr></table></figure>
+<h1 id="二-像js一样任意给对象赋属性和取出属性"><a href="#二-像js一样任意给对象赋属性和取出属性" class="headerlink" title="二. 像js一样任意给对象赋属性和取出属性"></a>二. 像js一样任意给对象赋属性和取出属性</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (void)setValue:(id)value forUndefinedKey:(NSString *)key &#123;</span><br><span class="line">    if (value == nil) &#123;</span><br><span class="line">        value = [NSNull null];</span><br><span class="line">    &#125;</span><br><span class="line">    objc_setAssociatedObject(self, (__bridge const void *)(key), value, OBJC_ASSOCIATION_RETAIN);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)valueForUndefinedKey:(NSString *)key &#123;</span><br><span class="line">    id target = objc_getAssociatedObject(self, (__bridge const void *)(key));</span><br><span class="line">    if ([target isKindOfClass:[NSNull class]])</span><br><span class="line">        return nil;</span><br><span class="line">    return target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -362,6 +640,137 @@
 <li>Products        (生成的二进制文件)</li>
 <li>Frameworks      (用到的系统的动态库)</li>
 </ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?v=4&u=f5638036e2ae07181f94613dc4b95eb207ac0476&s=400">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
+                2017-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
+<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
+<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
+<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
+<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
+<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 
@@ -1349,7 +1758,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
