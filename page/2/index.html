@@ -259,6 +259,332 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" itemprop="url">判断电脑是大端系统还是小端系统</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-30T15:47:08+08:00">
+                2016-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">union enidanUnion &#123;</span><br><span class="line">    short shortValue;</span><br><span class="line">    char charValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 返回 -1 失效; 0 小端; 1 大端</span><br><span class="line"> */</span><br><span class="line">int testEnidan(void) &#123;</span><br><span class="line">    </span><br><span class="line">    union enidanUnion num;</span><br><span class="line">    if (sizeof(short) == 2) &#123;</span><br><span class="line">        </span><br><span class="line">        num.shortValue = 0x000F;</span><br><span class="line">        if (num.charValue[0] == 0 &amp;&amp; num.charValue[1] == 15) &#123;</span><br><span class="line">            printf(&quot;大端系统&quot;);</span><br><span class="line">            return 1;</span><br><span class="line">        &#125; else if (num.charValue[0] == 15 &amp;&amp; num.charValue[1] == 0) &#123;</span><br><span class="line">            printf(&quot;小端系统&quot;);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            printf(&quot;本测试失效&quot;);</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        printf(&quot;本测试失效&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/" itemprop="url">double类型数据的存储结构</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-30T11:08:42+08:00">
+                2016-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一. 基础知识</p>
+<p>double 类型的大小为:8字节<br>float  类型的大小为:4字节<br>注意:在一些单片机里,double的大小为 4字节<br>本文以 8字节的double为讨论对象（4字节的同理）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br></pre></td></tr></table></figure>
+<p>double型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">位(从0开始)</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">64</td>
+<td style="text-align:center">符号位 0正 1负</td>
+</tr>
+<tr>
+<td style="text-align:center">52-62 (共 11 位)</td>
+<td style="text-align:center">指数部分</td>
+</tr>
+<tr>
+<td style="text-align:center">0-51  (共 52 位)</td>
+<td style="text-align:center">尾数部分</td>
+</tr>
+</tbody>
+</table>
+<p>float型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">位(从0开始)</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">31</td>
+<td style="text-align:center">符号位 0正 1负</td>
+</tr>
+<tr>
+<td style="text-align:center">23-30 (共 8 位)</td>
+<td style="text-align:center">指数部分</td>
+</tr>
+<tr>
+<td style="text-align:center">0-22  (共 23 位)</td>
+<td style="text-align:center">尾数部分</td>
+</tr>
+</tbody>
+</table>
+<p>值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">double </span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-1023)</span><br><span class="line">float</span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-127)</span><br></pre></td></tr></table></figure></p>
+<p>二. 例子</p>
+<p>以0.9为例 看看我们的结论是否正确 代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">union Double &#123;</span><br><span class="line">    double doubleValue;</span><br><span class="line">    int intValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    </span><br><span class="line">    union Double d;</span><br><span class="line">    d.doubleValue = 0.9;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">intValue[0] 是 -858993459 转成二进制是 11001100110011001100110011001101</span><br><span class="line">intValue[1] 是 1072483532 转成二进制是 00111111111011001100110011001100</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>连接连个整数的二进制<br>  我是根据两个整数的值来判断的<br>  intValue[0] 小于 0， intValue[1] 大于 0，而我们的0.9 大于零，<br>  因此，连个整数在内存中的排列是形如下图的: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">前</th>
+<th style="text-align:center">后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">intValue[1]</td>
+<td style="text-align:center">intValue[0]</td>
+</tr>
+<tr>
+<td style="text-align:center">00111111111011001100110011001100</td>
+<td style="text-align:center">11001100110011001100110011001101</td>
+</tr>
+</tbody>
+</table>
+<pre><code>最科学的方法当然是 要知道自己的电脑是 大端系统 还是 小端系统；
+本文只是作者的实际操作，可能不是很科学。
+两个整数连接在一起，前半段是 intValue[1] 的二进制；后半段是 intValue[0] 的二进制
+0011111111101100110011001100110011001100110011001100110011001101
+</code></pre><ul>
+<li><p>验证结论<br>  把二进制按位分开 分别 1，11，52 位<br>  63位:    0<br>  52-62位:   01111111110<br>  0-51位:    1100110011001100110011001100110011001100110011001101</p>
+<p>  63位 是0， 表示是正数<br>  52-62位 是01111111110 大小为 0x3FE 十进制是 1022<br>  0-51位 是二进制的小数部分 转成十六进制是 0xCCCCCCCCCCCCD</p>
+<p>  其实这个小数部分可以很方便的计算<br>  但是我发现这其实是一个无限循环小数，我们完全可以用无穷级数求和来计算:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">值 = 12 * 16^-1 + 12 * 16^-2 + 12 * 16^-3 + ......</span><br><span class="line">值 = (12/16) / (1 - 1/16)</span><br><span class="line">值 = 4/5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.9 = -1^0 * (1 + 4/5) * 2^(1022-1023)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/15/iOS内存管理方式/iOS内存管理方式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1073,7 +1399,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

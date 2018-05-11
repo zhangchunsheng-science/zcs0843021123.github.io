@@ -552,6 +552,206 @@ B、选择All Glyphs
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/01/OC的load与initialize/OC的load与initialize/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/01/OC的load与initialize/OC的load与initialize/" itemprop="url">OC的load与initialize</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T20:50:31+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>参考资料<br> <a href="http://blog.leichunfeng.com/blog/2015/05/02/objective-c-plus-load-vs-plus-initialize/" target="_blank" rel="noopener">http://blog.leichunfeng.com/blog/2015/05/02/objective-c-plus-load-vs-plus-initialize/</a> (来源：雷纯锋的技术博客)</li>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
+<li>Objective-C 中绝大部分的类都继承自 NSObject 类。<br>而在 NSObject 类中有两个非常特殊的类方法 +load 和 +initialize ，用于类的初始化。<br>问题:<ol>
+<li>子类、父类、分类中的相应方法什么时候会被调用？</li>
+<li>需不需要在子类的实现中显式地调用父类的实现？</li>
+<li>每个方法到底会被调用多少次？</li>
+</ol>
+</li>
+</ol>
+<p>下面结合 runtime（objc4-646.tar.gz) 的源码，来研究一下。<br>runtime源码<br><a href="https://opensource.apple.com/tarballs/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/</a><br><a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/objc4/</a></p>
+<ol start="2">
+<li>+load<br>+load 方法是当类或分类被添加到 Objective-C runtime 时被调用的，<br>实现这个方法可以让我们在类加载的时候执行一些类相关的行为。<br>子类的 +load 方法会在它的所有父类的 +load 方法之后执行，<br>而分类的 +load 方法会在它的主类的 +load 方法之后执行。<br>但是不同的类之间的 +load 方法的调用顺序是不确定的。<br>打开 runtime 工程，我们接下来看看与 +load 方法相关的几个关键函数。<br>首先是文件 objc-runtime-new.mm 中的 <code>void prepare_load_methods(header_info *hi)</code> 函数：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void prepare_load_methods(header_info *hi)</span><br><span class="line">&#123;</span><br><span class="line">    size_t count, i;</span><br><span class="line">    rwlock_assert_writing(&amp;runtimeLock);</span><br><span class="line"></span><br><span class="line">    classref_t *classlist = _getObjc2NonlazyClassList(hi, &amp;count);</span><br><span class="line">    for (i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        schedule_class_load(remapClass(classlist[i]));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    category_t ** categorylist = _getObjc2NonlazyCategoryList(hi, &amp;count);</span><br><span class="line">    for (i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        category_t *cat = categorylist[i];</span><br><span class="line">        Class cls = remapClass(cat-&gt;cls);</span><br><span class="line">        if (!cls) continue;  // category for ignored weak-linked class</span><br><span class="line">        realizeClass(cls);</span><br><span class="line">        assert(cls-&gt;ISA()-&gt;isRealized());</span><br><span class="line">        add_category_to_loadable_list(cat);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>顾名思义，这个函数的作用就是提前准备好满足 +load 方法调用条件的类和分类，以供接下来的调用。<br>其中，在处理类时，调用了同文件中的另外一个函数 <code>static void schedule_class_load(Class cls)</code> 来执行具体的操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">static void schedule_class_load(Class cls)</span><br><span class="line">&#123;</span><br><span class="line">    if (!cls) return;</span><br><span class="line">    assert(cls-&gt;isRealized());  // _read_images should realize</span><br><span class="line">    if (cls-&gt;data()-&gt;flags &amp; RW_LOADED) return;</span><br><span class="line"></span><br><span class="line">    // Ensure superclass-first ordering</span><br><span class="line">    schedule_class_load(cls-&gt;superclass);</span><br><span class="line"></span><br><span class="line">    add_class_to_loadable_list(cls);</span><br><span class="line">    cls-&gt;setInfo(RW_LOADED);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，函数第 9 行代码对入参的父类进行了递归调用，以确保父类优先的顺序。<br><code>void prepare_load_methods(header_info *hi)</code> 函数执行完后，<br>当前所有满足 +load 方法调用条件的类和分类就被分别存放在全局变量 loadable_classes 和 loadable_categories 中了。</p>
+<p>准备好类和分类后，接下来就是对它们的 +load 方法进行调用了。<br>打开文件 objc-loadmethod.m ，找到其中的 <code>void call_load_methods(void)</code> 函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void call_load_methods(void)</span><br><span class="line">&#123;</span><br><span class="line">    static BOOL loading = NO;</span><br><span class="line">    BOOL more_categories;</span><br><span class="line"></span><br><span class="line">    recursive_mutex_assert_locked(&amp;loadMethodLock);</span><br><span class="line"></span><br><span class="line">    // Re-entrant calls do nothing; the outermost call will finish the job.</span><br><span class="line">    if (loading) return;</span><br><span class="line">    loading = YES;</span><br><span class="line"></span><br><span class="line">    void *pool = objc_autoreleasePoolPush();</span><br><span class="line"></span><br><span class="line">    do &#123;</span><br><span class="line">        // 1. Repeatedly call class +loads until there aren&apos;t any more</span><br><span class="line">        while (loadable_classes_used &gt; 0) &#123;</span><br><span class="line">            call_class_loads();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 2. Call category +loads ONCE</span><br><span class="line">        more_categories = call_category_loads();</span><br><span class="line"></span><br><span class="line">        // 3. Run more +loads if there are classes OR more untried categories</span><br><span class="line">    &#125; while (loadable_classes_used &gt; 0  ||  more_categories);</span><br><span class="line"></span><br><span class="line">    objc_autoreleasePoolPop(pool);</span><br><span class="line"></span><br><span class="line">    loading = NO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样的，这个函数的作用就是调用上一步准备好的类和分类中的 +load 方法，并且确保类优先于分类的顺序。<br>我们继续查看在这个函数中调用的另外两个关键函数<br><code>static void call_class_loads(void) 和 static BOOL call_category_loads(void)</code> 。<br>由于这两个函数的作用大同小异，下面就以篇幅较小的 <code>static void call_class_loads(void)</code> 函数为例进行探讨。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">static void call_class_loads(void) &#123;</span><br><span class="line">    int i;</span><br><span class="line"></span><br><span class="line">    // Detach current loadable list.</span><br><span class="line">    struct loadable_class *classes = loadable_classes;</span><br><span class="line">    int used = loadable_classes_used;</span><br><span class="line">    loadable_classes = nil;</span><br><span class="line">    loadable_classes_allocated = 0;</span><br><span class="line">    loadable_classes_used = 0;</span><br><span class="line"></span><br><span class="line">    // Call all +loads for the detached list.</span><br><span class="line">    for (i = 0; i &lt; used; i++) &#123;</span><br><span class="line">        Class cls = classes[i].cls;</span><br><span class="line">        load_method_t load_method = (load_method_t)classes[i].method;</span><br><span class="line">        if (!cls) continue;</span><br><span class="line"></span><br><span class="line">        if (PrintLoading) &#123;</span><br><span class="line">            _objc_inform(&quot;LOAD: +[%s load]\n&quot;, cls-&gt;nameForLogging());</span><br><span class="line">        &#125;</span><br><span class="line">        (*load_method)(cls, SEL_load);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Destroy the detached list.</span><br><span class="line">    if (classes) _free_internal(classes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个函数的作用就是真正负责调用类的 +load 方法了。<br>它从全局变量 loadable_classes 中取出所有可供调用的类，并进行清零操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loadable_classes = nil;</span><br><span class="line">loadable_classes_allocated = 0;</span><br><span class="line">loadable_classes_used = 0;</span><br></pre></td></tr></table></figure>
+<p>其中 loadable_classes 指向用于保存类信息的内存的首地址，<br>loadable_classes_allocated 标识已分配的内存空间大小，<br>loadable_classes_used 则标识已使用的内存空间大小。<br>然后，循环调用所有类的 +load 方法。</p>
+<p>注意，这里是（调用分类的 +load 方法也是如此）直接使用函数内存地址的方式 (*load_method)(cls, SEL_load);<br>对 +load 方法进行调用的，而不是使用发送消息 objc_msgSend 的方式。<br>这样的调用方式就使得 +load 方法拥有了一个非常有趣的特性，<br>那就是子类、父类和分类中的 +load 方法的实现是被区别对待的。<br>也就是说如果子类没有实现 +load 方法，那么当它被加载时 runtime 是不会去调用父类的 +load 方法的。<br>同理，当一个类和它的分类都实现了 +load 方法时，两个方法都会被调用。<br>因此，我们常常可以利用这个特性做一些“邪恶”的事情，比如说方法混淆（Method Swizzling）。</p>
+<ol start="3">
+<li>+initialize<br>+initialize 方法是在类或它的子类收到第一条消息之前被调用的，<br>这里所指的消息包括实例方法和类方法的调用。<br>也就是说 +initialize 方法是以懒加载的方式被调用的，<br>如果程序一直没有给某个类或它的子类发送消息，<br>那么这个类的 +initialize 方法是永远不会被调用的。<br>那这样设计有什么好处呢？好处是显而易见的，那就是节省系统资源，避免浪费。</li>
+</ol>
+<p>打开文件 objc-runtime-new.mm ，找到以下函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">IMP lookUpImpOrForward(Class cls, SEL sel, id inst, bool initialize, bool cache, bool resolver)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">        rwlock_unlock_write(&amp;runtimeLock);</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    if (initialize  &amp;&amp;  !cls-&gt;isInitialized()) &#123;</span><br><span class="line">        _class_initialize (_class_getNonMetaClass(cls, inst));</span><br><span class="line">        // If sel == initialize, _class_initialize will send +initialize and </span><br><span class="line">        // then the messenger will send +initialize again after this </span><br><span class="line">        // procedure finishes. Of course, if this is not being called </span><br><span class="line">        // from the messenger then it won&apos;t happen. 2778172</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // The lock is held to make method-lookup + cache-fill atomic </span><br><span class="line">    // with respect to method addition. Otherwise, a category could </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们给某个类发送消息时，runtime 会调用这个函数在类中查找相应方法的实现或进行消息转发。<br>从第 8-14 的关键代码我们可以看出，<br>当类没有初始化时 runtime 会调用 <code>void _class_initialize(Class cls)</code> 函数对该类进行初始化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">void _class_initialize(Class cls)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    Class supercls;</span><br><span class="line">    BOOL reallyInitialize = NO;</span><br><span class="line"></span><br><span class="line">    // Make sure super is done initializing BEFORE beginning to initialize cls.</span><br><span class="line">    // See note about deadlock above.</span><br><span class="line">    supercls = cls-&gt;superclass;</span><br><span class="line">    if (supercls  &amp;&amp;  !supercls-&gt;isInitialized()) &#123;</span><br><span class="line">        _class_initialize(supercls);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Try to atomically set CLS_INITIALIZING.</span><br><span class="line">    monitor_enter(&amp;classInitLock);</span><br><span class="line">    if (!cls-&gt;isInitialized() &amp;&amp; !cls-&gt;isInitializing()) &#123;</span><br><span class="line">        cls-&gt;setInitializing();</span><br><span class="line">        reallyInitialize = YES;</span><br><span class="line">    &#125;</span><br><span class="line">    monitor_exit(&amp;classInitLock);</span><br><span class="line"></span><br><span class="line">    if (reallyInitialize) &#123;</span><br><span class="line">        // We successfully set the CLS_INITIALIZING bit. Initialize the class.</span><br><span class="line"></span><br><span class="line">        // Record that we&apos;re initializing this class so we can message it.</span><br><span class="line">        _setThisThreadIsInitializingClass(cls);</span><br><span class="line"></span><br><span class="line">        // Send the +initialize message.</span><br><span class="line">        // Note that +initialize is sent to the superclass (again) if </span><br><span class="line">        // this class doesn&apos;t implement +initialize. 2157218</span><br><span class="line">        if (PrintInitializing) &#123;</span><br><span class="line">            _objc_inform(&quot;INITIALIZE: calling +[%s initialize]&quot;,</span><br><span class="line">                         cls-&gt;nameForLogging());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ((void(*)(Class, SEL))objc_msgSend)(cls, SEL_initialize);</span><br><span class="line"></span><br><span class="line">        if (PrintInitializing) &#123;</span><br><span class="line">            _objc_inform(&quot;INITIALIZE: finished +[%s initialize]&quot;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，第 7-12 行代码对入参的父类进行了递归调用，以确保父类优先于子类初始化。<br>另外，最关键的是第 36 行代码（暴露了 +initialize 方法的本质），<br>runtime 使用了发送消息 objc_msgSend 的方式对 +initialize 方法进行调用。<br>也就是说 +initialize 方法的调用与普通方法的调用是一样的，走的都是发送消息的流程。<br>换言之，如果子类没有实现 +initialize 方法，那么继承自父类的实现会被调用；<br>如果一个类的分类实现了 +initialize 方法，那么就会对这个类中的实现造成覆盖。<br>因此，如果一个子类没有实现 +initialize 方法，那么父类的实现是会被执行多次的。<br>有时候，这可能是你想要的；但如果我们想确保自己的 +initialize 方法只执行一次，<br>避免多次执行可能带来的副作用时，我们可以使用下面的代码来实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ (void)initialize &#123;</span><br><span class="line">  if (self == [ClassName self]) &#123;</span><br><span class="line">    // ... do the initialization ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>总结</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">+load</th>
+<th style="text-align:center">+initialize</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">调用时机</td>
+<td style="text-align:center">被添加到 runtime 时</td>
+<td style="text-align:center">收到第一条消息前，可能永远不调用</td>
+</tr>
+<tr>
+<td style="text-align:center">调用顺序</td>
+<td style="text-align:center">父类-&gt;子类-&gt;分类</td>
+<td style="text-align:center">父类-&gt;子类</td>
+</tr>
+<tr>
+<td style="text-align:center">调用次数</td>
+<td style="text-align:center">1次</td>
+<td style="text-align:center">多次</td>
+</tr>
+<tr>
+<td style="text-align:center">是否需要显式调用父类实现</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+</tr>
+<tr>
+<td style="text-align:center">是否沿用父类的实现</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">分类中的实现</td>
+<td style="text-align:center">类和分类都执行</td>
+<td style="text-align:center">覆盖类中的方法，只执行分类的实现</td>
+</tr>
+</tbody>
+</table>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/15/OC与Swift混编/OC与Swift混编/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1095,6 +1295,158 @@ B、选择All Glyphs
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/" itemprop="url">OC Fast Enumeration</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-15T22:03:03+08:00">
+                2017-07-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>参考资料<br> <a href="http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/" target="_blank" rel="noopener">http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/</a> (来源：雷纯锋的技术博客)</li>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
+<li><p>简介FastEnumeration<br>在 Objective-C 2.0 中提供了快速枚举的语法，它是我们遍历集合元素的首选方法，因为它具有以下优点：<br>● 比直接使用 NSEnumerator 更高效；<br>● 语法非常简洁；<br>● 如果集合在遍历的过程中被修改，它会抛出异常；<br>● 可以同时执行多个枚举。</p>
+</li>
+<li><p>解析NSFastEnumeration协议<br>在Objective-C中，我们要想实现快速枚举就必须要实现NSFastEnumeration协议，<br>在这个协议中，只声明了一个必须实现的方法：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state</span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf</span><br><span class="line">                                    count:(NSUInteger)len;</span><br></pre></td></tr></table></figure>
+<p>其中，结构体 NSFastEnumerationState 的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">	unsigned long state;</span><br><span class="line">   id __unsafe_unretained __nullable * __nullable itemsPtr;</span><br><span class="line">	unsigned long * __nullable mutationsPtr;</span><br><span class="line">	unsigned long extra[5];</span><br><span class="line">&#125; NSFastEnumerationState;</span><br></pre></td></tr></table></figure>
+<p>这个方法用于返回一系列的C数组，以供调用者进行遍历。<br>为什么是一系列的C数组呢？<br>因为，在一个for/in循环中，这个方法其实会被调用多次，每一次调用都会返回一个C数组。用C数组是为了提高效率了。</p>
+<p>既然要返回C数组，也就意味着我们需要返回一个数组的指针和数组的长度。<br>数组的长度就是通过这个方法的返回值来提供的，而数组的指针则是通过结构体NSFastEnumerationState的itemsPtr字段进行返回的。<br>所以，这两个值就一起定义了这个方法返回的C数组。</p>
+<p>通常来说，NSFastEnumeration允许我们直接返回一个指向内部存储的指针，但是并非所有的数据结构都能够满足内存连续的要求。<br>因此，NSFastEnumeration还为我们提供了另外一种实现方案，我们可以将元素拷贝到调用者提供的一个C数组上，即stackbuf。<br>它的长度由参数len指定。<br>而且使用stackbuf有点耗费内存，所以对于系统的NSArray等，forin的len等于16。</p>
+<p>如果集合在遍历的过程中被修改的话，NSFastEnumeration就会抛出异常。<br>而这个功能就是通过mutationsPtr字段来实现的，它指向一个这样的值，这个值在集合被修改时会发现改变。<br>因此，我们就可以利用它来判断集合在遍历的过程中是否被修改。<br>现在，我们还剩下NSFastEnumerationState中的state和extra字段没有进行介绍。<br>实际上，它们是调用者提供给被调用者自由使用的两个字段，调用者根本不关心这两个字段的值。<br>因此，我们可以利用它们来存储任何对自身有用的值。</p>
+<p>揭密快速枚举的内部实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    for (NSNumber *number in array) &#123;</span><br><span class="line">        if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog(@&quot;%@&quot;, number);</span><br><span class="line">        break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着，我们使用下面的 clang 命令将 main.m 文件重写成 C++ 代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -rewrite-objc main.m</span><br></pre></td></tr></table></figure>
+<p>得到 main.cpp 文件，其中 main 函数的代码如下：(代码略长，可以直接跳过，下边有精简版)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = ((NSArray *(*)(Class, SEL, const ObjectType *, NSUInteger))(void *)objc_msgSend)(objc_getClass(&quot;NSArray&quot;), sel_registerName(&quot;arrayWithObjects:count:&quot;), (const id *)__NSContainer_literal(3U, ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 2), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 3)).arr, 3U);</span><br><span class="line">    &#123;</span><br><span class="line">	NSNumber * number;</span><br><span class="line">	struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">	id __rw_items[16];</span><br><span class="line">	id l_collection = (id) array;</span><br><span class="line">	_WIN_NSUInteger limit =</span><br><span class="line">		((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16);</span><br><span class="line">	if (limit) &#123;</span><br><span class="line">	unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">	do &#123;</span><br><span class="line">		unsigned long counter = 0;</span><br><span class="line">		do &#123;</span><br><span class="line">			if (startMutations != *enumState.mutationsPtr)</span><br><span class="line">				objc_enumerationMutation(l_collection);</span><br><span class="line">			number = (NSNumber *)enumState.itemsPtr[counter++]; &#123;</span><br><span class="line">        if (((BOOL (*)(id, SEL, NSNumber *))(void *)objc_msgSend)((id)number, sel_registerName(&quot;isEqualToNumber:&quot;), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1))) &#123;</span><br><span class="line">            goto __continue_label_1;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog((NSString *)&amp;__NSConstantStringImpl__var_folders_l6_lnvw8nt94q70jwplqs_w3dkw0000gn_T_main_5025b8_mi_0, number);</span><br><span class="line">        goto __break_label_1;</span><br><span class="line">    &#125;;</span><br><span class="line">	__continue_label_1: ;</span><br><span class="line">		&#125; while (counter &lt; limit);</span><br><span class="line">	&#125; while ((limit = ((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16)));</span><br><span class="line">	number = ((NSNumber *)0);</span><br><span class="line">	__break_label_1: ;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">		number = ((NSNumber *)0);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>伪算法版</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line"></span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    NSNumber * number;</span><br><span class="line">    struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">    id __rw_items[16];</span><br><span class="line">    id l_collection = (id) array;</span><br><span class="line">    NSUInteger limit = [l_collection countByEnumeratingWithState: &amp;enumState </span><br><span class="line">                                                         objects: __rw_items</span><br><span class="line">                                                           count: 16];//对于系统的forin每次就是16</span><br><span class="line">    if (limit) &#123;</span><br><span class="line">        unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">        do &#123;</span><br><span class="line">            unsigned long counter = 0;</span><br><span class="line">            do &#123;</span><br><span class="line">                if (startMutations != *enumState.mutationsPtr) &#123;</span><br><span class="line">                    objc_enumerationMutation(l_collection);//抛异常</span><br><span class="line">                &#125;</span><br><span class="line">                number = (NSNumber *)enumState.itemsPtr[counter++];</span><br><span class="line">                if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">                	goto __continue_label_1;</span><br><span class="line">                &#125;</span><br><span class="line">	             //打印</span><br><span class="line">                NSLog(@&quot;%@&quot;, number);</span><br><span class="line">                goto __break_label_1;//continue</span><br><span class="line">                __continue_label_1: ;</span><br><span class="line">            &#125; while (counter &lt; limit);</span><br><span class="line">        &#125; while (limit = [l_collection countByEnumeratingWithState: &amp;enumState objects: __rw_items count: 16]);</span><br><span class="line">        number = @(0);</span><br><span class="line">        __break_label_1: ;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        number = @(0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上代码所示，快速枚举其实就是用两层do/while循环来实现的，<br>外层循环负责调用- countByEnumeratingWithState:objects:count:方法，获取C数组，<br>而内层循环则负责遍历获取到的C数组。<br>同时，我想你应该也注意到了它是如何利用mutationsPtr来检测集合在遍历过程中的突变的，以及使用objc_enumerationMutation函数来抛出异常。</p>
+<p>正如我们前面提到的，在快速枚举的实现中，确实没有用到结构体NSFastEnumerationState中的state和extra字段，<br>它们只是提供给-countByEnumeratingWithState:objects:count:方法的实现者自由使用的字段。</p>
+<p>值得一提的是，我特意在main.m中加入了continue和break语句。因此，我们有机会看到了在for/in语句中是如何利用goto来实现continue和break语句的。</p>
+<p>实现NSFastEnumeration协议<br>我们前面已经提到了，NSFastEnumeration在设计上允许我们使用两种不同的方式来实现它。<br>如果集合中的元素在内存上是连续的，那么我们可以直接返回这段内存的首地址；<br>如果不连续，比如链表，就只能使用调用者提供的C数组stackbuf了，将我们的元素拷贝到这个C数组上。<br>接下来，我们将通过一个自定义的集合类Array，来演示这两种不同的实现NSFastEnumeration协议的方式。<br>注：完整的项目代码可以在这里找到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">@interface Array : NSObject &lt;NSFastEnumeration&gt;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Array &#123;</span><br><span class="line">    std::vector&lt;NSNumber *&gt; _list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems &#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        for (NSUInteger i = 0; i &lt; numItems; i++) &#123;</span><br><span class="line">            _list.push_back(@(random()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#define USE_STACKBUF 1</span><br><span class="line"></span><br><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state </span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf </span><br><span class="line">                                    count:(NSUInteger)len &#123;</span><br><span class="line"></span><br><span class="line">    NSUInteger count = 0;</span><br><span class="line">    unsigned long countOfItemsAlreadyEnumerated = state-&gt;state;</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated == 0) &#123;</span><br><span class="line">        state-&gt;mutationsPtr = &amp;state-&gt;extra[0];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#if USE_STACKBUF</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line"></span><br><span class="line">        state-&gt;itemsPtr = stackbuf;</span><br><span class="line"></span><br><span class="line">        while (countOfItemsAlreadyEnumerated &lt; _list.size() &amp;&amp; count &lt; len) &#123;</span><br><span class="line"></span><br><span class="line">            stackbuf[count] = _list[countOfItemsAlreadyEnumerated];</span><br><span class="line">            countOfItemsAlreadyEnumerated++;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#else</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line">        __unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">        state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br><span class="line"></span><br><span class="line">        countOfItemsAlreadyEnumerated = _list.size();</span><br><span class="line">        count = _list.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">    state-&gt;state = countOfItemsAlreadyEnumerated;</span><br><span class="line">    return count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>在第二种方式的实现中，我们用到了ARC下不同所有权对象之间的相互转换，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br></pre></td></tr></table></figure>
+<p>其实，这里面涉及到两次类型转换，<br>第一次是从 <code>__strong NSNumber *</code> 类型转换到 <code>__unsafe_unretained const id *</code> 类型，<br>第二次是从 <code>__unsafe_unretained const id *</code> 类型转换到 <code>id __unsafe_unretained *</code> 类型</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/10/私有Pod/私有Pod/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1367,332 +1719,6 @@ B、选择All Glyphs
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" itemprop="url">判断电脑是大端系统还是小端系统</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-30T15:47:08+08:00">
-                2016-09-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">union enidanUnion &#123;</span><br><span class="line">    short shortValue;</span><br><span class="line">    char charValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 返回 -1 失效; 0 小端; 1 大端</span><br><span class="line"> */</span><br><span class="line">int testEnidan(void) &#123;</span><br><span class="line">    </span><br><span class="line">    union enidanUnion num;</span><br><span class="line">    if (sizeof(short) == 2) &#123;</span><br><span class="line">        </span><br><span class="line">        num.shortValue = 0x000F;</span><br><span class="line">        if (num.charValue[0] == 0 &amp;&amp; num.charValue[1] == 15) &#123;</span><br><span class="line">            printf(&quot;大端系统&quot;);</span><br><span class="line">            return 1;</span><br><span class="line">        &#125; else if (num.charValue[0] == 15 &amp;&amp; num.charValue[1] == 0) &#123;</span><br><span class="line">            printf(&quot;小端系统&quot;);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            printf(&quot;本测试失效&quot;);</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        printf(&quot;本测试失效&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/30/double类型数据的存储结构/double类型数据的存储结构/" itemprop="url">double类型数据的存储结构</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-30T11:08:42+08:00">
-                2016-09-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>一. 基础知识</p>
-<p>double 类型的大小为:8字节<br>float  类型的大小为:4字节<br>注意:在一些单片机里,double的大小为 4字节<br>本文以 8字节的double为讨论对象（4字节的同理）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br><span class="line">printf(&quot;%zd\n&quot;, sizeof(double));</span><br></pre></td></tr></table></figure>
-<p>double型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">位(从0开始)</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">64</td>
-<td style="text-align:center">符号位 0正 1负</td>
-</tr>
-<tr>
-<td style="text-align:center">52-62 (共 11 位)</td>
-<td style="text-align:center">指数部分</td>
-</tr>
-<tr>
-<td style="text-align:center">0-51  (共 52 位)</td>
-<td style="text-align:center">尾数部分</td>
-</tr>
-</tbody>
-</table>
-<p>float型</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">位(从0开始)</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">31</td>
-<td style="text-align:center">符号位 0正 1负</td>
-</tr>
-<tr>
-<td style="text-align:center">23-30 (共 8 位)</td>
-<td style="text-align:center">指数部分</td>
-</tr>
-<tr>
-<td style="text-align:center">0-22  (共 23 位)</td>
-<td style="text-align:center">尾数部分</td>
-</tr>
-</tbody>
-</table>
-<p>值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">double </span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-1023)</span><br><span class="line">float</span><br><span class="line">值 = (-1)^符号位 * (1.尾数部分转成十进制小数后的值) * 2^(指数部分-127)</span><br></pre></td></tr></table></figure></p>
-<p>二. 例子</p>
-<p>以0.9为例 看看我们的结论是否正确 代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">union Double &#123;</span><br><span class="line">    double doubleValue;</span><br><span class="line">    int intValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    </span><br><span class="line">    union Double d;</span><br><span class="line">    d.doubleValue = 0.9;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>其中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">intValue[0] 是 -858993459 转成二进制是 11001100110011001100110011001101</span><br><span class="line">intValue[1] 是 1072483532 转成二进制是 00111111111011001100110011001100</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>连接连个整数的二进制<br>  我是根据两个整数的值来判断的<br>  intValue[0] 小于 0， intValue[1] 大于 0，而我们的0.9 大于零，<br>  因此，连个整数在内存中的排列是形如下图的: </li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">前</th>
-<th style="text-align:center">后</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">intValue[1]</td>
-<td style="text-align:center">intValue[0]</td>
-</tr>
-<tr>
-<td style="text-align:center">00111111111011001100110011001100</td>
-<td style="text-align:center">11001100110011001100110011001101</td>
-</tr>
-</tbody>
-</table>
-<pre><code>最科学的方法当然是 要知道自己的电脑是 大端系统 还是 小端系统；
-本文只是作者的实际操作，可能不是很科学。
-两个整数连接在一起，前半段是 intValue[1] 的二进制；后半段是 intValue[0] 的二进制
-0011111111101100110011001100110011001100110011001100110011001101
-</code></pre><ul>
-<li><p>验证结论<br>  把二进制按位分开 分别 1，11，52 位<br>  63位:    0<br>  52-62位:   01111111110<br>  0-51位:    1100110011001100110011001100110011001100110011001101</p>
-<p>  63位 是0， 表示是正数<br>  52-62位 是01111111110 大小为 0x3FE 十进制是 1022<br>  0-51位 是二进制的小数部分 转成十六进制是 0xCCCCCCCCCCCCD</p>
-<p>  其实这个小数部分可以很方便的计算<br>  但是我发现这其实是一个无限循环小数，我们完全可以用无穷级数求和来计算:</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">值 = 12 * 16^-1 + 12 * 16^-2 + 12 * 16^-3 + ......</span><br><span class="line">值 = (12/16) / (1 - 1/16)</span><br><span class="line">值 = 4/5</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>计算结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.9 = -1^0 * (1 + 4/5) * 2^(1022-1023)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1749,7 +1775,7 @@ B、选择All Glyphs
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

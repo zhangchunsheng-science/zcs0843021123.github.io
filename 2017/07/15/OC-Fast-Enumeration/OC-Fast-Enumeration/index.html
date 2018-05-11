@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-atom.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="零. 写在前边的话 参考资料 http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/ (来源：雷纯锋的技术博客) 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 简介Fast">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OC Fast Enumeration">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/index.html">
+<meta property="og:site_name" content="凤凰苑">
+<meta property="og:description" content="零. 写在前边的话 参考资料 http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/ (来源：雷纯锋的技术博客) 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 简介Fast">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-11T09:26:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OC Fast Enumeration">
+<meta name="twitter:description" content="零. 写在前边的话 参考资料 http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/ (来源：雷纯锋的技术博客) 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com  一. 简介Fast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://zcs0843021123.github.io/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/"/>
+
+
+
+
+
+  <title>OC Fast Enumeration | 凤凰苑</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">凤凰苑</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">张春生的个人博客</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">OC Fast Enumeration</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-15T22:03:03+08:00">
+                2017-07-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>参考资料<br> <a href="http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/" target="_blank" rel="noopener">http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/</a> (来源：雷纯锋的技术博客)</li>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
+<li><p>简介FastEnumeration<br>在 Objective-C 2.0 中提供了快速枚举的语法，它是我们遍历集合元素的首选方法，因为它具有以下优点：<br>● 比直接使用 NSEnumerator 更高效；<br>● 语法非常简洁；<br>● 如果集合在遍历的过程中被修改，它会抛出异常；<br>● 可以同时执行多个枚举。</p>
+</li>
+<li><p>解析NSFastEnumeration协议<br>在Objective-C中，我们要想实现快速枚举就必须要实现NSFastEnumeration协议，<br>在这个协议中，只声明了一个必须实现的方法：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state</span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf</span><br><span class="line">                                    count:(NSUInteger)len;</span><br></pre></td></tr></table></figure>
+<p>其中，结构体 NSFastEnumerationState 的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">	unsigned long state;</span><br><span class="line">   id __unsafe_unretained __nullable * __nullable itemsPtr;</span><br><span class="line">	unsigned long * __nullable mutationsPtr;</span><br><span class="line">	unsigned long extra[5];</span><br><span class="line">&#125; NSFastEnumerationState;</span><br></pre></td></tr></table></figure>
+<p>这个方法用于返回一系列的C数组，以供调用者进行遍历。<br>为什么是一系列的C数组呢？<br>因为，在一个for/in循环中，这个方法其实会被调用多次，每一次调用都会返回一个C数组。用C数组是为了提高效率了。</p>
+<p>既然要返回C数组，也就意味着我们需要返回一个数组的指针和数组的长度。<br>数组的长度就是通过这个方法的返回值来提供的，而数组的指针则是通过结构体NSFastEnumerationState的itemsPtr字段进行返回的。<br>所以，这两个值就一起定义了这个方法返回的C数组。</p>
+<p>通常来说，NSFastEnumeration允许我们直接返回一个指向内部存储的指针，但是并非所有的数据结构都能够满足内存连续的要求。<br>因此，NSFastEnumeration还为我们提供了另外一种实现方案，我们可以将元素拷贝到调用者提供的一个C数组上，即stackbuf。<br>它的长度由参数len指定。<br>而且使用stackbuf有点耗费内存，所以对于系统的NSArray等，forin的len等于16。</p>
+<p>如果集合在遍历的过程中被修改的话，NSFastEnumeration就会抛出异常。<br>而这个功能就是通过mutationsPtr字段来实现的，它指向一个这样的值，这个值在集合被修改时会发现改变。<br>因此，我们就可以利用它来判断集合在遍历的过程中是否被修改。<br>现在，我们还剩下NSFastEnumerationState中的state和extra字段没有进行介绍。<br>实际上，它们是调用者提供给被调用者自由使用的两个字段，调用者根本不关心这两个字段的值。<br>因此，我们可以利用它们来存储任何对自身有用的值。</p>
+<p>揭密快速枚举的内部实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    for (NSNumber *number in array) &#123;</span><br><span class="line">        if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog(@&quot;%@&quot;, number);</span><br><span class="line">        break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着，我们使用下面的 clang 命令将 main.m 文件重写成 C++ 代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -rewrite-objc main.m</span><br></pre></td></tr></table></figure>
+<p>得到 main.cpp 文件，其中 main 函数的代码如下：(代码略长，可以直接跳过，下边有精简版)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = ((NSArray *(*)(Class, SEL, const ObjectType *, NSUInteger))(void *)objc_msgSend)(objc_getClass(&quot;NSArray&quot;), sel_registerName(&quot;arrayWithObjects:count:&quot;), (const id *)__NSContainer_literal(3U, ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 2), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 3)).arr, 3U);</span><br><span class="line">    &#123;</span><br><span class="line">	NSNumber * number;</span><br><span class="line">	struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">	id __rw_items[16];</span><br><span class="line">	id l_collection = (id) array;</span><br><span class="line">	_WIN_NSUInteger limit =</span><br><span class="line">		((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16);</span><br><span class="line">	if (limit) &#123;</span><br><span class="line">	unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">	do &#123;</span><br><span class="line">		unsigned long counter = 0;</span><br><span class="line">		do &#123;</span><br><span class="line">			if (startMutations != *enumState.mutationsPtr)</span><br><span class="line">				objc_enumerationMutation(l_collection);</span><br><span class="line">			number = (NSNumber *)enumState.itemsPtr[counter++]; &#123;</span><br><span class="line">        if (((BOOL (*)(id, SEL, NSNumber *))(void *)objc_msgSend)((id)number, sel_registerName(&quot;isEqualToNumber:&quot;), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1))) &#123;</span><br><span class="line">            goto __continue_label_1;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog((NSString *)&amp;__NSConstantStringImpl__var_folders_l6_lnvw8nt94q70jwplqs_w3dkw0000gn_T_main_5025b8_mi_0, number);</span><br><span class="line">        goto __break_label_1;</span><br><span class="line">    &#125;;</span><br><span class="line">	__continue_label_1: ;</span><br><span class="line">		&#125; while (counter &lt; limit);</span><br><span class="line">	&#125; while ((limit = ((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16)));</span><br><span class="line">	number = ((NSNumber *)0);</span><br><span class="line">	__break_label_1: ;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">		number = ((NSNumber *)0);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>伪算法版</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line"></span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    NSNumber * number;</span><br><span class="line">    struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">    id __rw_items[16];</span><br><span class="line">    id l_collection = (id) array;</span><br><span class="line">    NSUInteger limit = [l_collection countByEnumeratingWithState: &amp;enumState </span><br><span class="line">                                                         objects: __rw_items</span><br><span class="line">                                                           count: 16];//对于系统的forin每次就是16</span><br><span class="line">    if (limit) &#123;</span><br><span class="line">        unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">        do &#123;</span><br><span class="line">            unsigned long counter = 0;</span><br><span class="line">            do &#123;</span><br><span class="line">                if (startMutations != *enumState.mutationsPtr) &#123;</span><br><span class="line">                    objc_enumerationMutation(l_collection);//抛异常</span><br><span class="line">                &#125;</span><br><span class="line">                number = (NSNumber *)enumState.itemsPtr[counter++];</span><br><span class="line">                if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">                	goto __continue_label_1;</span><br><span class="line">                &#125;</span><br><span class="line">	             //打印</span><br><span class="line">                NSLog(@&quot;%@&quot;, number);</span><br><span class="line">                goto __break_label_1;//continue</span><br><span class="line">                __continue_label_1: ;</span><br><span class="line">            &#125; while (counter &lt; limit);</span><br><span class="line">        &#125; while (limit = [l_collection countByEnumeratingWithState: &amp;enumState objects: __rw_items count: 16]);</span><br><span class="line">        number = @(0);</span><br><span class="line">        __break_label_1: ;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        number = @(0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上代码所示，快速枚举其实就是用两层do/while循环来实现的，<br>外层循环负责调用- countByEnumeratingWithState:objects:count:方法，获取C数组，<br>而内层循环则负责遍历获取到的C数组。<br>同时，我想你应该也注意到了它是如何利用mutationsPtr来检测集合在遍历过程中的突变的，以及使用objc_enumerationMutation函数来抛出异常。</p>
+<p>正如我们前面提到的，在快速枚举的实现中，确实没有用到结构体NSFastEnumerationState中的state和extra字段，<br>它们只是提供给-countByEnumeratingWithState:objects:count:方法的实现者自由使用的字段。</p>
+<p>值得一提的是，我特意在main.m中加入了continue和break语句。因此，我们有机会看到了在for/in语句中是如何利用goto来实现continue和break语句的。</p>
+<p>实现NSFastEnumeration协议<br>我们前面已经提到了，NSFastEnumeration在设计上允许我们使用两种不同的方式来实现它。<br>如果集合中的元素在内存上是连续的，那么我们可以直接返回这段内存的首地址；<br>如果不连续，比如链表，就只能使用调用者提供的C数组stackbuf了，将我们的元素拷贝到这个C数组上。<br>接下来，我们将通过一个自定义的集合类Array，来演示这两种不同的实现NSFastEnumeration协议的方式。<br>注：完整的项目代码可以在这里找到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">@interface Array : NSObject &lt;NSFastEnumeration&gt;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Array &#123;</span><br><span class="line">    std::vector&lt;NSNumber *&gt; _list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems &#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        for (NSUInteger i = 0; i &lt; numItems; i++) &#123;</span><br><span class="line">            _list.push_back(@(random()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#define USE_STACKBUF 1</span><br><span class="line"></span><br><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state </span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf </span><br><span class="line">                                    count:(NSUInteger)len &#123;</span><br><span class="line"></span><br><span class="line">    NSUInteger count = 0;</span><br><span class="line">    unsigned long countOfItemsAlreadyEnumerated = state-&gt;state;</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated == 0) &#123;</span><br><span class="line">        state-&gt;mutationsPtr = &amp;state-&gt;extra[0];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#if USE_STACKBUF</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line"></span><br><span class="line">        state-&gt;itemsPtr = stackbuf;</span><br><span class="line"></span><br><span class="line">        while (countOfItemsAlreadyEnumerated &lt; _list.size() &amp;&amp; count &lt; len) &#123;</span><br><span class="line"></span><br><span class="line">            stackbuf[count] = _list[countOfItemsAlreadyEnumerated];</span><br><span class="line">            countOfItemsAlreadyEnumerated++;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#else</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line">        __unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">        state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br><span class="line"></span><br><span class="line">        countOfItemsAlreadyEnumerated = _list.size();</span><br><span class="line">        count = _list.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">    state-&gt;state = countOfItemsAlreadyEnumerated;</span><br><span class="line">    return count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>在第二种方式的实现中，我们用到了ARC下不同所有权对象之间的相互转换，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br></pre></td></tr></table></figure>
+<p>其实，这里面涉及到两次类型转换，<br>第一次是从 <code>__strong NSNumber *</code> 类型转换到 <code>__unsafe_unretained const id *</code> 类型，<br>第二次是从 <code>__unsafe_unretained const id *</code> 类型转换到 <code>id __unsafe_unretained *</code> 类型</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/10/私有Pod/私有Pod/" rel="next" title="私有Pod">
+                <i class="fa fa-chevron-left"></i> 私有Pod
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" rel="prev" title="OC runtime 源码阅读-1.环境搭建篇">
+                OC runtime 源码阅读-1.环境搭建篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4"
+                alt="张春生" />
+            
+              <p class="site-author-name" itemprop="name">张春生</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/zcs0843021123" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1017295148@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一"><span class="nav-number">2.</span> <span class="nav-text">一.</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">张春生</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
