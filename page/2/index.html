@@ -259,6 +259,278 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/11/OC-runtime-其他知识/OC-runtime-其他知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/11/OC-runtime-其他知识/OC-runtime-其他知识/" itemprop="url">OC runtime 其他知识</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-11T12:27:31+08:00">
+                2017-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>1.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 获取所有加载的Objective-C框架和动态库的名称</span><br><span class="line">const char ** objc_copyImageNames ( unsigned int *outCount );</span><br><span class="line">// 获取指定类所在动态库</span><br><span class="line">const char * class_getImageName ( Class cls );</span><br><span class="line">// 获取指定库或框架中所有类的类名</span><br><span class="line">const char ** objc_copyClassNamesForImage ( const char *image, unsigned int *outCount );</span><br></pre></td></tr></table></figure>
+<p>2.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 创建一个指针函数的指针，该函数调用时会调用特定的block</span><br><span class="line">IMP imp_implementationWithBlock ( id block );</span><br><span class="line">// 返回与IMP(使用imp_implementationWithBlock创建的)相关的block</span><br><span class="line">id imp_getBlock ( IMP anImp );</span><br><span class="line">// 解除block与IMP(使用imp_implementationWithBlock创建的)的关联关系，并释放block的拷贝</span><br><span class="line">BOOL imp_removeBlock ( IMP anImp );</span><br></pre></td></tr></table></figure>
+<p>imp_implementationWithBlock函数：参数block的签名必须是method_return_type ^(id self, method_args …)形式的。<br>该方法能让我们使用block作为IMP。如下代码所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@interface MyRuntimeBlock : NSObject</span><br><span class="line">@end	</span><br><span class="line">@implementation MyRuntimeBlock</span><br><span class="line">@end</span><br><span class="line">// 测试代码</span><br><span class="line">IMP imp = imp_implementationWithBlock(^(id obj, NSString *str) &#123;</span><br><span class="line">    NSLog(@&quot;%@&quot;, str);</span><br><span class="line">&#125;);</span><br><span class="line">class_addMethod(MyRuntimeBlock.class, @selector(testBlock:), imp, &quot;v@:@&quot;);</span><br><span class="line">MyRuntimeBlock *runtime = [[MyRuntimeBlock alloc] init];</span><br><span class="line">[runtime performSelector:@selector(testBlock:) withObject:@&quot;hello world!&quot;];</span><br></pre></td></tr></table></figure>
+<p>3.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 加载弱引用指针引用的对象并返回</span><br><span class="line">id objc_loadWeak ( id *location );</span><br><span class="line">// 存储__weak变量的新值</span><br><span class="line">id objc_storeWeak ( id *location, id obj );</span><br></pre></td></tr></table></figure>
+<p>objc_loadWeak函数：该函数加载一个弱指针引用的对象，并在对其做retain和autoreleasing操作后返回它。<br>这样，对象就可以在调用者使用它时保持足够长的生命周期。该函数典型的用法是在任何有使用<strong>weak变量的表达式中使用。<br>objc_storeWeak函数：该函数的典型用法是用于</strong>weak变量做为赋值对象时。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define nil  __DARWIN_NULL</span><br><span class="line">#define Nil  __DARWIN_NULL</span><br><span class="line">其中nil用于空的实例对象，而Nil用于空类对象。</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/11/OC-Category/OC-Category/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/11/OC-Category/OC-Category/" itemprop="url">OC Category</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-11T12:27:31+08:00">
+                2017-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
+<li>简介</li>
+</ol>
+<p>对设计模式有一定了解的朋友应该听说过装饰模式，Objective-C 中的 Category 就是对装饰模式的一种具体实现。<br>它的主要作用是在不改变原有类的前提下，动态地给这个类添加一些方法。<br>在 Objective-C 中的具体体现为：实例（类）方法、属性和协议。是的，在 Objective-C 中可以用 Category 来实现协议。<br>本文将结合 runtime（objc4-646.tar.gz) 的源码来探究它实现的原理。</p>
+<p>使用场景<br>根据苹果官方文档对 Category 的描述，它的使用场景主要有三个：</p>
+<ol>
+<li>给现有的类添加方法；</li>
+<li>将一个类的实现拆分成多个独立的源文件；</li>
+<li>声明私有的方法。<br>其中，第 1 个是最典型的使用场景，应用最广泛。</li>
+</ol>
+<p>注：Category 有一个非常容易误用的场景，那就是用 Category 来覆写父类或主类的方法。<br>虽然目前 Objective-C 是允许这么做的，但是这种使用场景是非常不推荐的。<br>使用 Category 来覆写方法有很多缺点，比如不能覆写 Category 中的方法、无法调用主类中的原始实现等，且很容易造成无法预估的行为。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// Category是表示一个指向分类的结构体的指针，其定义如下：</span><br><span class="line"></span><br><span class="line">typedef struct objc_category *Category;</span><br><span class="line"></span><br><span class="line">// 对外的结构体</span><br><span class="line">struct objc_category &#123;</span><br><span class="line">    char *category_name                                      OBJC2_UNAVAILABLE;</span><br><span class="line">    char *class_name                                         OBJC2_UNAVAILABLE;</span><br><span class="line">    struct objc_method_list *instance_methods                OBJC2_UNAVAILABLE;</span><br><span class="line">    struct objc_method_list *class_methods                   OBJC2_UNAVAILABLE;</span><br><span class="line">    struct objc_protocol_list *protocols                     OBJC2_UNAVAILABLE;</span><br><span class="line">&#125;                                                            OBJC2_UNAVAILABLE;</span><br><span class="line"></span><br><span class="line">// 这个结构体主要包含了分类定义的实例方法与类方法，</span><br><span class="line">// 其中instance_methods列表是objc_class中方法列表的一个子集，</span><br><span class="line">// 而class_methods列表是元类方法列表的一个子集。</span><br><span class="line"></span><br><span class="line">// 对内的结构体</span><br><span class="line">struct category_t &#123;</span><br><span class="line">    const char *name;</span><br><span class="line">    classref_t cls;</span><br><span class="line">    struct method_list_t *instanceMethods;</span><br><span class="line">    struct method_list_t *classMethods;</span><br><span class="line">    struct protocol_list_t *protocols;</span><br><span class="line">    struct property_list_t *instanceProperties;</span><br><span class="line">    // Fields below this point are not always present on disk.</span><br><span class="line">    struct property_list_t *_classProperties;</span><br><span class="line"></span><br><span class="line">    method_list_t *methodsForMeta(bool isMeta) &#123;</span><br><span class="line">        if (isMeta) return classMethods;</span><br><span class="line">        else return instanceMethods;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    property_list_t *propertiesForMeta(bool isMeta, struct header_info *hi);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>实现原理<br>我们知道，无论我们有没有主动引入 Category 的头文件，Category 中的方法都会被添加进主类中。<br>我们可以通过 - performSelector: 等方式对 Category 中的相应方法进行调用，<br>之所以需要在调用的地方引入 Category 的头文件，只是为了“照顾”编译器的感受。</p>
+<p>下面，我们将结合 runtime 的源码探究下 Category 的实现原理。<br>打开 runtime 源码工程，在文件 objc-runtime-new.mm 中找到以下函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">void _read_images(header_info **hList, uint32_t hCount)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">        _free_internal(resolvedFutureClasses);</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    // 遍历所有的Category </span><br><span class="line">    for (EACH_HEADER) &#123;</span><br><span class="line">        category_t **catlist = _getObjc2CategoryList(hi, &amp;count);</span><br><span class="line">        for (i = 0; i &lt; count; i++) &#123;</span><br><span class="line">            category_t *cat = catlist[i];</span><br><span class="line">            Class cls = remapClass(cat-&gt;cls);</span><br><span class="line"></span><br><span class="line">            if (!cls) &#123;</span><br><span class="line">                // Category 的 Class 没了 (可能是 weak-linked).</span><br><span class="line">                // 销毁这个 Category 的所有信息</span><br><span class="line">                catlist[i] = nil;</span><br><span class="line">                // 打印错误信息</span><br><span class="line">                if (PrintConnecting) &#123;</span><br><span class="line">                    _objc_inform(&quot;CLASS: IGNORING category \?\?\?(%s) %p with &quot; </span><br><span class="line">                                &quot;missing weak-linked target class&quot;,</span><br><span class="line">                                cat-&gt;name, cat);</span><br><span class="line">                &#125;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 处理分类</span><br><span class="line">            // 先把分类注册到主类上去</span><br><span class="line">            // 若主类realized了，重建主类和元类的 method lists (etc)等</span><br><span class="line">            BOOL classExists = NO;</span><br><span class="line">            if (cat-&gt;instanceMethods </span><br><span class="line">                ||  cat-&gt;protocols</span><br><span class="line">                ||  cat-&gt;instanceProperties)</span><br><span class="line">            &#123;</span><br><span class="line">                // 往主类里边加函数，注册到哈希表中</span><br><span class="line">                addUnattachedCategoryForClass(cat, cls, hi);</span><br><span class="line">                if (cls-&gt;isRealized()) &#123;</span><br><span class="line">                    // 如果主类已实现，那么重建它的方法列表。</span><br><span class="line">                    remethodizeClass(cls);</span><br><span class="line">                    classExists = YES;</span><br><span class="line">                &#125;</span><br><span class="line">                if (PrintConnecting) &#123;</span><br><span class="line">                    _objc_inform(&quot;CLASS: found category -%s(%s) %s&quot;,</span><br><span class="line">                                 cls-&gt;nameForLogging(), cat-&gt;name,</span><br><span class="line">                                 classExists ? &quot;on existing class&quot; : &quot;&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (cat-&gt;classMethods  ||  cat-&gt;protocols)</span><br><span class="line">            &#123;</span><br><span class="line">                // 往主类的元类里边加函数，注册到哈希表中</span><br><span class="line">                addUnattachedCategoryForClass(cat, cls-&gt;ISA(), hi);</span><br><span class="line">                if (cls-&gt;ISA()-&gt;isRealized()) &#123;</span><br><span class="line">                    // 如果元类已实现，那么重建它的方法列表。</span><br><span class="line">                    remethodizeClass(cls-&gt;ISA());</span><br><span class="line">                &#125;</span><br><span class="line">                if (PrintConnecting) &#123;</span><br><span class="line">                    _objc_inform(&quot;CLASS: found category +%s(%s)&quot;,</span><br><span class="line">                                 cls-&gt;nameForLogging(), cat-&gt;name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 遍历分类的过程一定要在最后。</span><br><span class="line">    // Category discovery MUST BE LAST to avoid potential races </span><br><span class="line">    // when other threads call the new category code before </span><br><span class="line">    // this thread finishes its fixups.</span><br><span class="line"></span><br><span class="line">    // +load handled by prepare_load_methods()</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Category 中的协议被同时整合到了主类和元类中<br>我们注意到，不管是哪种情况，最终都是通过调用 <code>static void remethodizeClass(Class cls)</code> 函数来重新整理类的数据的。<br>这个函数的主要作用是将 Category 中的方法、属性和协议整合到类（主类或元类）中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">static void remethodizeClass(Class cls)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">        cls-&gt;nameForLogging(), isMeta ? &quot;(meta)&quot; : &quot;&quot;);</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">        // Update methods, properties, protocols</span><br><span class="line"></span><br><span class="line">        attachCategoryMethods(cls, cats, YES);</span><br><span class="line"></span><br><span class="line">        newproperties = buildPropertyList(nil, cats, isMeta);</span><br><span class="line">        if (newproperties) &#123;</span><br><span class="line">            newproperties-&gt;next = cls-&gt;data()-&gt;properties;</span><br><span class="line">            cls-&gt;data()-&gt;properties = newproperties;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        newprotos = buildProtocolList(cats, nil, cls-&gt;data()-&gt;protocols);</span><br><span class="line">        if (cls-&gt;data()-&gt;protocols  &amp;&amp;  cls-&gt;data()-&gt;protocols != newprotos) &#123;</span><br><span class="line">            _free_internal(cls-&gt;data()-&gt;protocols);</span><br><span class="line">        &#125;</span><br><span class="line">        cls-&gt;data()-&gt;protocols = newprotos;</span><br><span class="line"></span><br><span class="line">        _free_internal(cats);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 它的主要作用就是将类中的旧有方法和 Category 中新添加的方法整合成一个新的方法列表，并赋值给 method_lists 或 method_list 。</span><br><span class="line">// 主类中的方法和 Category 中的方法在 runtime 看来并没有区别，它们是被同等对待的，都保存在主类的方法列表中。</span><br><span class="line"></span><br><span class="line">static void attachMethodLists(Class cls, </span><br><span class="line">                            method_list_t **addedLists, </span><br><span class="line">                            int addedCount, </span><br><span class="line">                            bool baseMethods, </span><br><span class="line">                            bool methodsFromBundle, </span><br><span class="line">                            bool flushCaches) &#123;</span><br><span class="line">    ...</span><br><span class="line">        newLists[newCount++] = mlist;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    // Copy old methods to the method list array</span><br><span class="line">    for (i = 0; i &lt; oldCount; i++) &#123;</span><br><span class="line">        newLists[newCount++] = oldLists[i];</span><br><span class="line">    &#125;</span><br><span class="line">    if (oldLists  &amp;&amp;  oldLists != oldBuf) free(oldLists);</span><br><span class="line"></span><br><span class="line">    // nil-terminate</span><br><span class="line">    newLists[newCount] = nil;</span><br><span class="line"></span><br><span class="line">    // 类的方法列表字段有一点特殊，它的结构是联合体，method_lists 和 method_list 共用同一块内存地址。</span><br><span class="line">    // 当 newCount 的个数大于 1 时，使用 method_lists 来保存 newLists ，并将方法列表的标志位置为 RW_METHOD_ARRAY ，</span><br><span class="line">    // 此时类的方法列表字段是 method_list_t 类型的指针数组；</span><br><span class="line">    // 否则，使用 method_list 来保存 newLists ，并将方法列表的标志位置空，此时类的方法列表字段是 method_list_t 类型的指针</span><br><span class="line">    if (newCount &gt; 1) &#123;</span><br><span class="line">        assert(newLists != newBuf);</span><br><span class="line">        cls-&gt;data()-&gt;method_lists = newLists;</span><br><span class="line">        cls-&gt;setInfo(RW_METHOD_ARRAY);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        assert(newLists == newBuf);</span><br><span class="line">        cls-&gt;data()-&gt;method_list = newLists[0];</span><br><span class="line">        assert(!(cls-&gt;data()-&gt;flags &amp; RW_METHOD_ARRAY));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// class&apos;s method list is an array of method lists</span><br><span class="line">#define RW_METHOD_ARRAY       (1&lt;&lt;20)</span><br><span class="line"></span><br><span class="line">union &#123;</span><br><span class="line">    method_list_t **method_lists;  // RW_METHOD_ARRAY == 1</span><br><span class="line">    method_list_t *method_list;    // RW_METHOD_ARRAY == 0</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>runtime 对 Category 中方法的处理过程并没有对 +load 方法进行什么特殊地处理。<br>因此，严格意义上讲 Category 中的 +load 方法跟普通方法一样也会对主类中的 +load 方法造成覆盖，<br>只不过 runtime 在自动调用主类和 Category 中的 +load 方法时是直接使用各自方法的指针进行调用的。<br>所以才会使我们觉得主类和 Category 中的 +load 方法好像互不影响一样。<br>因此，当我们手动给主类发送 +load 消息时，调用的一直会是分类中的 +load 方法 。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1680,256 +1952,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
-                2017-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
-<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
-<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
-<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
-<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
-<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" itemprop="url">判断电脑是大端系统还是小端系统</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-30T15:47:08+08:00">
-                2016-09-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">union enidanUnion &#123;</span><br><span class="line">    short shortValue;</span><br><span class="line">    char charValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 返回 -1 失效; 0 小端; 1 大端</span><br><span class="line"> */</span><br><span class="line">int testEnidan(void) &#123;</span><br><span class="line">    </span><br><span class="line">    union enidanUnion num;</span><br><span class="line">    if (sizeof(short) == 2) &#123;</span><br><span class="line">        </span><br><span class="line">        num.shortValue = 0x000F;</span><br><span class="line">        if (num.charValue[0] == 0 &amp;&amp; num.charValue[1] == 15) &#123;</span><br><span class="line">            printf(&quot;大端系统&quot;);</span><br><span class="line">            return 1;</span><br><span class="line">        &#125; else if (num.charValue[0] == 15 &amp;&amp; num.charValue[1] == 0) &#123;</span><br><span class="line">            printf(&quot;小端系统&quot;);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            printf(&quot;本测试失效&quot;);</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        printf(&quot;本测试失效&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1986,7 +2008,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
