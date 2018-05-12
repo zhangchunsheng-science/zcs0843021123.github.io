@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="C, C++, Objective-C, iOS, Linux, bash" />
+  <meta name="keywords" content="iOS," />
 
 
 
@@ -86,16 +86,28 @@
 
 
 
-<meta name="description" content="张春生的技术博客 不定时更新 请原谅">
-<meta property="og:type" content="website">
-<meta property="og:title" content="凤凰苑">
-<meta property="og:url" content="https://zcs0843021123.github.io/page/2/index.html">
+<meta name="description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com 参考链接: https://juejin.im/post/599a42285188252425646357 (作者：黑超熊猫zuik)  一. MV(X）系列概要1. MVC MVP MVVM VIPERMVC MVP MVVM 都把一个应用中的实体分为以">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我对VIPER的理解">
+<meta property="og:url" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/index.html">
 <meta property="og:site_name" content="凤凰苑">
-<meta property="og:description" content="张春生的技术博客 不定时更新 请原谅">
+<meta property="og:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com 参考链接: https://juejin.im/post/599a42285188252425646357 (作者：黑超熊猫zuik)  一. MV(X）系列概要1. MVC MVP MVVM VIPERMVC MVP MVVM 都把一个应用中的实体分为以">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/old_mvc.png">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/apple_mvc.png">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/apple_mvc_1.png">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/mvp.png">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/mvvm.png">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/viper.png">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/full_viper.png">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/full_viper2.png">
+<meta property="og:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/pic.png">
+<meta property="og:updated_time" content="2018-05-12T07:52:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="凤凰苑">
-<meta name="twitter:description" content="张春生的技术博客 不定时更新 请原谅">
+<meta name="twitter:title" content="我对VIPER的理解">
+<meta name="twitter:description" content="零. 写在前边的话 本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 1017295148@qq.com 参考链接: https://juejin.im/post/599a42285188252425646357 (作者：黑超熊猫zuik)  一. MV(X）系列概要1. MVC MVP MVVM VIPERMVC MVP MVVM 都把一个应用中的实体分为以">
+<meta name="twitter:image" content="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/old_mvc.png">
 
 
 
@@ -125,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="https://zcs0843021123.github.io/page/2/"/>
+  <link rel="canonical" href="https://zcs0843021123.github.io/2017/11/01/我对VIPER的理解/我对VIPER的理解/"/>
 
 
 
 
 
-  <title>凤凰苑</title>
+  <title>我对VIPER的理解 | 凤凰苑</title>
   
 
 
@@ -150,8 +162,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-  page-home">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -244,9 +255,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -276,9 +287,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/01/我对VIPER的理解/我对VIPER的理解/" itemprop="url">我对VIPER的理解</a></h2>
+          <h2 class="post-title" itemprop="name headline">我对VIPER的理解</h2>
         
 
         <div class="post-meta">
@@ -328,9 +337,7 @@
       
 
       
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+        <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
 <li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
 <li>参考链接: <a href="https://juejin.im/post/599a42285188252425646357" target="_blank" rel="noopener">https://juejin.im/post/599a42285188252425646357</a> (作者：黑超熊猫zuik)</li>
 </ol>
@@ -576,8 +583,6 @@
 <p>使用了错误的protocol执行路由<br>执行路由时configuration配置错误<br>不支持的路由方式（router可以限制界面只能使用push、present等有限的跳转方式）<br>在其他界面的跳转过程中，执行了另一个界面的跳转（unbalanced transition错误，会导致-viewWillAppear:、-viewDidAppear:、-viewWillDisAppear:、-viewDidDisappear:等事件的顺序发生错乱）<br>Source view controller此时的状态无法执行当前路由<br>路由时container view controller配置错误<br>segue在代理方法中被取消，导致路由未执行<br>重复执行路由</p>
 <p>基本上包含了界面跳转时会发生的大部分错误事件。<br>支持任意模块<br>ZIKRouter包含ZIKViewRouter和ZIKServiceRouter。ZIKViewRouter专门用于界面跳转，ZIKServiceRouter则可以添加任意类进行实例获取。<br>你可以用ZIKServiceRouter管理需要的类，并且ZIKServiceRouter增添了和ZIKViewRouter相同的动态性和泛型支持。<br>性能<br>为了错误检查、支持storyboard和注册，ZIKViewRouter和ZIKServiceRouter会在app启动时遍历所有类，进行hook和注册的工作。注册时只是把view class、protocol和router class的地址加入字典，不会对内存有影响。<br>在release模式下，iPhone6s机型上，测试了5000个UIViewController以及5000个对应的router，遍历所有类并且hook的耗时大约为15ms，注册router的耗时大约为50ms。基本上不会遇到性能问题。<br>如果你不需要支持storyboard，可以去掉view class和router class配对的注册，去掉以后就无法自动为storyboard里的view controller创建router。至于protocol和router的注册，目前似乎是无法避免的。</p>
 
-          
-        
       
     </div>
     
@@ -592,270 +597,40 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/10/19/KVC-原理/KVC-原理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/19/KVC-原理/KVC-原理/" itemprop="url">KVC 原理</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-19T16:42:31+08:00">
-                2017-10-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-KVC-查找过程"><a href="#一-KVC-查找过程" class="headerlink" title="一. KVC 查找过程"></a>一. KVC 查找过程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">以一个叫 name 的属性为例：</span><br><span class="line">//    setter and getter       // 0 第0步查找，最先查找</span><br><span class="line">//    NSString * _name;       // 1 第1步查找</span><br><span class="line">//    NSString * _isName;     // 2 第2步查找</span><br><span class="line">//    NSString * name;        // 3 第3步查找</span><br><span class="line">//    NSString * isName;      // 4 第4步查找</span><br><span class="line">//    UndefinedKey:           // 5 第5步查找</span><br></pre></td></tr></table></figure>
-<h1 id="二-像js一样任意给对象赋属性和取出属性"><a href="#二-像js一样任意给对象赋属性和取出属性" class="headerlink" title="二. 像js一样任意给对象赋属性和取出属性"></a>二. 像js一样任意给对象赋属性和取出属性</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (void)setValue:(id)value forUndefinedKey:(NSString *)key &#123;</span><br><span class="line">    if (value == nil) &#123;</span><br><span class="line">        value = [NSNull null];</span><br><span class="line">    &#125;</span><br><span class="line">    objc_setAssociatedObject(self, (__bridge const void *)(key), value, OBJC_ASSOCIATION_RETAIN);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)valueForUndefinedKey:(NSString *)key &#123;</span><br><span class="line">    id target = objc_getAssociatedObject(self, (__bridge const void *)(key));</span><br><span class="line">    if ([target isKindOfClass:[NSNull class]])</span><br><span class="line">        return nil;</span><br><span class="line">    return target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/23/UITableViewCell自动行高/UITableViewCell自动行高/" itemprop="url">UITableView自动撑开</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T21:28:42+08:00">
-                2017-09-23
-              </time>
+              <a href="/2017/10/19/KVC-原理/KVC-原理/" rel="next" title="KVC 原理">
+                <i class="fa fa-chevron-left"></i> KVC 原理
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
+              <a href="/2017/11/11/OC-runtime-其他知识/OC-runtime-其他知识/" rel="prev" title="OC runtime 其他知识">
+                OC runtime 其他知识 <i class="fa fa-chevron-right"></i>
+              </a>
             
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开"><a href="#一-TableViewCell-、SectionHeader-、-SectionFooter-自动撑开" class="headerlink" title="一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开"></a>一. TableViewCell 、SectionHeader 、 SectionFooter 自动撑开</h1><ol>
-<li><p>Cell，SectionHeader，SectionFooter布局<br>子View的布局要素：<br>最上边一个子View：左，顶，宽<br>中间子View：左，顶，宽<br>最下边的一个子View：左，顶，宽，底<br>// 注意最上边 中间 最下边 ： 可能是同一个控件，一个空间可能既是中间的也是最下边的，更可能也是最上边的一个。</p>
-</li>
-<li><p>使用TableView</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">UITableView * tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];</span><br><span class="line">    _tableView = tableView;</span><br><span class="line">    [self.view addSubview:tableView];</span><br><span class="line">    [tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];</span><br><span class="line">    tableView.delegate = self;</span><br><span class="line">    tableView.dataSource = self;</span><br><span class="line">    tableView.estimatedRowHeight = 100;</span><br><span class="line">    tableView.estimatedSectionHeaderHeight = 30;</span><br><span class="line">    tableView.estimatedSectionFooterHeight = 12;</span><br><span class="line">    tableView.rowHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionHeaderHeight = UITableViewAutomaticDimension;</span><br><span class="line">    tableView.sectionFooterHeight = UITableViewAutomaticDimension;</span><br><span class="line">    [tableView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">        make.left.right.top.bottom.equalTo(self.view);</span><br><span class="line">    &#125;];</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>实现你要写的View</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- tableView: viewForHeaderInSection:</span><br><span class="line">- tableView: viewForFooterInSection:</span><br><span class="line">- tableView: cellForRowAtIndexPath:</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -865,1078 +640,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/" itemprop="url">OC runtime 源码阅读-1.环境搭建篇</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T16:42:31+08:00">
-                2017-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li><p>参考资料</p>
-<ul>
-<li><a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a><br>这个是可以编译通过的runtime源码,特别鸣谢这位作者整理了我们可以编译通过runtime版本, 而且这位作者始终在更新, 十分感谢</li>
-<li><a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/objc4/</a><br>苹果官方网站源码,苹果的是不能编译通过的</li>
-</ul>
-</li>
-<li><p>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></p>
-</li>
-</ol>
-<h1 id="一-runtime-源码概述"><a href="#一-runtime-源码概述" class="headerlink" title="一. runtime 源码概述"></a>一. runtime 源码概述</h1><ol start="0">
-<li>首先明确一点 runtime 是C++代码 不是C代码; C语言和C++不是一种语言!!!</li>
-<li>本文采用的 runtime 源码为 objc4-709.1 </li>
-<li>下载源码 地址 <a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">https://github.com/RetVal/objc-runtime</a> </li>
-<li><p>下载后打开Xcode工程 文档结构图如下<br><img src="/2017/09/19/OC-runtime-源码阅读-1-环境搭建篇/OC-runtime-源码阅读-1-环境搭建篇/Snip20170920_1.png" alt=""></p>
-<p>若打不开图片,则可以看这个文字版的文档结构图:</p>
-</li>
-</ol>
-<ul>
-<li>objc<ul>
-<li>include (各种头文件, 不要以为是头文件就不重要, 这是C++代码, 很多函数都是直接写在了声明类的头文件里)</li>
-<li>Public Headers  (公共头文件)</li>
-<li>Private Headers (私有头文件)</li>
-<li>Project Headers (项目头文件)</li>
-<li>Obsolete Headers(旧的,即将要废弃的头文件)</li>
-<li>Obsolete Source (旧的,即将要废弃的源代码)</li>
-<li>Source          (源代码)</li>
-<li>Other           (其他)</li>
-<li>debug-objc      (调试用的代码)</li>
-<li>Products        (生成的二进制文件)</li>
-<li>Frameworks      (用到的系统的动态库)</li>
-</ul>
-</li>
-</ul>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/15/OC-Fast-Enumeration/OC-Fast-Enumeration/" itemprop="url">OC Fast Enumeration</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-15T22:03:03+08:00">
-                2017-07-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>参考资料<br> <a href="http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/" target="_blank" rel="noopener">http://blog.leichunfeng.com/blog/2016/06/20/objective-c-fast-enumeration-implementation-principle/</a> (来源：雷纯锋的技术博客)</li>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
-<li><p>简介FastEnumeration<br>在 Objective-C 2.0 中提供了快速枚举的语法，它是我们遍历集合元素的首选方法，因为它具有以下优点：<br>● 比直接使用 NSEnumerator 更高效；<br>● 语法非常简洁；<br>● 如果集合在遍历的过程中被修改，它会抛出异常；<br>● 可以同时执行多个枚举。</p>
-</li>
-<li><p>解析NSFastEnumeration协议<br>在Objective-C中，我们要想实现快速枚举就必须要实现NSFastEnumeration协议，<br>在这个协议中，只声明了一个必须实现的方法：</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state</span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf</span><br><span class="line">                                    count:(NSUInteger)len;</span><br></pre></td></tr></table></figure>
-<p>其中，结构体 NSFastEnumerationState 的定义如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">	unsigned long state;</span><br><span class="line">   id __unsafe_unretained __nullable * __nullable itemsPtr;</span><br><span class="line">	unsigned long * __nullable mutationsPtr;</span><br><span class="line">	unsigned long extra[5];</span><br><span class="line">&#125; NSFastEnumerationState;</span><br></pre></td></tr></table></figure>
-<p>这个方法用于返回一系列的C数组，以供调用者进行遍历。<br>为什么是一系列的C数组呢？<br>因为，在一个for/in循环中，这个方法其实会被调用多次，每一次调用都会返回一个C数组。用C数组是为了提高效率了。</p>
-<p>既然要返回C数组，也就意味着我们需要返回一个数组的指针和数组的长度。<br>数组的长度就是通过这个方法的返回值来提供的，而数组的指针则是通过结构体NSFastEnumerationState的itemsPtr字段进行返回的。<br>所以，这两个值就一起定义了这个方法返回的C数组。</p>
-<p>通常来说，NSFastEnumeration允许我们直接返回一个指向内部存储的指针，但是并非所有的数据结构都能够满足内存连续的要求。<br>因此，NSFastEnumeration还为我们提供了另外一种实现方案，我们可以将元素拷贝到调用者提供的一个C数组上，即stackbuf。<br>它的长度由参数len指定。<br>而且使用stackbuf有点耗费内存，所以对于系统的NSArray等，forin的len等于16。</p>
-<p>如果集合在遍历的过程中被修改的话，NSFastEnumeration就会抛出异常。<br>而这个功能就是通过mutationsPtr字段来实现的，它指向一个这样的值，这个值在集合被修改时会发现改变。<br>因此，我们就可以利用它来判断集合在遍历的过程中是否被修改。<br>现在，我们还剩下NSFastEnumerationState中的state和extra字段没有进行介绍。<br>实际上，它们是调用者提供给被调用者自由使用的两个字段，调用者根本不关心这两个字段的值。<br>因此，我们可以利用它们来存储任何对自身有用的值。</p>
-<p>揭密快速枚举的内部实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    for (NSNumber *number in array) &#123;</span><br><span class="line">        if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog(@&quot;%@&quot;, number);</span><br><span class="line">        break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接着，我们使用下面的 clang 命令将 main.m 文件重写成 C++ 代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -rewrite-objc main.m</span><br></pre></td></tr></table></figure>
-<p>得到 main.cpp 文件，其中 main 函数的代码如下：(代码略长，可以直接跳过，下边有精简版)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    NSArray *array = ((NSArray *(*)(Class, SEL, const ObjectType *, NSUInteger))(void *)objc_msgSend)(objc_getClass(&quot;NSArray&quot;), sel_registerName(&quot;arrayWithObjects:count:&quot;), (const id *)__NSContainer_literal(3U, ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 2), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 3)).arr, 3U);</span><br><span class="line">    &#123;</span><br><span class="line">	NSNumber * number;</span><br><span class="line">	struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">	id __rw_items[16];</span><br><span class="line">	id l_collection = (id) array;</span><br><span class="line">	_WIN_NSUInteger limit =</span><br><span class="line">		((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16);</span><br><span class="line">	if (limit) &#123;</span><br><span class="line">	unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">	do &#123;</span><br><span class="line">		unsigned long counter = 0;</span><br><span class="line">		do &#123;</span><br><span class="line">			if (startMutations != *enumState.mutationsPtr)</span><br><span class="line">				objc_enumerationMutation(l_collection);</span><br><span class="line">			number = (NSNumber *)enumState.itemsPtr[counter++]; &#123;</span><br><span class="line">        if (((BOOL (*)(id, SEL, NSNumber *))(void *)objc_msgSend)((id)number, sel_registerName(&quot;isEqualToNumber:&quot;), ((NSNumber *(*)(Class, SEL, int))(void *)objc_msgSend)(objc_getClass(&quot;NSNumber&quot;), sel_registerName(&quot;numberWithInt:&quot;), 1))) &#123;</span><br><span class="line">            goto __continue_label_1;</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog((NSString *)&amp;__NSConstantStringImpl__var_folders_l6_lnvw8nt94q70jwplqs_w3dkw0000gn_T_main_5025b8_mi_0, number);</span><br><span class="line">        goto __break_label_1;</span><br><span class="line">    &#125;;</span><br><span class="line">	__continue_label_1: ;</span><br><span class="line">		&#125; while (counter &lt; limit);</span><br><span class="line">	&#125; while ((limit = ((_WIN_NSUInteger (*) (id, SEL, struct __objcFastEnumerationState *, id *, _WIN_NSUInteger))(void *)objc_msgSend)</span><br><span class="line">		((id)l_collection,</span><br><span class="line">		sel_registerName(&quot;countByEnumeratingWithState:objects:count:&quot;),</span><br><span class="line">		&amp;enumState, (id *)__rw_items, (_WIN_NSUInteger)16)));</span><br><span class="line">	number = ((NSNumber *)0);</span><br><span class="line">	__break_label_1: ;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">		number = ((NSNumber *)0);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>伪算法版</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line"></span><br><span class="line">    NSArray *array = @[ @1, @2, @3 ];</span><br><span class="line">    NSNumber * number;</span><br><span class="line">    struct __objcFastEnumerationState enumState = &#123; 0 &#125;;</span><br><span class="line">    id __rw_items[16];</span><br><span class="line">    id l_collection = (id) array;</span><br><span class="line">    NSUInteger limit = [l_collection countByEnumeratingWithState: &amp;enumState </span><br><span class="line">                                                         objects: __rw_items</span><br><span class="line">                                                           count: 16];//对于系统的forin每次就是16</span><br><span class="line">    if (limit) &#123;</span><br><span class="line">        unsigned long startMutations = *enumState.mutationsPtr;</span><br><span class="line">        do &#123;</span><br><span class="line">            unsigned long counter = 0;</span><br><span class="line">            do &#123;</span><br><span class="line">                if (startMutations != *enumState.mutationsPtr) &#123;</span><br><span class="line">                    objc_enumerationMutation(l_collection);//抛异常</span><br><span class="line">                &#125;</span><br><span class="line">                number = (NSNumber *)enumState.itemsPtr[counter++];</span><br><span class="line">                if ([number isEqualToNumber:@1]) &#123;</span><br><span class="line">                	goto __continue_label_1;</span><br><span class="line">                &#125;</span><br><span class="line">	             //打印</span><br><span class="line">                NSLog(@&quot;%@&quot;, number);</span><br><span class="line">                goto __break_label_1;//continue</span><br><span class="line">                __continue_label_1: ;</span><br><span class="line">            &#125; while (counter &lt; limit);</span><br><span class="line">        &#125; while (limit = [l_collection countByEnumeratingWithState: &amp;enumState objects: __rw_items count: 16]);</span><br><span class="line">        number = @(0);</span><br><span class="line">        __break_label_1: ;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        number = @(0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上代码所示，快速枚举其实就是用两层do/while循环来实现的，<br>外层循环负责调用- countByEnumeratingWithState:objects:count:方法，获取C数组，<br>而内层循环则负责遍历获取到的C数组。<br>同时，我想你应该也注意到了它是如何利用mutationsPtr来检测集合在遍历过程中的突变的，以及使用objc_enumerationMutation函数来抛出异常。</p>
-<p>正如我们前面提到的，在快速枚举的实现中，确实没有用到结构体NSFastEnumerationState中的state和extra字段，<br>它们只是提供给-countByEnumeratingWithState:objects:count:方法的实现者自由使用的字段。</p>
-<p>值得一提的是，我特意在main.m中加入了continue和break语句。因此，我们有机会看到了在for/in语句中是如何利用goto来实现continue和break语句的。</p>
-<p>实现NSFastEnumeration协议<br>我们前面已经提到了，NSFastEnumeration在设计上允许我们使用两种不同的方式来实现它。<br>如果集合中的元素在内存上是连续的，那么我们可以直接返回这段内存的首地址；<br>如果不连续，比如链表，就只能使用调用者提供的C数组stackbuf了，将我们的元素拷贝到这个C数组上。<br>接下来，我们将通过一个自定义的集合类Array，来演示这两种不同的实现NSFastEnumeration协议的方式。<br>注：完整的项目代码可以在这里找到。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">@interface Array : NSObject &lt;NSFastEnumeration&gt;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Array &#123;</span><br><span class="line">    std::vector&lt;NSNumber *&gt; _list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithCapacity:(NSUInteger)numItems &#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        for (NSUInteger i = 0; i &lt; numItems; i++) &#123;</span><br><span class="line">            _list.push_back(@(random()));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#define USE_STACKBUF 1</span><br><span class="line"></span><br><span class="line">- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state </span><br><span class="line">                                  objects:(id __unsafe_unretained [])stackbuf </span><br><span class="line">                                    count:(NSUInteger)len &#123;</span><br><span class="line"></span><br><span class="line">    NSUInteger count = 0;</span><br><span class="line">    unsigned long countOfItemsAlreadyEnumerated = state-&gt;state;</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated == 0) &#123;</span><br><span class="line">        state-&gt;mutationsPtr = &amp;state-&gt;extra[0];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#if USE_STACKBUF</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line"></span><br><span class="line">        state-&gt;itemsPtr = stackbuf;</span><br><span class="line"></span><br><span class="line">        while (countOfItemsAlreadyEnumerated &lt; _list.size() &amp;&amp; count &lt; len) &#123;</span><br><span class="line"></span><br><span class="line">            stackbuf[count] = _list[countOfItemsAlreadyEnumerated];</span><br><span class="line">            countOfItemsAlreadyEnumerated++;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#else</span><br><span class="line"></span><br><span class="line">    if (countOfItemsAlreadyEnumerated &lt; _list.size()) &#123;</span><br><span class="line">        __unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">        state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br><span class="line"></span><br><span class="line">        countOfItemsAlreadyEnumerated = _list.size();</span><br><span class="line">        count = _list.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">    state-&gt;state = countOfItemsAlreadyEnumerated;</span><br><span class="line">    return count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>在第二种方式的实现中，我们用到了ARC下不同所有权对象之间的相互转换，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__unsafe_unretained const id * const_array = _list.data();</span><br><span class="line">state-&gt;itemsPtr = (__typeof__(state-&gt;itemsPtr))const_array;</span><br></pre></td></tr></table></figure>
-<p>其实，这里面涉及到两次类型转换，<br>第一次是从 <code>__strong NSNumber *</code> 类型转换到 <code>__unsafe_unretained const id *</code> 类型，<br>第二次是从 <code>__unsafe_unretained const id *</code> 类型转换到 <code>id __unsafe_unretained *</code> 类型</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/11/Xcode-Subproject/Xcode-Subproject/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/11/Xcode-Subproject/Xcode-Subproject/" itemprop="url">Xcdoe Subproject</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T02:27:31+08:00">
-                2017-06-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><p>1、子项目必须可以编译成 framework 或者是 静态库<br>2、新建一个项目 要求是 framework 或者是 静态库</p>
-<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_1.png" alt="Xcode-Subproject"></p>
-<p>3、新建项目 要编译通过</p>
-<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_2.png" alt="Xcode-Subproject"></p>
-<p>4、把子项目放到你的工程的目录里去，通过 Add files to project 添加子项目，千万不要自己拖拽，因为Xcode有BUG</p>
-<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_3.png" alt="Xcode-Subproject"></p>
-<p>5、Build Phases 中 Link Binary With Libraries 中 加上你的静态库</p>
-<p>6、Build Settings  中 Header Search Paths 中 加上你的静态库所在的父目录 ZRIPSubProject</p>
-<p><img src="/2017/06/11/Xcode-Subproject/Xcode-Subproject/Snip20170516_4.png" alt="Xcode-Subproject"></p>
-<p>这里注意：<br>Header Search Paths 它只是寻找静态库或者是 framework 暴露出来的头文件，<br>你的头文件在哪，就写那个目录，（递归还是不递归，看情况），<br>Header Search Paths 是以 主项目 的 .xcodeproj 所在的目录为当前目录往下找的。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/06/10/私有Pod/私有Pod/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/10/私有Pod/私有Pod/" itemprop="url">私有Pod</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-10T23:25:31+08:00">
-                2017-06-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-创建私有Pod"><a href="#一-创建私有Pod" class="headerlink" title="一. 创建私有Pod"></a>一. 创建私有Pod</h1><ol>
-<li><p>首先，你的代码要编译通过。</p>
-</li>
-<li><p>创建spec文件</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod spec create https://github.com/zcs0843021123/ZRPlayground</span><br><span class="line"># url 是github上的地址。不是下载地址，只是Github上那一页的地址</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>修改spec文件并提交 </li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |s|</span><br><span class="line">  s.name = &quot;ZRPlayground&quot;</span><br><span class="line">  s.version = &quot;0.0.4&quot;</span><br><span class="line">  s.summary = &quot;ZRPlayground&quot;</span><br><span class="line">  s.description = &lt;&lt;-DESC</span><br><span class="line">                      	ZRPlaygroundDescription</span><br><span class="line">                        DESC</span><br><span class="line">  s.homepage = &quot;https://github.com/zcs0843021123/ZRPlayground&quot;</span><br><span class="line">  s.author = &#123; &quot;zcs&quot; =&gt; &quot;1017295148@qq.com&quot; &#125;</span><br><span class="line">  s.source = &#123; :git =&gt; &quot;https://github.com/zcs0843021123/ZRPlayground.git&quot;, :tag =&gt; &quot;0.0.4&quot; &#125;</span><br><span class="line">  s.source_files = &quot;ZRPlayground/&quot;, &quot;ZRPlayground/**/*.&#123;h,m&#125;&quot;</span><br><span class="line">  s.public_header_files = &quot;ZRPlayground/**/*.h&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-<ul>
-<li>记住 version 和 tag 一定要对应你即将要打的tag（此时，你还没打tag，你要把这个spec文件也打进去）<br>就是说 ： 你的 tag 一定要与你的 spec 文件 一一对应。</li>
-<li>homepage、git、source_files、public_header_files 这几个是必须填写的</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &quot;XXXX&quot;</span><br><span class="line">git pull</span><br><span class="line">git push</span><br><span class="line">git tag -a 0.0.1 -m &quot;Tag release 0.0.1&quot;  #本地打tag标签</span><br><span class="line">git push --tags   						    #推送tag到远程</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>在引用这个Pod的Podfile中加入这一句。这里的URL是git仓库的地址。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;ZRPlayground&apos;, :git =&gt; &apos;https://github.com/zcs0843021123/ZRPlayground.git&apos;</span><br></pre></td></tr></table></figure>
-<p>或</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;ZRPlayground&apos;, :path =&gt; &apos;spec文件的路径&apos;</span><br></pre></td></tr></table></figure>
-<p>注意：以上两句都可以podfile中的指定，这只是指定spec文件在哪里，并不是指定源文件在哪里。在spec文件中指定源文件在哪里的。<br>所以 spec 文件是可以和 源文件 分开的。</p>
-<ol start="5">
-<li>安装Pod</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod install</span><br><span class="line">pod update</span><br></pre></td></tr></table></figure>
-<ol start="6">
-<li>相关说明</li>
-</ol>
-<p>Podfile.lock<br>这是CocoaPods创建的最重要的文件之一。它记录了需要被安装的pod的每个已安装的版本。如果你想知道已安装的pod是哪个版本，可以查看这个文件。推荐将Podfile.lock文件加入到版本控制中，这有助于整个团队的一致性。</p>
-<p>Manifest.lock<br>这是每次运行pod install时创建的Podfile.lock文件的副本。如果你见过“沙盒文件和Podfile.lock文件不同步”的错误，这个错误就是因Manifest.lock文件和Podfile.lock文件不一样引起。由于Pods所在的目录并不总在版本控制之下，这样可以保证开发者运行app之前都能更新他们的pods，否则app可能会crash，或者在一些不太明显的地方编译失败。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/OC-Associated-Objects/OC-Associated-Objects/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/10/OC-Associated-Objects/OC-Associated-Objects/" itemprop="url">OC Associated Objects</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
-                2017-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一"><a href="#一" class="headerlink" title="一."></a>一.</h1><ol>
-<li><p>简介</p>
-<p> 我们可以通过 Associated Objects 在分类中给类添加属性。本文将结合 runtime 源码深入探究 Objective-C 中 Associated Objects 的实现原理。着重关注以下三个问题：</p>
-<ol>
-<li>关联对象被存储在什么地方，是不是存放在被关联对象本身的内存中？</li>
-<li>关联对象的五种关联策略有什么区别，有什么坑？</li>
-<li>关联对象的生命周期是怎样的，什么时候被释放，什么时候被移除？</li>
-</ol>
-</li>
-<li><p>使用场景</p>
-</li>
-</ol>
-<p>Associated Objects 主要有以下三个使用场景：</p>
-<ol>
-<li>为现有的类添加私有变量以帮助实现细节；</li>
-<li>为现有的类添加公有属性；</li>
-<li>为 KVO 创建一个关联的观察者。</li>
-</ol>
-<p>从本质上看，第 1 、2 个场景其实是一个意思，唯一的区别就在于新添加的这个属性是公有的还是私有的而已。就目前来说，使用得最多的是第 2 个场景。</p>
-<ol start="3">
-<li>相关函数</li>
-</ol>
-<p>与 Associated Objects 相关的函数主要有三个，在 runtime.h 文件中找到它们的声明：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy);</span><br><span class="line">id objc_getAssociatedObject(id object, const void *key);</span><br><span class="line">void objc_removeAssociatedObjects(id object);</span><br></pre></td></tr></table></figure>
-<p>这三个函数的命名对程序员非常友好，可以让我们一眼就看出函数的作用：<br>  ● objc_setAssociatedObject 用于给对象添加关联对象，传入 nil 则可以移除已有的关联对象；<br>  ● objc_getAssociatedObject 用于获取关联对象；<br>  ● objc_removeAssociatedObjects 用于移除一个对象的所有关联对象。</p>
-<p>注：objc_removeAssociatedObjects 函数我们一般是用不上的，因为这个函数会移除一个对象的所有关联对象，将该对象恢复成“原始”状态。这样做就很有可能把别人添加的关联对象也一并移除，这并不是我们所希望的。所以一般的做法是通过给 objc_setAssociatedObject 函数传入 nil来移除某个已有的关联对象。</p>
-<p>key 值<br>关于前两个函数中的 key 值是我们需要重点关注的一个点，这个 key 值必须保证是一个对象级别的唯一常量。一般来说，有以下三种推荐的 key 值：</p>
-<ol>
-<li>声明 <code>static char kAssociatedObjectKey;</code> ，使用 <code>&amp;kAssociatedObjectKey</code> 作为 key 值;</li>
-<li>声明 <code>static void *kAssociatedObjectKey = &amp;kAssociatedObjectKey;</code> ，使用 <code>kAssociatedObjectKey</code> 作为 key 值；</li>
-<li>用 <code>selector</code> ，使用 <code>getter</code> 方法的名称作为 key 值 (常用)。</li>
-</ol>
-<p>关联策略<br>在给一个对象添加关联对象时有五种关联策略可供选择：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left"></th>
-<th style="text-align:left"></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_ASSIGN</td>
-<td style="text-align:left">@property (assign) @property (unsafe_unretained)  弱引用关联对象</td>
-</tr>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_RETAIN_NONATOMIC</td>
-<td style="text-align:left">@property (strong, nonatomic)                     强引用关联对象 非原子</td>
-</tr>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_COPY_NONATOMIC</td>
-<td style="text-align:left">@property (copy, nonatomic)                       复制关联对象 非原子</td>
-</tr>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_RETAIN</td>
-<td style="text-align:left">@property (strong, atomic)                        强引用关联对象 原子</td>
-</tr>
-<tr>
-<td style="text-align:left">OBJC_ASSOCIATION_COPY</td>
-<td style="text-align:left">@property (copy, atomic)                          复制关联对象 原子</td>
-</tr>
-</tbody>
-</table>
-<p>其中，第 2 种与第 4 种、第 3 种与第 5 种关联策略的唯一差别就在于操作是否具有原子性。</p>
-<p>实现原理<br>在探究 Associated Objects 的实现原理前，我们还是先来动手做一个小实验，研究一下关联对象什么时候会被释放。<br>本实验主要涉及 ViewController 类和它的分类 ViewController+AssociatedObjects 。<br>关键代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">@interface ViewController (AssociatedObjects)</span><br><span class="line"></span><br><span class="line">@property (assign, nonatomic) NSString *associatedObject_assign;</span><br><span class="line">@property (strong, nonatomic) NSString *associatedObject_retain;</span><br><span class="line">@property (copy,   nonatomic) NSString *associatedObject_copy;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ViewController (AssociatedObjects)</span><br><span class="line"></span><br><span class="line">- (NSString *)associatedObject_assign &#123;</span><br><span class="line">    return objc_getAssociatedObject(self, _cmd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)setAssociatedObject_assign:(NSString *)associatedObject_assign &#123;</span><br><span class="line">    objc_setAssociatedObject(self, @selector(associatedObject_assign), associatedObject_assign, OBJC_ASSOCIATION_ASSIGN);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSString *)associatedObject_retain &#123;</span><br><span class="line">    return objc_getAssociatedObject(self, _cmd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)setAssociatedObject_retain:(NSString *)associatedObject_retain &#123;</span><br><span class="line">    objc_setAssociatedObject(self, @selector(associatedObject_retain), associatedObject_retain, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSString *)associatedObject_copy &#123;</span><br><span class="line">    return objc_getAssociatedObject(self, _cmd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)setAssociatedObject_copy:(NSString *)associatedObject_copy &#123;</span><br><span class="line">    objc_setAssociatedObject(self, @selector(associatedObject_copy), associatedObject_copy, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>在 ViewController+AssociatedObjects.h 中声明了三个属性，限定符分别为 assign, nonatomic、strong, nonatomic 和 copy, nonatomic ，<br>而在 ViewController+AssociatedObjects.m 中相应的分别用 OBJC_ASSOCIATION_ASSIGN 、OBJC_ASSOCIATION_RETAIN_NONATOMIC 、OBJC_ASSOCIATION_COPY_NONATOMIC<br>三种关联策略为这三个属性添加“实例变量”。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">__weak NSString *string_weak_assign = nil;</span><br><span class="line">__weak NSString *string_weak_retain = nil;</span><br><span class="line">__weak NSString *string_weak_copy   = nil;</span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line"></span><br><span class="line">    // 由于它是弱引用，所以自动释放池一drain，对象就没了，变成nil。</span><br><span class="line">    // viewDidLoad, viewWillAppear 与 viewDidAppear 不在一个RunLoop。自动释放池会释放一次。</span><br><span class="line">    // 对象销毁时，会调用 _object_remove_assocations ，调用这个函数后所有关联对象被全部移除。</span><br><span class="line">    self.associatedObject_assign = [NSString stringWithFormat:@&quot;1233&quot;]; </span><br><span class="line">    self.associatedObject_retain = [NSString stringWithFormat:@&quot;1233&quot;];</span><br><span class="line">    self.associatedObject_copy   = [NSString stringWithFormat:@&quot;1233&quot;];</span><br><span class="line"></span><br><span class="line">    string_weak_assign = self.associatedObject_assign;</span><br><span class="line">    string_weak_retain = self.associatedObject_retain;</span><br><span class="line">    string_weak_copy   = self.associatedObject_copy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event &#123;</span><br><span class="line">//    NSLog(@&quot;self.associatedObject_assign: %@&quot;, self.associatedObject_assign); // Will Crash</span><br><span class="line">    NSLog(@&quot;self.associatedObject_retain: %@&quot;, self.associatedObject_retain);</span><br><span class="line">    NSLog(@&quot;self.associatedObject_copy:   %@&quot;, self.associatedObject_copy);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-<p>结论</p>
-<ol>
-<li>关联对象的释放时机与被移除的时机并不总是一致的，比如上面的 self.associatedObject_assign 所指向的对象在 ViewController 出现后就被释放了，但是 self.associatedObject_assign 仍然有值，还是保存的原对象的地址。如果之后再使用 self.associatedObject_assign 就会造成 Crash ，所以我们在使用弱引用的关联对象时要非常小心；</li>
-<li><p>一个对象的所有关联对象是在这个对象被释放时调用的 _object_remove_assocations 函数中被移除的。</p>
-<ul>
-<li>objc_setAssociatedObject (objc-references.mm 文件中)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   class AssociationsManager &#123; // 这货一出生就带着一个锁，直到它死了才把锁unlock</span><br><span class="line">   </span><br><span class="line">   static AssociationsHashMap *_map;</span><br><span class="line">   public:</span><br><span class="line">       AssociationsManager()   &#123; AssociationsManagerLock.lock(); &#125;</span><br><span class="line">       ~AssociationsManager()  &#123; AssociationsManagerLock.unlock(); &#125;</span><br><span class="line">   </span><br><span class="line">       AssociationsHashMap &amp;associations() &#123;</span><br><span class="line">           if (_map == NULL)</span><br><span class="line">               _map = new AssociationsHashMap();</span><br><span class="line">           return *_map;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;;</span><br><span class="line"></span><br><span class="line">   class AssociationsHashMap : public unordered_map &lt;disguised_ptr_t, </span><br><span class="line">                                                     ObjectAssociationMap *, </span><br><span class="line">                                                     DisguisedPointerHash, </span><br><span class="line">                                                     DisguisedPointerEqual, </span><br><span class="line">                                                     AssociationsHashMapAllocator&gt; &#123;</span><br><span class="line">   public:</span><br><span class="line">       void *operator new(size_t n) &#123; return ::malloc(n); &#125;</span><br><span class="line">       void operator delete(void *ptr) &#123; ::free(ptr); &#125;</span><br><span class="line">   &#125;;</span><br><span class="line">   </span><br><span class="line">   class ObjectAssociationMap : public std::map&lt;void *, ObjcAssociation, ObjectPointerLess, ObjectAssociationMapAllocator&gt; &#123;</span><br><span class="line">   public:</span><br><span class="line">       void *operator new(size_t n) &#123; return ::malloc(n); &#125;</span><br><span class="line">       void operator delete(void *ptr) &#123; ::free(ptr); &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   class ObjcAssociation &#123;</span><br><span class="line">       uintptr_t _policy;</span><br><span class="line">       id _value;</span><br><span class="line">   public:</span><br><span class="line">       ObjcAssociation(uintptr_t policy, id value) : _policy(policy), _value(value) &#123;&#125;</span><br><span class="line">       ObjcAssociation() : _policy(0), _value(nil) &#123;&#125;</span><br><span class="line"></span><br><span class="line">       uintptr_t policy() const &#123; return _policy; &#125;</span><br><span class="line">       id value() const &#123; return _value; &#125;</span><br><span class="line">       </span><br><span class="line">       bool hasValue() &#123; return _value != nil; &#125;</span><br><span class="line">   &#125;;</span><br><span class="line"></span><br><span class="line">// 		</span><br><span class="line">void _object_set_associative_reference(id object, void *key, id value, uintptr_t policy) &#123;</span><br><span class="line">    </span><br><span class="line">    ObjcAssociation old_association(0, nil);</span><br><span class="line">    id new_value = value ? acquireValue(value, policy) : nil;</span><br><span class="line">    &#123; // 这个作用域就是为了搭配 manager这个锁的</span><br><span class="line">        AssociationsManager manager;</span><br><span class="line">        AssociationsHashMap &amp;associations(manager.associations());</span><br><span class="line">        disguised_ptr_t disguised_object = DISGUISE(object);</span><br><span class="line">        if (new_value) &#123;</span><br><span class="line"></span><br><span class="line">            AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">            if (i != associations.end()) &#123;</span><br><span class="line"></span><br><span class="line">                ObjectAssociationMap *refs = i-&gt;second; // second 取出的是value 即ObjectAssociationMap</span><br><span class="line">                ObjectAssociationMap::iterator j = refs-&gt;find(key);</span><br><span class="line">                if (j != refs-&gt;end()) &#123;</span><br><span class="line">                    old_association = j-&gt;second;</span><br><span class="line">                    j-&gt;second = ObjcAssociation(policy, new_value);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    (*refs)[key] = ObjcAssociation(policy, new_value);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line"></span><br><span class="line">                ObjectAssociationMap *refs = new ObjectAssociationMap;</span><br><span class="line">                associations[disguised_object] = refs;</span><br><span class="line">                (*refs)[key] = ObjcAssociation(policy, new_value);</span><br><span class="line">                object-&gt;setHasAssociatedObjects();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line"></span><br><span class="line">            AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">            if (i !=  associations.end()) &#123;</span><br><span class="line">                ObjectAssociationMap *refs = i-&gt;second;</span><br><span class="line">                ObjectAssociationMap::iterator j = refs-&gt;find(key);</span><br><span class="line">                if (j != refs-&gt;end()) &#123;</span><br><span class="line">                    old_association = j-&gt;second;</span><br><span class="line">                    refs-&gt;erase(j);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // 解锁之后释放旧的值</span><br><span class="line">    if (old_association.hasValue()) ReleaseValue()(old_association);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>在看这段代码前，我们需要先了解一下几个数据结构以及它们之间的关系：</p>
-<ol>
-<li>AssociationsManager 是顶级的对象，维护了一个从 spinlock_t 锁到 AssociationsHashMap 哈希表的单例键值对映射；</li>
-<li>AssociationsHashMap 是一个无序的哈希表，维护了从对象地址到 ObjectAssociationMap 的映射；</li>
-<li>ObjectAssociationMap 是一个 C++ 中的 map ，维护了从 key 到 ObjcAssociation 的映射，即关联记录；</li>
-<li><p>ObjcAssociation 是一个 C++ 的类，表示一个具体的关联结构，主要包括两个实例变量，_policy 表示关联策略，_value 表示关联对象。<br>每一个对象地址对应一个 ObjectAssociationMap 对象，而一个 ObjectAssociationMap 对象保存着这个对象的若干个关联记录。<br>流程图：</p>
-<p><img src="/2017/05/10/OC-Associated-Objects/OC-Associated-Objects/objc_setAssociatedObject.png" alt="OC-Associated-Objects"></p>
-</li>
-</ol>
-<p>objc_getAssociatedObject (objc-references.mm 文件中)</p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">id _object_get_associative_reference(id object, void *key) &#123;</span><br><span class="line">    id value = nil;</span><br><span class="line">    uintptr_t policy = OBJC_ASSOCIATION_ASSIGN;</span><br><span class="line">    &#123;</span><br><span class="line">        AssociationsManager manager;</span><br><span class="line">        AssociationsHashMap &amp;associations(manager.associations());</span><br><span class="line">        disguised_ptr_t disguised_object = DISGUISE(object);</span><br><span class="line">        AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">        if (i != associations.end()) &#123;</span><br><span class="line">            ObjectAssociationMap *refs = i-&gt;second;</span><br><span class="line">            ObjectAssociationMap::iterator j = refs-&gt;find(key);</span><br><span class="line">            if (j != refs-&gt;end()) &#123;</span><br><span class="line">                ObjcAssociation &amp;entry = j-&gt;second;</span><br><span class="line">                value = entry.value();</span><br><span class="line">                policy = entry.policy();</span><br><span class="line">                if (policy &amp; OBJC_ASSOCIATION_GETTER_RETAIN) ((id(*)(id, SEL))objc_msgSend)(value, SEL_retain);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (value &amp;&amp; (policy &amp; OBJC_ASSOCIATION_GETTER_AUTORELEASE)) &#123;</span><br><span class="line">        ((id(*)(id, SEL))objc_msgSend)(value, SEL_autorelease);</span><br><span class="line">    &#125;</span><br><span class="line">    return value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><p>看懂了 objc_setAssociatedObject 函数后，objc_getAssociatedObject 函数对我们来说就是小菜一碟了。<br>这个函数先根据对象地址在 AssociationsHashMap 中查找其对应的 ObjectAssociationMap 对象，<br>如果能找到则进一步根据 key 在 ObjectAssociationMap 对象中查找这个 key 所对应的关联结构 ObjcAssociation ，<br>如果能找到则返回 ObjcAssociation 对象的 value 值，否则返回 nil 。</p>
-<p>objc_removeAssociatedObjects<br>同理，我们也可以在 objc-references.mm 文件中找到 objc_removeAssociatedObjects 函数最终调用的函数：</p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">void _object_remove_assocations(id object) &#123;</span><br><span class="line">    vector&lt; ObjcAssociation,ObjcAllocator&lt;ObjcAssociation&gt; &gt; elements;</span><br><span class="line">    &#123;</span><br><span class="line">        AssociationsManager manager;</span><br><span class="line">        AssociationsHashMap &amp;associations(manager.associations());</span><br><span class="line">        if (associations.size() == 0) return;</span><br><span class="line">        disguised_ptr_t disguised_object = DISGUISE(object);</span><br><span class="line">        AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">        if (i != associations.end()) &#123;</span><br><span class="line">            // copy all of the associations that need to be removed.</span><br><span class="line">            ObjectAssociationMap *refs = i-&gt;second;</span><br><span class="line">            for (ObjectAssociationMap::iterator j = refs-&gt;begin(), end = refs-&gt;end(); j != end; ++j) &#123;</span><br><span class="line">                elements.push_back(j-&gt;second);</span><br><span class="line">            &#125;</span><br><span class="line">            // remove the secondary table.</span><br><span class="line">            delete refs;</span><br><span class="line">            associations.erase(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // the calls to releaseValue() happen outside of the lock.</span><br><span class="line">    for_each(elements.begin(), elements.end(), ReleaseValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><p>这个函数负责移除一个对象的所有关联对象，具体实现也是先根据对象的地址获取其对应的 ObjectAssociationMap 对象，然后将所有的关联结构保存到一个 vector 中，最终释放 vector中保存的所有关联对象。根据前面的实验观察到的情况，在一个对象被释放时，也正是调用的这个函数来移除其所有的关联对象。</p>
-<p>给类对象添加关联对象<br>看完源代码后，我们知道对象地址与 AssociationsHashMap 哈希表是一一对应的。那么我们可能就会思考这样一个问题，是否可以给类对象添加关联对象呢？答案是肯定的。我们完全可以用同样的方式给类对象添加关联对象，只不过我们一般情况下不会这样做，因为更多时候我们可以通过 static 变量来实现类级别的变量。我在分类 ViewController+AssociatedObjects 中给 ViewController 类对象添加了一个关联象 associatedObject ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">+ (NSString *)associatedObject;</span><br><span class="line">+ (void)setAssociatedObject:(NSString *)associatedObject;</span><br></pre></td></tr></table></figure>
-<p>总结<br>读到这里，相信你对开篇的那三个问题已经有了一定的认识，下面我们再梳理一下：</p>
-<ol>
-<li>关联对象与被关联对象本身的存储并没有直接的关系，它是存储在单独的哈希表中的；</li>
-<li>关联对象的五种关联策略与属性的限定符非常类似，在绝大多数情况下，我们都会使用 OBJC_ASSOCIATION_RETAIN_NONATOMIC 的关联策略，这可以保证我们持有关联对象；</li>
-<li>关联对象的释放时机与移除时机并不总是一致，比如 OBJC_ASSOCIATION_ASSIGN 进行关联的对象，不知道什么时候就被释放了，但是并没有被移除，而再使用这个关联对象时就会造成 Crash。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/10/响应者链条的一些思考/响应者链条的一些思考/" itemprop="url">响应者链条的一些思考</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T09:25:31+08:00">
-                2017-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-响应者链条"><a href="#一-响应者链条" class="headerlink" title="一. 响应者链条"></a>一. 响应者链条</h1><ul>
-<li>响应者链条是怎么找子View的，以及如何处理这里略去。这里只讨论，响应者链条向上一级传递的流程。</li>
-<li>如果点击了一个你定义的View，流程是从你自定义的子类开始，</li>
-<li>一级级找父类，找父类处理事件 [super touchesBegan:touches withEvent:event]，</li>
-<li>如果不写 [super touchesBegan:touches withEvent:event] 链条就会断了，不往上传了。</li>
-<li><p>找父类找到 UIKit 的控件级别，就会找父View，然后父View找它的父类或是父View。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">0、子View上点击</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 在响应者链条之后执行。</span><br><span class="line"></span><br><span class="line">0.1、若不写 [super touchesBegan:touches withEvent:event];</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br><span class="line">或者</span><br><span class="line">-[ZRSonView touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController viewTaped:]</span><br><span class="line">所以 tap 不受响应者链条的影响，注册了一定会执行。</span><br><span class="line"></span><br><span class="line">1、Button点击</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnClicked:]</span><br><span class="line">注意必须要有 [super touchesBegan:touches withEvent:event]; </span><br><span class="line">否则响应者链条断了，不会传回去，也就不会执行btnClicked !!!</span><br><span class="line">响应者链条在 UIButton 处断了 ！！！ 不会再往回传了 ！！！</span><br><span class="line">但是 UIView 会继续往回传 ！！！</span><br><span class="line"></span><br><span class="line">1.1、Button同时注册了tap与btnClick: btnClick失效了！！</span><br><span class="line">-[ZRSonButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRFatherButton touchesBegan:withEvent:]</span><br><span class="line">-[ZRButtonTestViewController btnTaped:]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/30/判断电脑是大端系统还是小端系统/判断电脑是大端系统还是小端系统/" itemprop="url">判断电脑是大端系统还是小端系统</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-30T15:47:08+08:00">
-                2016-09-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">union enidanUnion &#123;</span><br><span class="line">    short shortValue;</span><br><span class="line">    char charValue[2];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 返回 -1 失效; 0 小端; 1 大端</span><br><span class="line"> */</span><br><span class="line">int testEnidan(void) &#123;</span><br><span class="line">    </span><br><span class="line">    union enidanUnion num;</span><br><span class="line">    if (sizeof(short) == 2) &#123;</span><br><span class="line">        </span><br><span class="line">        num.shortValue = 0x000F;</span><br><span class="line">        if (num.charValue[0] == 0 &amp;&amp; num.charValue[1] == 15) &#123;</span><br><span class="line">            printf(&quot;大端系统&quot;);</span><br><span class="line">            return 1;</span><br><span class="line">        &#125; else if (num.charValue[0] == 15 &amp;&amp; num.charValue[1] == 0) &#123;</span><br><span class="line">            printf(&quot;小端系统&quot;);</span><br><span class="line">            return 0;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            printf(&quot;本测试失效&quot;);</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        printf(&quot;本测试失效&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
 
 
           </div>
@@ -1944,6 +652,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1966,8 +678,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -2038,6 +759,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#零-写在前边的话"><span class="nav-number">1.</span> <span class="nav-text">零. 写在前边的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一-MV-X）系列概要"><span class="nav-number">2.</span> <span class="nav-text">一. MV(X）系列概要</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-MVC-MVP-MVVM-VIPER"><span class="nav-number">2.1.</span> <span class="nav-text">1. MVC MVP MVVM VIPER</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-传统的MVC"><span class="nav-number">2.2.</span> <span class="nav-text">2. 传统的MVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-苹果推荐的MVC"><span class="nav-number">2.3.</span> <span class="nav-text">3. 苹果推荐的MVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-MVP"><span class="nav-number">2.4.</span> <span class="nav-text">4. MVP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-MVVM"><span class="nav-number">2.5.</span> <span class="nav-text">5. MVVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-VIPER"><span class="nav-number">2.6.</span> <span class="nav-text">6. VIPER</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二-VIPER实现-完全"><span class="nav-number">3.</span> <span class="nav-text">二. VIPER实现(完全)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-View"><span class="nav-number">3.1.</span> <span class="nav-text">1. View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Presenter"><span class="nav-number">3.2.</span> <span class="nav-text">2. Presenter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Interactor"><span class="nav-number">3.3.</span> <span class="nav-text">3. Interactor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Service"><span class="nav-number">3.4.</span> <span class="nav-text">4. Service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Router"><span class="nav-number">3.5.</span> <span class="nav-text">5. Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Adapter"><span class="nav-number">3.6.</span> <span class="nav-text">6. Adapter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Builder"><span class="nav-number">3.7.</span> <span class="nav-text">7. Builder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-子模块"><span class="nav-number">3.8.</span> <span class="nav-text">8. 子模块</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三-VIPER实现-允许适当耦合"><span class="nav-number">4.</span> <span class="nav-text">三. VIPER实现(允许适当耦合)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-View-1"><span class="nav-number">4.1.</span> <span class="nav-text">1. View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Presenter-1"><span class="nav-number">4.2.</span> <span class="nav-text">2. Presenter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Interactor-1"><span class="nav-number">4.3.</span> <span class="nav-text">3. Interactor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-路由和依赖注入"><span class="nav-number">4.4.</span> <span class="nav-text">4. 路由和依赖注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四-面向接口的路由设计"><span class="nav-number">5.</span> <span class="nav-text">四. 面向接口的路由设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-路由是实现模块间解耦的一个有效工具。如果要进行组件化开发，路由是必不可少的一部分。目前iOS上绝大部分的路由工具都是基于URL匹配的，优缺点都很明显。"><span class="nav-number">5.1.</span> <span class="nav-text">1. 路由是实现模块间解耦的一个有效工具。如果要进行组件化开发，路由是必不可少的一部分。目前iOS上绝大部分的路由工具都是基于URL匹配的，优缺点都很明显。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Router的作用"><span class="nav-number">5.2.</span> <span class="nav-text">2. Router的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-URL-Router"><span class="nav-number">5.3.</span> <span class="nav-text">3. URL Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Protocol-Router"><span class="nav-number">5.4.</span> <span class="nav-text">4. Protocol Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Target-Action"><span class="nav-number">5.5.</span> <span class="nav-text">5. Target-Action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-UIStoryboardSegue"><span class="nav-number">5.6.</span> <span class="nav-text">6. UIStoryboardSegue</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五-ZIKRouter"><span class="nav-number">6.</span> <span class="nav-text">五. ZIKRouter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ZIKRouter的特性"><span class="nav-number">6.1.</span> <span class="nav-text">1. ZIKRouter的特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-一个router子类的简单实现如下："><span class="nav-number">6.2.</span> <span class="nav-text">2. 一个router子类的简单实现如下：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -2180,6 +917,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

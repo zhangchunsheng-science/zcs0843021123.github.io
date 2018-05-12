@@ -849,6 +849,154 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="张春生">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凤凰苑">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/" itemprop="url">iOS中使用矢量图</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T20:50:31+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
+<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
+</ol>
+<h1 id="一-方法"><a href="#一-方法" class="headerlink" title="一. 方法"></a>一. 方法</h1><p>1、png转SVG inkscape(一个工具)</p>
+<p>2、SVG转.ttf文件</p>
+<pre><code>A、登录阿里巴巴矢量图片库
+B、点击图标管理
+C、上传图标
+D、放到暂存架
+E、下载到本地，里边就有了矢量图对应的字体文件 .ttf 文件，
+里边还有一个.html文件，里边有字体文件对应的实体字符码。详细信息都在HTML文件里边。
+</code></pre><p>3、把iconfont.ttf 添加到工程目录下</p>
+<p>4、在info.plist里, Fonts provided by application(它是一个数组)加上字体文件 <code>item0: iconfont.ttf</code></p>
+<p>5、Build Phase里, CopyBundleResource的时候，把iconfont.ttf放进去，这样字体文件就被copy了，这样，字体文件就被安装上了。</p>
+<p>6、使用时</p>
+<pre><code>UIFont *iconfont = [UIFont fontWithName:@&quot;uxIconFont&quot; size: 16];
+    label.font = iconfont;
+这个uxIconFont是字体名字，不是iconfont.ttf的名字。
+label.text = @&quot;\U00003439 \U000035ad \U000035ae \U000035af \U000035eb \U000035ec&quot;;
+</code></pre><p>7、注意：</p>
+<pre><code>文本值为4个字节的Unicode码(UTF16 小端编码)，
+所以，要在\U 与 字体值之间补上0。
+`13420/0x346c` 这就是字体值，前边是十进制，后边是十六进制，我们使用的是十六进制。
+</code></pre><p>8、使用BirdFont查看字体对应的编码，他可以直接打开.ttf文件。</p>
+<pre><code>A、打开BirdFont，打开字体文件（.tff文件）
+B、选择All Glyphs
+</code></pre><p>9、使用字体文件实现矢量图的原理：</p>
+<pre><code>就是造一个fontFamily, 里边有一种特定的font, 这种特定的font, 它也是使用Unicode码,
+只不过这种font, 用我们自己定义的图案, 代替了原本的字符。
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/01/OC的load与initialize/OC的load与initialize/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1002,154 +1150,6 @@
 </tbody>
 </table>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zcs0843021123.github.io/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="张春生">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/12196768?s=400&u=8427ff12e9cdf05f9659b444385b2b5ee1663a18&v=4">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="凤凰苑">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/01/iOS中使用矢量图/iOS中使用矢量图/" itemprop="url">iOS中使用矢量图</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T20:50:31+08:00">
-                2017-12-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="零-写在前边的话"><a href="#零-写在前边的话" class="headerlink" title="零. 写在前边的话"></a>零. 写在前边的话</h1><ol>
-<li>本系列文章是自己的学习总结,因此写的有些简略,如有任何问题,可以给我发邮件, 我的邮箱 <a href="mailto:1017295148@qq.com" target="_blank" rel="noopener">1017295148@qq.com</a></li>
-</ol>
-<h1 id="一-方法"><a href="#一-方法" class="headerlink" title="一. 方法"></a>一. 方法</h1><p>1、png转SVG inkscape(一个工具)</p>
-<p>2、SVG转.ttf文件</p>
-<pre><code>A、登录阿里巴巴矢量图片库
-B、点击图标管理
-C、上传图标
-D、放到暂存架
-E、下载到本地，里边就有了矢量图对应的字体文件 .ttf 文件，
-里边还有一个.html文件，里边有字体文件对应的实体字符码。详细信息都在HTML文件里边。
-</code></pre><p>3、把iconfont.ttf 添加到工程目录下</p>
-<p>4、在info.plist里, Fonts provided by application(它是一个数组)加上字体文件 <code>item0: iconfont.ttf</code></p>
-<p>5、Build Phase里, CopyBundleResource的时候，把iconfont.ttf放进去，这样字体文件就被copy了，这样，字体文件就被安装上了。</p>
-<p>6、使用时</p>
-<pre><code>UIFont *iconfont = [UIFont fontWithName:@&quot;uxIconFont&quot; size: 16];
-    label.font = iconfont;
-这个uxIconFont是字体名字，不是iconfont.ttf的名字。
-label.text = @&quot;\U00003439 \U000035ad \U000035ae \U000035af \U000035eb \U000035ec&quot;;
-</code></pre><p>7、注意：</p>
-<pre><code>文本值为4个字节的Unicode码(UTF16 小端编码)，
-所以，要在\U 与 字体值之间补上0。
-`13420/0x346c` 这就是字体值，前边是十进制，后边是十六进制，我们使用的是十六进制。
-</code></pre><p>8、使用BirdFont查看字体对应的编码，他可以直接打开.ttf文件。</p>
-<pre><code>A、打开BirdFont，打开字体文件（.tff文件）
-B、选择All Glyphs
-</code></pre><p>9、使用字体文件实现矢量图的原理：</p>
-<pre><code>就是造一个fontFamily, 里边有一种特定的font, 这种特定的font, 它也是使用Unicode码,
-只不过这种font, 用我们自己定义的图案, 代替了原本的字符。
-</code></pre>
           
         
       
@@ -1772,7 +1772,7 @@ B、选择All Glyphs
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
